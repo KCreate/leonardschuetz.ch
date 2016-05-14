@@ -1,6 +1,7 @@
 // Dependencies
 import React, { Component, PropTypes } from 'react';
 import get from '../../utils/get';
+import Card from './Card';
 
 // Router
 import {
@@ -13,6 +14,59 @@ class ProtoController extends Component {
     constructor(...args) {
         super(...args);
         this.initialDataLoadForSource = this.initialDataLoadForSource.bind(this);
+        this.writingAnimationFinished = this.writingAnimationFinished.bind(this);
+        this.getCurrentCards = this.getCurrentCards.bind(this);
+        this.renderCurrentCards = this.renderCurrentCards.bind(this);
+    }
+
+    componentDidMount() {
+        if (this.state) {
+            if (this.state.navigation.length) {
+                this.state.navigation.forEach((item, index) => {
+                    this.initialDataLoadForSource(item[0]);
+                });
+            }
+        }
+    }
+
+    getCurrentCards() {
+
+        // Global cards available to every controller
+        const cards = ({})[this.props.route.path];
+
+        // If no cards were found
+        if (!cards && typeof cards === 'undefined') {
+
+            // Markdown
+            return (
+                <Card># Resource not found</Card>
+            );
+        }
+
+        return cards;
+    }
+
+    renderCurrentCards(source) {
+
+        // Return an empty array if no cards were found
+        if (!this.props.sources[source]) {
+            return [];
+        }
+
+        // Return all the cards from the store
+        return this.props.sources[source].map((child, index) => (
+            <Card
+                key={index}
+                meta={child.meta}>
+                {child.markdown}
+            </Card>
+        ));
+    }
+
+    writingAnimationFinished(event) {
+        this.setState({
+            expanded: false,
+        });
     }
 
     initialDataLoadForSource(source) {
@@ -62,6 +116,7 @@ class ProtoController extends Component {
                                         file: source + '/' + item.filename,
                                     }),
                                     markdown: article,
+                                    index: index,
                                 });
                             });
                         });
