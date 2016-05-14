@@ -26,6 +26,7 @@
         > * {
             margin: $elementMargin 0;
             font-size: 18px;
+            word-break: break-word;
 
             &:first-child {
                 margin-top: 0;
