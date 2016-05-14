@@ -1,0 +1,73 @@
+@import "../style/global.scss";
+.Header {
+    height: 205px;
+    background-color: red;
+    color: $colorLight1;
+
+    background-color: $colorBlue1;
+    position: relative;
+    transition: height $durLong $easing;
+
+    &.expanded {
+        height: 100vh;
+        > div {
+            > h1 {
+                transform: translateY(70%);
+            }
+            > ul {
+                opacity: 0;
+                transition: none;
+            }
+        }
+    }
+
+    > div {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        transform: translate(-50%, calc(-50% - 32px));
+
+        > h1 {
+            font-size: 2.9em;
+            transform: translateY(0);
+            transition: transform $durLong $easing;
+            text-align: center;
+
+            text-shadow: $shadow1;
+            transition: text-shadow $durMedium $easing,
+                        transform $durMedium $easing;
+
+            &:hover {
+                text-shadow: $shadow5;
+                transform: translateY(-2px);
+            }
+        }
+
+        > ul {
+
+            text-align: center;
+            opacity: 1;
+            transition: opacity $durExtraLong $easing;
+            li {
+
+                display: inline-block;
+                margin: 3px 5px;
+
+                a {
+                    color: $colorLight1;
+                    text-decoration: none;
+
+                    font-size: 14pt;
+                    padding-bottom: 4px;
+                    border-bottom: 0px solid $colorLight1;
+                    transition: border $durFast $easing;
+
+                    &:hover, &.current {
+                        border-bottom: 2px solid $colorLight1;
+                    }
+                }
+            }
+        }
+    }
+}

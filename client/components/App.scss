@@ -1,0 +1,10 @@
+.App {
+    > h1 {
+        color: red;
+
+        &::first-letter {
+            color: blue;
+            font-size: 1.2em;
+        }
+    }
+}

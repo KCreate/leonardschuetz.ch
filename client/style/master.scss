@@ -1,0 +1,20 @@
+@import "global.scss";
+@import url(https://fonts.googleapis.com/css?family=RobotoDraft:300,400);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro);
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "RobotoDraft", sans-serif;
+    font-weight: 400;
+}
+
+// FIXME: !important is an anti-pattern
+body {
+    background-color: $colorLight1 !important;
+    transition: background $durMedium $easing;
+    @include mobile {
+        background-color: $colorBlue1 !important;
+    };
+}

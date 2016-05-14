@@ -1,0 +1,73 @@
+// Media Queries
+@mixin mobile {
+    @media (max-width: 570px) {
+        @content;
+    }
+}
+
+@mixin mobile-small {
+    @media (max-width: 370px) {
+        @content;
+    }
+}
+
+// Colors
+$colorCard:   #FFFFFF;
+$colorLight1: darken(#FAFAFA, 6%);
+$colorLight2: darken($colorLight1, 6%);
+$colorLight3: darken($colorLight2, 6%);
+$colorLight4: darken($colorLight3, 6%);
+
+$colorDark1: darken(#263238, 6%);
+$colorDark2: lighten($colorDark1, 6%);
+$colorDark3: lighten($colorDark2, 6%);
+$colorDark4: lighten($colorDark3, 6%);
+
+$colorBlue1:  #3B69CC;
+$colorBlue2:  darken($colorBlue1, 6%);
+$colorBlue3:  darken($colorBlue2, 6%);
+$colorBlue4:  darken($colorBlue3, 6%);
+
+$colorLinks: saturate(lighten($colorBlue1, 6%), 100%);
+
+// Shadows
+$shadow1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+$shadow2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+$shadow3: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+$shadow4: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+$shadow5: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+
+// Transition related stuff
+$durFast: 100ms;
+$durShort: 200ms;
+$durMedium: 350ms;
+$durLong: 600ms;
+$durExtraLong: 900ms;
+$easing: cubic-bezier(.55, 0, .1, 1);
+
+// Functions
+@function pow($number, $exponent) {
+  $value: 1;
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $value: $value * $number;
+    }
+  }
+  @return $value;
+}
+
+// Stroke font-character
+@function stroke($stroke, $color) {
+  $shadow: ();
+  $from: $stroke*-1;
+  @for $i from $from through $stroke {
+   @for $j from $from through $stroke {
+      $shadow: append($shadow, $i*1px $j*1px 0 $color, comma);
+    }
+  }
+  @return $shadow;
+}
+// Stroke font-character
+@mixin stroke($stroke, $color) {
+  text-shadow: stroke($stroke, $color);
+}

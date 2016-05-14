@@ -1,0 +1,25 @@
+@import "../style/global.scss";
+
+.Content {
+    width: 100%;
+    transform: translateY(-70px);
+    transition: transform $durExtraLong $easing;
+
+    &.expanded {
+        transform: translateY(70px);
+    }
+
+    > div {
+        margin: 0 auto;
+        width: 550px;
+        max-width: calc(100% - 30px);
+
+        transition: max-width $durMedium $easing,
+                    width $durMedium $easing;
+
+        @include mobile {
+            max-width: calc(100%);
+            width: 100%;
+        };
+    }
+}

@@ -1,0 +1,241 @@
+@import "../style/global.scss";
+
+.Card {
+    margin: 12px 0;
+    padding: 24px 16px 16px;
+    background-color: $colorCard;
+    border-radius: 3px;
+    border-bottom: 0 solid $colorLight2;
+    box-shadow: $shadow1;
+
+    transition: transform $durMedium $easing,
+                opacity $durMedium $easing,
+                border-radius $durMedium $easing,
+                margin $durMedium $easing,
+                border $durMedium $easing,
+                box-shadow $durMedium $easing;
+
+    &.deferedApplied {
+        transform: scale(0.95) translateY(20px);
+        opacity: 0;
+    }
+
+    $elementMargin: 16px;
+    > div.Card-Content, > div.Card-Share {
+
+        > * {
+            margin: $elementMargin 0;
+            font-size: 18px;
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+
+        /* Header Styles */
+        > h1, h2, h3, h4, h5, h6 {
+            border-left: 4px solid $colorBlue1;
+            padding-left: 8px;
+
+            // The main header shouldn't have a different font
+            &:not(h1) {
+                font-family: 'Source Sans Pro', sans-serif;
+                color: $colorBlue1;
+            }
+
+            // Make links a different color
+            & > a {
+                color: $colorBlue2;
+                text-decoration: underline;
+            }
+        }
+
+        > h1 { font-size: 28px; }
+        > h2 { font-size: 22.4px; }
+        > h3 { font-size: 20px; }
+        > h4 { font-size: 20px; }
+        > h5 { font-size: 20px; }
+        > h6 { font-size: 20px; }
+
+        // Join adjacent descending headers together
+        @for $i from 1 through 6 {
+            @if $i < 6 {
+                // Join descending headers together
+                > h#{$i} + h#{$i+1} {
+                    margin-top: -$elementMargin;
+                }
+            }
+        }
+
+        /* Horizontal rulers */
+        > hr {
+            width: calc(100% - 8px);
+            margin: $elementMargin auto;
+            display: block;
+            height: 4px;
+            border: none;
+            background-color: $colorBlue1;
+        }
+
+        /* Links */
+        > a, > p > a {
+            text-decoration: none;
+            color: $colorLinks;
+
+            &:hover, &:active {
+                text-decoration: underline;
+            }
+        }
+
+        /* Lists */
+        ol, ul {
+
+            list-style: none;
+            padding-left: 1em;
+            li {
+                &::before {
+                    content: "- ";
+                }
+            }
+        }
+
+        /* Strong, treated as highlight */
+        > p > strong {
+            background-color: $colorLight1;
+            display: inline-block;
+            padding: 2px 4px;
+            border-radius: 2px;
+
+            > a {
+                color: $colorLinks;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        /* blockquotes */
+        > blockquote > p {
+            background-color: $colorLight1;
+            padding: 10px 8px;
+            border-left: 4px solid $colorBlue1;
+            border-radius: 2px;
+            box-shadow: $shadow1;
+        }
+
+        /* Images */
+        > .Card-Image {
+
+            width: calc(100% + 32px);
+            transform: translateX(-16px);
+
+            > img {
+                width: 100%;
+                display: block;
+                margin: 0 auto;
+
+                &:not([alt=""]) {
+                    box-shadow: $shadow1;
+                    transition: box-shadow $durShort $easing;
+
+                    &:hover {
+                        box-shadow: $shadow2;
+                    }
+                }
+
+                &[alt="circular"] {
+                    border-radius: 50%;
+                    width: calc(100% - 20px);
+                }
+
+                &[alt="circular-small"] {
+                    border-radius: 50%;
+                    width: 240px;
+                }
+
+                &[alt="framed"] {
+                    border-radius: 3px;
+                    width: calc(100% - 20px);
+                }
+            }
+
+            // Join adjacent images
+            & + .Card-Image { margin-top: -16px; }
+            &~ p + div.Card-Image {
+                &+ p + h2 + p + .Card-Image {
+                    margin-top: -20px;
+                }
+            }
+        }
+
+        // Put the h2 header over the image
+        > div.Card-Image + p + h2 {
+            border-left: none;
+            padding-left: 0;
+            margin-top: -48px;
+            margin-bottom: 24px;
+            color: $colorLight1;
+            position: relative;
+            font-size: 1.3em;
+            transform: translateY(-4px);
+
+            & > a {
+                color: $colorLight1;
+            }
+            @include stroke(2, rgba(0,0,0,0.05));
+        }
+
+        /* Code */
+        > pre > code {
+            background-color: $colorDark3;
+            color: $colorLight1;
+            padding: 16px 18px;
+            overflow-x: scroll;
+
+            * {
+                font-weight: 400;
+                text-decoration: none;
+            }
+
+            display: block;
+            width: calc(100% + 32px);
+            transform: translateX(-16px);
+        }
+    }
+
+    > div.Card-Share {
+        background-color: $colorBlue2;
+        border-radius: 3px;
+        box-shadow: $shadow2;
+        display: inline-block;
+        padding: 7px 12px;
+
+        margin-right: 16px;
+        &:last-child {
+            margin-right: 0;
+        }
+
+        transition: box-shadow $durShort $easing;
+
+        &:hover {
+            box-shadow: $shadow3;
+        }
+
+        > a {
+            color: $colorCard;
+        }
+    }
+
+    @include mobile {
+        border-radius: 0;
+        margin: 0;
+        border-bottom: 3px solid $colorLight2;
+        box-shadow: none;
+
+        &.deferedApplied {
+            transform: translateY(30px);
+        }
+    };
+}
