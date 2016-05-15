@@ -5,7 +5,7 @@ import highlight from 'highlight.js';
 import 'highlight.js/styles/material.css';
 
 const cachedMarkdown = { sources: [], highlighted: [] };
-const MarkdownConfig = {
+const MarkdownConfigHighlight = {
     imagesAreBlocks: true,
     highlight: (str, lang) => {
 
@@ -28,6 +28,9 @@ const MarkdownConfig = {
         return highlighted;
     },
 };
+const MarkdownConfigNoHighlight = {
+    imagesAreBlocks: true,
+};
 
 // Router
 import {
@@ -37,12 +40,43 @@ import {
 
 import './Card.scss';
 class Card extends Component {
+
+    constructor(...args) {
+        super(...args);
+        this.getMarkdown = this.getMarkdown.bind(this);
+        this.state = {
+            shouldHighlight: false,
+        };
+    }
+
+    getMarkdown() {
+        if (this.state.shouldHighlight) {
+            return (
+                <Markdown className="Card-Content" container="div" options={MarkdownConfigHighlight}>
+                    {this.props.children}
+                </Markdown>
+            );
+        } else {
+            return (
+                <Markdown className="Card-Content" container="div" options={MarkdownConfigNoHighlight}>
+                    {this.props.children}
+                </Markdown>
+            );
+        }
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({
+                shouldHighlight: true,
+            });
+        }, 1500);
+    };
+
     render() {
         return (
         <div className={'Card' + this.props.className}>
-            <Markdown className="Card-Content" container="div" options={MarkdownConfig}>
-                {this.props.children}
-            </Markdown>
+            {this.getMarkdown()}
         </div>
         );
     }
