@@ -22,6 +22,7 @@ class MainController extends ProtoController {
                 ['blog', 'Blog'],
                 ['projects', 'Projects'],
                 ['about', 'About'],
+                ['development', 'Development'],
             ],
             sources: this.props.sources,
             expanded: true,
@@ -30,12 +31,8 @@ class MainController extends ProtoController {
 
     getCurrentCards() {
 
-        // Select the right function from the object
-        const cards = ({
-            '/blog': this.renderCurrentCards('blog'),
-            '/projects': this.renderCurrentCards('projects'),
-            '/about': this.renderCurrentCards('about'),
-        })[this.props.route.path];
+        // Get the current cards
+        const cards = this.renderCurrentCards(this.props.route.path.slice(1));
 
         // If no cards are found on this controller, call the protocontroller
         return cards || super.getCurrentCards();

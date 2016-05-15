@@ -35,7 +35,8 @@ class Header extends Component {
                 i++;
 
                 // If we reached the last char, notify the parent
-                if (i === this.state.titleToWrite.length) {
+                if (i > this.state.titleToWrite.length) {
+                    clearInterval(interval);
                     this.props.writingAnimationFinished({});
                 }
             }, 60);
@@ -43,12 +44,17 @@ class Header extends Component {
     }
 
     render() {
+
+        function shouldInclude(value) {
+            return (value !== undefined && value !== false) || value === undefined;
+        }
+
         return (
             <div className={classnames({ Header: true, expanded: this.props.expanded })}>
                 <div>
                     <h1>{this.state.title}</h1>
                     <ul>
-                        {this.props.navigation.map((item, index) => (
+                        {this.props.navigation.filter(shouldInclude).map((item, index) => (
                             <li key={index}>
                                 <Link to={'/' + item[0]} activeClassName="current">{item[1]}</Link>
                             </li>

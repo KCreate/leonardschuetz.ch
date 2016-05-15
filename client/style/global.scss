@@ -67,7 +67,3 @@ $easing: cubic-bezier(.55, 0, .1, 1);
   }
   @return $shadow;
 }
-// Stroke font-character
-@mixin stroke($stroke, $color) {
-  text-shadow: stroke($stroke, $color);
-}

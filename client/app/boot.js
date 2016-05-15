@@ -29,6 +29,7 @@ render((
                 <Route path="/blog" component={MainController}></Route>
                 <Route path="/projects" component={MainController}></Route>
                 <Route path="/about" component={MainController}></Route>
+                <Route path="/development" component={MainController}></Route>
                 <Redirect from="/*" to="/blog"></Redirect>
             </Route>
         </Router>

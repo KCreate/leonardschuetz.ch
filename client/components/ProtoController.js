@@ -1,7 +1,7 @@
 // Dependencies
 import React, { Component, PropTypes } from 'react';
 import get from '../../utils/get';
-import Card from './Card';
+import Card from './CardRemarkable';
 
 // Router
 import {
@@ -53,14 +53,16 @@ class ProtoController extends Component {
             return [];
         }
 
-        // Return all the cards from the store
-        return this.props.sources[source].map((child, index) => (
+        const cards = this.props.sources[source].map((child, index) => (
             <Card
                 key={index}
                 meta={child.meta}>
                 {child.markdown}
             </Card>
         ));
+
+        // Return all the cards from the store
+        return cards;
     }
 
     writingAnimationFinished(event) {
@@ -116,7 +118,7 @@ class ProtoController extends Component {
                                         file: source + '/' + item.filename,
                                     }),
                                     markdown: article,
-                                    index: index,
+                                    index,
                                 });
                             });
                         });

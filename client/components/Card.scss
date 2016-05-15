@@ -7,7 +7,9 @@
     border-radius: 3px;
     border-bottom: 0 solid $colorLight2;
     box-shadow: $shadow1;
+    overflow: hidden;
 
+    transform-origin: top;
     transition: transform $durMedium $easing,
                 opacity $durMedium $easing,
                 border-radius $durMedium $easing,
@@ -21,7 +23,7 @@
     }
 
     $elementMargin: 16px;
-    > div.Card-Content, > div.Card-Share {
+    > div > span {
 
         > * {
             margin: $elementMargin 0;
@@ -127,7 +129,8 @@
         }
 
         /* Images */
-        > .Card-Image {
+        /*
+        > p > img {
 
             width: calc(100% + 32px);
             transform: translateX(-16px);
@@ -186,6 +189,72 @@
                 color: $colorLight1;
             }
             @include stroke(2, rgba(0,0,0,0.05));
+        }
+        */
+
+        /* Images */
+        > img {
+            width: calc(100% + 32px);
+            transform: translateX(-16px);
+            margin: $elementMargin 0;
+
+            &[alt=""]+ img {
+                margin-top: -($elementMargin + 4px);
+
+                &:last-of-type {
+                    margin-bottom: 0;
+                }
+            }
+
+            &[alt="framed"], &[alt="circular"], &[alt="circular-small"] {
+                width: 100%;
+                transform: translateX(0);
+                box-shadow: $shadow2;
+                transition: box-shadow $durMedium $easing;
+
+                &:hover {
+                    box-shadow: $shadow3;
+                }
+            }
+
+            &[alt="framed"] {
+                border-radius: 3px;
+            }
+
+            &[alt="circular"] {
+                border-radius: 50%;
+            }
+
+            &[alt="circular-small"] {
+                width: 240px;
+                margin: 0 auto;
+                display: block;
+                border-radius: 50%;
+            }
+
+            &+ h2 + img {
+                margin-top: -($elementMargin - 2px);
+            }
+
+            &+ h2 {
+                margin: 0;
+                transform: translateY(-220%);
+                border: none;
+                color: $colorLight1;
+                padding-left: 0;
+                text-shadow: $shadow3, stroke(2, transparentize($colorDark1, 0.93));
+
+                margin-bottom: -($elementMargin + 18px);
+
+                > a {
+                    color: $colorLight1;
+                    text-decoration: none;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
         }
 
         /* Code */

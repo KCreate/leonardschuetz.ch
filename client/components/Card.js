@@ -1,15 +1,6 @@
 // Dependencies
 import React, { Component, PropTypes } from 'react';
-import marked from 'marked';
-import highlightJS from 'highlight.js';
-import highlightJSStyle from 'highlight.js/styles/material.css';
-
-// Configure marked
-marked.setOptions({
-    highlight(code) {
-        return highlightJS.highlightAuto(code).value;
-    },
-});
+import Markdown from 'react-remarkable';
 
 // Router
 import {
@@ -21,16 +12,19 @@ import './Card.scss';
 class Card extends Component {
     render() {
 
-        const html = {
-            __html: marked(this.props.children),
-        };
+    /*
+    // Conditionally enable the share button
+    const shareButton = this.state.shareButtonEnabled
+    ? <div className="Card-Share"><Link to={'/article/' + this.props.meta.file}>Share</Link></div>
+    : undefined;
+    */
 
         return (
-            <div className={'Card' + this.props.className}>
-                <div className="Card-Content" dangerouslySetInnerHTML={html}></div>
-                <div className="Card-Share"><Link to={'/article/' + this.props.meta.file}>Share</Link></div>
-                <div className="Card-Share"><Link to={'/article/' + this.props.meta.file}>Share</Link></div>
-            </div>
+        <div className={'Card' + this.props.className}>
+            <Markdown className="Card-Content" container="div" options={{ imagesAreBlocks: true }}>
+                {this.props.children}
+            </Markdown>
+        </div>
         );
     }
 }
