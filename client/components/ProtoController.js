@@ -1,7 +1,7 @@
 // Dependencies
 import React, { Component, PropTypes } from 'react';
 import get from '../../utils/get';
-import Card from './CardRemarkable';
+import Card from './Card';
 
 // Router
 import {
