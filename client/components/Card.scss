@@ -135,10 +135,10 @@
         > img {
             width: calc(100% + 32px);
             transform: translateX(-16px);
-            margin: $elementMargin 0;
+            margin: 0;
 
             &[alt=""]+ img {
-                margin-top: -($elementMargin + 4px);
+                margin-top: -(4px);
 
                 &:last-of-type {
                     margin-bottom: 0;
@@ -171,19 +171,19 @@
                 border-radius: 50%;
             }
 
-            &+ h2 + img {
-                margin-top: -($elementMargin - 2px);
+            &+ img {
+                margin-top: $elementMargin;
             }
 
             &+ h2 {
                 margin: 0;
-                transform: translateY(-220%);
+                transform: translateY(-160%);
                 border: none;
                 color: $colorLight1;
                 padding-left: 0;
                 text-shadow: $shadow3, stroke(2, transparentize($colorDark1, 0.93));
 
-                margin-bottom: -($elementMargin + 18px);
+                margin-bottom: -($elementMargin + 16px);
 
                 > a {
                     color: $colorLinksLight;
