@@ -8,6 +8,8 @@
     position: relative;
     transition: height $durLong $easing;
 
+    will-change: transform;
+
     &.expanded {
         height: 100vh;
         > div {
