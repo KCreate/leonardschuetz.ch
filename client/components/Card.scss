@@ -17,9 +17,20 @@
                 border $durMedium $easing,
                 box-shadow $durMedium $easing;
 
+    @include mobile {
+        border-radius: 0;
+        margin: 0;
+        border-bottom: 3px solid $colorLight2;
+        box-shadow: none;
+    };
+
     &.deferedApplied {
-        transform: scale(0.95) translateY(20px);
+        transform: scale(0.98) translateY(10px);
         opacity: 0;
+
+        @include mobile {
+            transform: translateY(30px)
+        };
     }
 
     $elementMargin: 16px;
@@ -81,7 +92,7 @@
         }
 
         /* Links */
-        > a, > p > a {
+        a {
             text-decoration: none;
             color: $colorLinks;
 
@@ -103,20 +114,12 @@
         }
 
         /* Strong, treated as highlight */
-        > p > strong {
+        strong {
             background-color: $colorLight1;
             display: inline-block;
             padding: 2px 4px;
+            margin: 2px 0;
             border-radius: 2px;
-
-            > a {
-                color: $colorLinks;
-                text-decoration: none;
-
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
         }
 
         /* blockquotes */
@@ -127,70 +130,6 @@
             border-radius: 2px;
             box-shadow: $shadow1;
         }
-
-        /* Images */
-        /*
-        > p > img {
-
-            width: calc(100% + 32px);
-            transform: translateX(-16px);
-
-            > img {
-                width: 100%;
-                display: block;
-                margin: 0 auto;
-
-                &:not([alt=""]) {
-                    box-shadow: $shadow1;
-                    transition: box-shadow $durShort $easing;
-
-                    &:hover {
-                        box-shadow: $shadow2;
-                    }
-                }
-
-                &[alt="circular"] {
-                    border-radius: 50%;
-                    width: calc(100% - 20px);
-                }
-
-                &[alt="circular-small"] {
-                    border-radius: 50%;
-                    width: 240px;
-                }
-
-                &[alt="framed"] {
-                    border-radius: 3px;
-                    width: calc(100% - 20px);
-                }
-            }
-
-            // Join adjacent images
-            & + .Card-Image { margin-top: -16px; }
-            &~ p + div.Card-Image {
-                &+ p + h2 + p + .Card-Image {
-                    margin-top: -20px;
-                }
-            }
-        }
-
-        // Put the h2 header over the image
-        > div.Card-Image + p + h2 {
-            border-left: none;
-            padding-left: 0;
-            margin-top: -48px;
-            margin-bottom: 24px;
-            color: $colorLight1;
-            position: relative;
-            font-size: 1.3em;
-            transform: translateY(-4px);
-
-            & > a {
-                color: $colorLight1;
-            }
-            @include stroke(2, rgba(0,0,0,0.05));
-        }
-        */
 
         /* Images */
         > img {
@@ -247,8 +186,9 @@
                 margin-bottom: -($elementMargin + 18px);
 
                 > a {
-                    color: $colorLight1;
+                    color: $colorLinksLight;
                     text-decoration: none;
+                    text-shadow: $shadow3, stroke(2, transparentize($colorLight1, 0.93));
 
                     &:hover {
                         text-decoration: underline;
@@ -264,14 +204,50 @@
             padding: 16px 18px;
             overflow-x: scroll;
 
-            * {
-                font-weight: 400;
-                text-decoration: none;
-            }
+            font-size: 0.9em;
 
             display: block;
             width: calc(100% + 32px);
             transform: translateX(-16px);
+
+            * {
+                font-weight: 400;
+                text-decoration: none;
+            }
+        }
+
+        /* Tables */
+        > table {
+            width: 100%;
+            background-color: $colorLight1;
+            box-shadow: $shadow1;
+            border-collapse: collapse;
+            border-radius: 2px;
+            overflow: hidden;
+
+            th, td {
+                padding: 4px 6px;
+            }
+
+            th {
+                height: 40px;
+            }
+
+            td {
+                height: 36px
+            }
+
+            strong {
+                padding: 0;
+                color: $colorBlue1;
+            }
+
+            thead {
+                background-color: $colorLight2;
+                tr th {
+                    text-align: left;
+                }
+            }
         }
     }
 
@@ -297,15 +273,4 @@
             color: $colorCard;
         }
     }
-
-    @include mobile {
-        border-radius: 0;
-        margin: 0;
-        border-bottom: 3px solid $colorLight2;
-        box-shadow: none;
-
-        &.deferedApplied {
-            transform: translateY(30px);
-        }
-    };
 }

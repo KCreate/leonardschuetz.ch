@@ -66,11 +66,11 @@ class Card extends Component {
     }
 
     componentDidMount() {
-        setTimeout(() => {
+        const interval = setTimeout(() => {
             this.setState({
                 shouldHighlight: true,
             });
-        }, 1500);
+        }, 2000);
     };
 
     render() {

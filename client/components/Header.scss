@@ -34,12 +34,17 @@
             transition: transform $durLong $easing;
             text-align: center;
 
+            > a {
+                color: $colorLight1;
+                text-decoration: none;
+            }
+
             text-shadow: $shadow1;
             transition: text-shadow $durMedium $easing,
                         transform $durMedium $easing;
 
             &:hover {
-                text-shadow: $shadow5;
+                text-shadow: $shadow4;
                 transform: translateY(-2px);
             }
         }
@@ -61,10 +66,15 @@
                     font-size: 14pt;
                     padding-bottom: 4px;
                     border-bottom: 0px solid $colorLight1;
-                    transition: border $durFast $easing;
+                    transition: border $durFast $easing,
+                                padding $durFast $easing;
 
                     &:hover, &.current {
                         border-bottom: 2px solid $colorLight1;
+                    }
+
+                    &:active {
+                        padding-bottom: 8px;
                     }
                 }
             }

@@ -15,7 +15,7 @@ class Content extends Component {
         return (
             <div className={classnames({ Content: true, expanded: this.props.expanded })}>
                 <DeferedContainerList
-                    delay={350}
+                    delay={400}
                     appliedClassName="deferedApplied">
                     {this.props.children}
                 </DeferedContainerList>

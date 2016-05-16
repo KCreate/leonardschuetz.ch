@@ -52,7 +52,7 @@ class Header extends Component {
         return (
             <div className={classnames({ Header: true, expanded: this.props.expanded })}>
                 <div>
-                    <h1>{this.state.title}</h1>
+                    <h1><Link to="/">{this.state.title}</Link></h1>
                     <ul>
                         {this.props.navigation.filter(shouldInclude).map((item, index) => (
                             <li key={index}>

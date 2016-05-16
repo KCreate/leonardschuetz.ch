@@ -3,10 +3,13 @@
 .Content {
     width: 100%;
     transform: translateY(-70px);
-    transition: transform $durExtraLong $easing;
+    opacity: 1;
+    transition: transform $durExtraLong $easing,
+                opacity $durExtraLong $easing;
 
     &.expanded {
-        transform: translateY(70px);
+        transform: translateY(50%);
+        opacity: 0;
     }
 
     > div {

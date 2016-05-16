@@ -12,23 +12,26 @@
 }
 
 // Colors
-$colorCard:   #FFFFFF;
-$colorLight1: darken(#FAFAFA, 6%);
-$colorLight2: darken($colorLight1, 6%);
-$colorLight3: darken($colorLight2, 6%);
-$colorLight4: darken($colorLight3, 6%);
+$colorChangePercentage: 3%;
 
-$colorDark1: darken(#263238, 6%);
-$colorDark2: lighten($colorDark1, 6%);
-$colorDark3: lighten($colorDark2, 6%);
-$colorDark4: lighten($colorDark3, 6%);
+$colorCard:   #FFFFFF;
+$colorLight1: darken(#FAFAFA, $colorChangePercentage);
+$colorLight2: darken($colorLight1, $colorChangePercentage);
+$colorLight3: darken($colorLight2, $colorChangePercentage);
+$colorLight4: darken($colorLight3, $colorChangePercentage);
+
+$colorDark1: darken(#263238, $colorChangePercentage);
+$colorDark2: lighten($colorDark1, $colorChangePercentage);
+$colorDark3: lighten($colorDark2, $colorChangePercentage);
+$colorDark4: lighten($colorDark3, $colorChangePercentage);
 
 $colorBlue1:  #3B69CC;
-$colorBlue2:  darken($colorBlue1, 6%);
-$colorBlue3:  darken($colorBlue2, 6%);
-$colorBlue4:  darken($colorBlue3, 6%);
+$colorBlue2:  darken($colorBlue1, $colorChangePercentage);
+$colorBlue3:  darken($colorBlue2, $colorChangePercentage);
+$colorBlue4:  darken($colorBlue3, $colorChangePercentage);
 
-$colorLinks: saturate(lighten($colorBlue1, 6%), 100%);
+$colorLinks: saturate(lighten($colorBlue1, $colorChangePercentage), 100%);
+$colorLinksLight: mix($colorLinks, $colorLight1, 100%);
 
 // Shadows
 $shadow1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
