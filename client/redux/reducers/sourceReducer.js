@@ -7,7 +7,7 @@ function sourceReducer(sources = {}, action) {
         if (sources[action.source]) {
             currentSources = sources[action.source].slice(0); // Copy the array, don't reference
         }
-        currentSources[action.article.index] = action.article;
+        currentSources[action.index] = action.article;
 
         return Object.assign({}, sources, {
             [action.source]: currentSources,

@@ -1,9 +1,8 @@
 // Dependencies
 import React, { Component, PropTypes } from 'react';
 import ProtoController from './ProtoController';
-import Header from './Header';
-import Content from './Content';
 import get from '../../utils/get';
+import Card from './Card';
 
 // Router
 import {
@@ -16,7 +15,7 @@ class MainController extends ProtoController {
     constructor(...args) {
         super(...args);
 
-        this.state = Object.assign({}, {
+        this.state = Object.assign({}, this.state, {
             title: 'Leonard Schuetz',
             navigation: [
                 ['blog', 'Blog'],
@@ -24,34 +23,23 @@ class MainController extends ProtoController {
                 ['about', 'About'],
                 ['development', 'Development'],
             ],
-            sources: this.props.sources,
             expanded: true,
         });
     }
 
-    getCurrentCards() {
+    addCustomSources() {
+        this.props.actions.addArticles('about', (
+            <Card>
+                # This is markdown mixed with some other react component
 
-        // Get the current cards
-        const cards = this.renderCurrentCards(this.props.route.path.slice(1));
-
-        // If no cards are found on this controller, call the protocontroller
-        return cards || super.getCurrentCards();
+                <Card># What</Card>
+            </Card>
+        ), 10);
     }
 
-    render() {
-        return (
-            <div className="MainController">
-                <Header
-                    title={this.state.title}
-                    navigation={this.state.navigation}
-                    expanded={this.state.expanded}
-                    writingAnimationFinished={this.writingAnimationFinished}></Header>
-                <Content
-                    expanded={this.state.expanded}>
-                    {this.getCurrentCards()}
-                </Content>
-            </div>
-        );
+    filterCards(cards, source) {
+        if (source !== 'blog') return cards;
+        return cards.reverse();
     }
 }
 

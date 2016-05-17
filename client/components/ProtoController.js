@@ -2,6 +2,8 @@
 import React, { Component, PropTypes } from 'react';
 import get from '../../utils/get';
 import Card from './Card';
+import Content from './Content';
+import Header from './Header';
 
 // Router
 import {
@@ -15,8 +17,20 @@ class ProtoController extends Component {
         super(...args);
         this.initialDataLoadForSource = this.initialDataLoadForSource.bind(this);
         this.writingAnimationFinished = this.writingAnimationFinished.bind(this);
-        this.getCurrentCards = this.getCurrentCards.bind(this);
         this.renderCurrentCards = this.renderCurrentCards.bind(this);
+        this.addCustomSources = this.addCustomSources.bind(this);
+        this.filterCards = this.filterCards.bind(this);
+
+        this.state = {
+            title: 'ProtoController',
+            navigation: [
+                ['index', 'Index'],
+            ],
+            expanded: true,
+            sources: Object.assign({}, this.props.sources),
+        };
+
+        this.addCustomSources();
     }
 
     componentDidMount() {
@@ -29,39 +43,42 @@ class ProtoController extends Component {
         }
     }
 
-    getCurrentCards() {
-
-        // Global cards available to every controller
-        const cards = ({})[this.props.route.path];
-
-        // If no cards were found
-        if (!cards && typeof cards === 'undefined') {
-
-            // Markdown
-            return (
-                <Card># Resource not found</Card>
-            );
-        }
-
-        return cards;
+    getCustomSources() {
+        return;
     }
 
-    renderCurrentCards(source) {
-
-        // Return an empty array if no cards were found
+    renderCurrentCards() {
+        const source = this.props.route.path.slice(1);
         if (!this.props.sources[source]) {
-            return [];
+            return [
+                <Card key={0}># Resource not found!</Card>,
+            ];
         }
 
-        const cards = this.props.sources[source].map((child, index) => (
-            <Card
-                key={index}
-                meta={child.meta}>
-                {child.markdown}
-            </Card>
-        ));
+        const cards = this.props.sources[source].map((child, index) => {
+
+            // If we've got passed a Component directly, just use that instead.
+            if (child['$$typeof']) {
+                return React.cloneElement(child, {
+                    key: index,
+                });
+            }
+
+            // Else just create a new Card object
+            return (
+                <Card
+                    key={index}
+                    meta={child.meta}>
+                    {child.markdown}
+                </Card>
+            );
+        });
 
         // Return all the cards from the store
+        return this.filterCards(cards, source);
+    }
+
+    filterCards(cards, source) {
         return cards;
     }
 
@@ -118,8 +135,7 @@ class ProtoController extends Component {
                                         file: source + '/' + item.filename,
                                     }),
                                     markdown: article,
-                                    index,
-                                });
+                                }, index);
                             });
                         });
                     }
@@ -130,8 +146,16 @@ class ProtoController extends Component {
 
     render() {
         return (
-            <div className="ProtoController">
-                <h1>Hi! I'm a ProtoController!</h1>
+            <div className="Controller">
+                <Header
+                    title={this.state.title}
+                    navigation={this.state.navigation}
+                    expanded={this.state.expanded}
+                    writingAnimationFinished={this.writingAnimationFinished}></Header>
+                <Content
+                    expanded={this.state.expanded}>
+                    {this.renderCurrentCards()}
+                </Content>
             </div>
         );
     }

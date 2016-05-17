@@ -34,7 +34,7 @@
     "body-parser": "^1.15.0",
     "classnames": "^2.2.5",
     "compression": "^1.6.1",
-    "deferedcontainerlist": "^0.1.1-r",
+    "deferedcontainerlist": "^0.1.2-c",
     "express": "^4.13.4",
     "highlight.js": "^9.3.0",
     "mongoose": "^4.4.14",

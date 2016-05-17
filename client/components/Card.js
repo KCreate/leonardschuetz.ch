@@ -75,7 +75,7 @@ class Card extends Component {
 
     render() {
         return (
-        <div className={'Card' + this.props.className}>
+        <div className={'Card' + (this.props.className || '')}>
             {this.getMarkdown()}
         </div>
         );
