@@ -21,7 +21,7 @@ const MarkdownConfigHighlight = {
         }
 
         // Highlight if not found
-        const highlighted = highlight.highlightAuto(str).value;
+        const highlighted = highlight.highlight(lang, str, true).value;
         cachedMarkdown.sources.push(str);
         cachedMarkdown.highlighted.push(highlighted);
 
@@ -77,6 +77,7 @@ class Card extends Component {
         return (
         <div className={'Card' + (this.props.className || '')}>
             {this.getMarkdown()}
+            <Link to={'/article/' + this.props.meta.file} className="ShareButton">Direct Link</Link>
         </div>
         );
     }
