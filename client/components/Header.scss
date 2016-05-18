@@ -21,6 +21,12 @@
                 transition: none;
             }
         }
+
+        // Disable scrolling
+        body {
+            height: 100vh;
+            overflow: hidden;
+        }
     }
 
     > div {

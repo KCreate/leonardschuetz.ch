@@ -43,7 +43,7 @@ class ProtoController extends Component {
         }
     }
 
-    getCustomSources() {
+    addCustomSources() {
         return;
     }
 
@@ -145,6 +145,9 @@ class ProtoController extends Component {
     }
 
     render() {
+
+        const expandedStyle = 'body{height:100vh;overflow:hidden}';
+
         return (
             <div className="Controller">
                 <Header
@@ -152,6 +155,11 @@ class ProtoController extends Component {
                     navigation={this.state.navigation}
                     expanded={this.state.expanded}
                     writingAnimationFinished={this.writingAnimationFinished}></Header>
+
+                {(this.state.expanded ? (
+                    <style>{expandedStyle}</style>
+                ) : undefined)}
+                
                 <Content
                     expanded={this.state.expanded}>
                     {this.renderCurrentCards()}

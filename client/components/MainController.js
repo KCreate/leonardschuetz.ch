@@ -27,16 +27,6 @@ class MainController extends ProtoController {
         });
     }
 
-    addCustomSources() {
-        this.props.actions.addArticles('about', (
-            <Card>
-                # This is markdown mixed with some other react component
-
-                <Card># What</Card>
-            </Card>
-        ), 10);
-    }
-
     filterCards(cards, source) {
         if (source !== 'blog') return cards;
         return cards.reverse();
