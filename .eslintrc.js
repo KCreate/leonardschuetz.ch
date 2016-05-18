@@ -28,7 +28,6 @@ module.exports = {
         "wrap-iife": ["error", "inside"],
         "no-loop-func": "error",
         "prefer-rest-params": "error",
-        "no-param-reassign": "error",
         "prefer-arrow-callback": ["error", {
             allowNamedFunctions: true
         }],

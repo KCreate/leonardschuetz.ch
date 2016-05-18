@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 module.exports = function get(url, method, options, _callback) {
 
     // Allow the options to be optional

@@ -74,10 +74,18 @@ class Card extends Component {
     };
 
     render() {
+
+        let shareButton;
+        if (this.props.meta) {
+            shareButton = (
+                <Link to={'/article/' + this.props.meta.file} className="ShareButton">Direct Link</Link>
+            );
+        }
+
         return (
         <div className={'Card' + (this.props.className || '')}>
             {this.getMarkdown()}
-            <Link to={'/article/' + this.props.meta.file} className="ShareButton">Direct Link</Link>
+            {shareButton}
         </div>
         );
     }

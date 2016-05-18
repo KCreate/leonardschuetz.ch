@@ -1,6 +1,6 @@
 // Dependencies
 import React, { Component, PropTypes } from 'react';
-import get from '../../utils/get';
+import { categoryList, getFile } from '../../utils/getArticle';
 import Card from './Card';
 import Content from './Content';
 import Header from './Header';
@@ -89,56 +89,30 @@ class ProtoController extends Component {
     }
 
     initialDataLoadForSource(source) {
+        this.state.navigation.forEach((item) => {
+            categoryList(item[0], (res) => {
+                res.forEach((article, index) => {
+                    getFile(item[0], article.filename, 'article.md', (markdown) => {
+                        getFile(item[0], article.filename, 'meta.json', (meta) => {
+                            meta = JSON.parse(meta);
 
-        // Append to the data (Callback hell...)
-        get('/resources/' + source + '/', 'GET', {}, (err, res) => {
-            if (err) throw err;
-            const directory = JSON.parse(res);
+                            // Replace keywords in the markdown
+                            const parsedMarkdown = markdown
+                            .split('%%PATH%%')
+                            .join('/resources/' + item[0] + '/' + article.filename)
+                            .split('%%FILE%%')
+                            .join(item[0] + '/' + article.filename);
 
-            // Load all articles
-            directory.forEach((item, index) => {
-                get('/resources/' + source + '/' + item.filename, 'GET', {}, (err, res) => {
-                    if (err) throw err;
-                    const files = JSON.parse(res);
-
-                    // Check if all files exist
-                    if (files.filter((item) => (
-                        item.filename === 'article.md' ||
-                        item.filename === 'meta.json'
-                    )).length >= 2) {
-
-                        // All files are found
-                        get('/resources/' + source + '/' + item.filename + '/' + 'article.md',
-                        'GET', {}, (err, articleResponse) => {
-                            if (err) throw err;
-
-                            get('/resources/' + source + '/' + item.filename + '/' + 'meta.json',
-                            'GET', {}, (err, metaResponse) => {
-                                if (err) throw err;
-                                const content = JSON.parse(metaResponse);
-
-                                // Replace some variables in the response
-                                const article = articleResponse
-
-                                // Global Path variable
-                                .split('%%PATH%%')
-                                .join('/resources/' + source + '/' + item.filename)
-
-                                // Global File variable
-                                .split('%%FILE%%')
-                                .join(source + '/' + item.filename);
-
-                                // Insert into the state tree
-                                this.props.actions.addArticles(source, {
-                                    meta: Object.assign({}, content, {
-                                        path: '/resources/' + source + '/' + item.filename,
-                                        file: source + '/' + item.filename,
-                                    }),
-                                    markdown: article,
-                                }, index);
-                            });
+                            // Add to the redux sources
+                            this.props.actions.addArticles(item[0], {
+                                meta: Object.assign({}, meta, {
+                                    path: '/resources/' + item[0] + '/' + article.filename,
+                                    file: item[0] + '/' + article.filename,
+                                }),
+                                markdown: parsedMarkdown,
+                            }, index);
                         });
-                    }
+                    });
                 });
             });
         });
@@ -159,7 +133,7 @@ class ProtoController extends Component {
                 {(this.state.expanded ? (
                     <style>{expandedStyle}</style>
                 ) : undefined)}
-                
+
                 <Content
                     expanded={this.state.expanded}>
                     {this.renderCurrentCards()}
