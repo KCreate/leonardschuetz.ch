@@ -20,6 +20,7 @@ class ProtoController extends Component {
         this.renderCurrentCards = this.renderCurrentCards.bind(this);
         this.addCustomSources = this.addCustomSources.bind(this);
         this.filterCards = this.filterCards.bind(this);
+        this.sourceNotFound = this.sourceNotFound.bind(this);
 
         this.state = {
             title: 'ProtoController',
@@ -47,15 +48,24 @@ class ProtoController extends Component {
         return;
     }
 
+    sourceNotFound() {
+        return false;
+    }
+
     renderCurrentCards() {
         const source = this.props.route.path.slice(1);
-        if (!this.props.sources[source]) {
+
+        const sourceNotFoundHandlerResult = this.sourceNotFound(source, this.props.route, this.props.params);
+        if (!this.props.sources[source] && !sourceNotFoundHandlerResult) {
             return [
                 <Card key={0}># Resource not found!</Card>,
             ];
         }
 
-        const cards = this.props.sources[source].map((child, index) => {
+        let cards = sourceNotFoundHandlerResult.length
+        ? sourceNotFoundHandlerResult
+        : this.props.sources[source];
+        cards = cards.map((child, index) => {
 
             // If we've got passed a Component directly, just use that instead.
             if (child['$$typeof']) {

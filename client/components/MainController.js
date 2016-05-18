@@ -21,7 +21,6 @@ class MainController extends ProtoController {
                 ['blog', 'Blog'],
                 ['projects', 'Projects'],
                 ['about', 'About'],
-                ['development', 'Development'],
             ],
             expanded: true,
         });
@@ -30,6 +29,20 @@ class MainController extends ProtoController {
     filterCards(cards, source) {
         if (source !== 'blog') return cards;
         return cards.reverse();
+    }
+
+    sourceNotFound(source, route, params) {
+
+        // Check if we are in the article url
+        if (source.split('/')[0] === 'article') {
+            if (this.props.sources[params.category]) {
+                return this.props.sources[params.category].filter((item) => (
+                    item.meta.file === params.category + '/' + params.name
+                ));
+            }
+        }
+
+        return false;
     }
 }
 
