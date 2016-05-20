@@ -27,7 +27,6 @@ render((
             <Route path="/" component={App}>
                 <IndexRedirect to="/blog"></IndexRedirect>
                 <Route path="/blog" component={MainController}></Route>
-                <Route path="/projects" component={MainController}></Route>
                 <Route path="/about" component={MainController}></Route>
                 <Route path="/article/:category/:name" component={MainController}></Route>
                 <Redirect from="/*" to="/blog"></Redirect>

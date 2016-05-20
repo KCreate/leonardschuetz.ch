@@ -35,23 +35,21 @@ module.exports.categoryList = categoryList;
  * @param  {function} callback - callback function receiving the results
  */
 function articlesList(category, name, callback) {
-    categoryList(category, (dir) => {
-        get('/resources/' + category + '/' + name + '/', 'GET', {}, (err, res) => {
-            if (err) throw err;
+    get('/resources/' + category + '/' + name + '/', 'GET', {}, (err, res) => {
+        if (err) throw err;
 
-            let directory;
-            try {
-                directory = JSON.parse(res);
-            } catch (e) {
-                directory = [];
-            }
+        let directory;
+        try {
+            directory = JSON.parse(res);
+        } catch (e) {
+            directory = [];
+        }
 
-            if (directory.ok === false) {
-                callback(false);
-            } else {
-                callback(directory);
-            }
-        });
+        if (directory.ok === false) {
+            callback(false);
+        } else {
+            callback(directory);
+        }
     });
 };
 module.exports.articlesList = articlesList;
@@ -65,11 +63,9 @@ module.exports.articlesList = articlesList;
  * @param  {function} callback - callback function receiving the results
  */
 function getFile(category, name, file, callback) {
-    articlesList(category, name, (dir) => {
-        get('/resources/' + category + '/' + name + '/' + file, 'GET', {}, (err, res) => {
-            if (err) throw err;
-            callback(res);
-        });
+    get('/resources/' + category + '/' + name + '/' + file, 'GET', {}, (err, res) => {
+        if (err) throw err;
+        callback(res);
     });
 };
 module.exports.getFile = getFile;

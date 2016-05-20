@@ -15,77 +15,34 @@ class ProtoController extends Component {
 
     constructor(...args) {
         super(...args);
-        this.initialDataLoadForSource = this.initialDataLoadForSource.bind(this);
         this.writingAnimationFinished = this.writingAnimationFinished.bind(this);
         this.renderCurrentCards = this.renderCurrentCards.bind(this);
-        this.addCustomSources = this.addCustomSources.bind(this);
         this.filterCards = this.filterCards.bind(this);
-        this.sourceNotFound = this.sourceNotFound.bind(this);
+        this.loadSources = this.loadSources.bind(this);
+        this.requestSource = this.requestSource.bind(this);
+        this.configController = this.configController.bind(this);
 
         this.state = {
-            title: 'ProtoController',
+            title: 'Leonard Schuetz',
             navigation: [
-                ['index', 'Index'],
+                ['index', 'Index', { noNetworkRequest: true }],
             ],
             expanded: true,
             sources: Object.assign({}, this.props.sources),
+            requestSent: false,
         };
-
-        this.addCustomSources();
     }
 
     componentDidMount() {
-        if (this.state) {
-            if (this.state.navigation.length) {
-                this.state.navigation.forEach((item, index) => {
-                    this.initialDataLoadForSource(item[0]);
-                });
-            }
-        }
+        this.loadSources();
     }
 
-    addCustomSources() {
-        return;
-    }
-
-    sourceNotFound() {
-        return false;
-    }
-
-    renderCurrentCards() {
-        const source = this.props.route.path.slice(1);
-
-        const sourceNotFoundHandlerResult = this.sourceNotFound(source, this.props.route, this.props.params);
-        if (!this.props.sources[source] && !sourceNotFoundHandlerResult) {
-            return [
-                <Card key={0}># Resource not found!</Card>,
-            ];
-        }
-
-        let cards = sourceNotFoundHandlerResult.length
-        ? sourceNotFoundHandlerResult
-        : this.props.sources[source];
-        cards = cards.map((child, index) => {
-
-            // If we've got passed a Component directly, just use that instead.
-            if (child['$$typeof']) {
-                return React.cloneElement(child, {
-                    key: index,
-                });
-            }
-
-            // Else just create a new Card object
-            return (
-                <Card
-                    key={index}
-                    meta={child.meta}>
-                    {child.markdown}
-                </Card>
-            );
+    configController(config) {
+        this.setState(Object.assign({}, config, {
+            requestSent: false,
+        }), () => {
+            this.loadSources();
         });
-
-        // Return all the cards from the store
-        return this.filterCards(cards, source);
     }
 
     filterCards(cards, source) {
@@ -98,34 +55,108 @@ class ProtoController extends Component {
         });
     }
 
-    initialDataLoadForSource(source) {
-        this.state.navigation.forEach((item) => {
-            categoryList(item[0], (res) => {
-                res.forEach((article, index) => {
-                    getFile(item[0], article.filename, 'article.md', (markdown) => {
-                        getFile(item[0], article.filename, 'meta.json', (meta) => {
-                            meta = JSON.parse(meta);
+    preprocessMarkdown(markdown, source, article) {
+        return (
+            markdown
+            .split('%%PATH%%')
+            .join('/resources/' + source + '/' + article.filename)
+            .split('%%FILE%%')
+            .join(source + '/' + article.filename)
+        );
+    }
 
-                            // Replace keywords in the markdown
-                            const parsedMarkdown = markdown
-                            .split('%%PATH%%')
-                            .join('/resources/' + item[0] + '/' + article.filename)
-                            .split('%%FILE%%')
-                            .join(item[0] + '/' + article.filename);
+    requestSource(navItem, callback) {
+        callback([], navItem[0]);
+    }
 
-                            // Add to the redux sources
-                            this.props.actions.addArticles(item[0], {
-                                meta: Object.assign({}, meta, {
-                                    path: '/resources/' + item[0] + '/' + article.filename,
-                                    file: item[0] + '/' + article.filename,
-                                }),
-                                markdown: parsedMarkdown,
-                            }, index);
+    loadSources() {
+
+        // Check if the request has been sent before
+        if (!this.state.requestSent) {
+
+            // Update the state
+            this.setState({
+                requestSent: true,
+            });
+
+            // Iterate over all registered sources
+            this.state.navigation.forEach((item, index) => {
+
+                const source = item[0];
+
+                // Check if the source requires a network request
+                if (!(item[2] || {}).noNetworkRequest) {
+
+                    // Request a list of all articles inside the category
+                    categoryList(item[0], (res) => {
+                        if (!res) return console.error.call(console, 'error loading categories');
+
+                        res.forEach((article, index) => {
+
+                            // Request the article.md and meta.json file
+                            getFile(source, article.filename, 'article.md', (markdown) => {
+                                if (!markdown) return;
+                                getFile(source, article.filename, 'meta.json', (meta) => {
+                                    if (!meta) return;
+
+                                    meta = JSON.parse(meta);
+
+                                    // Add to the redux sources
+                                    this.props.actions.addArticles(source, {
+                                        meta: Object.assign({}, meta, {
+                                            path: '/resources/' + source + '/' + article.filename,
+                                            file: source + '/' + article.filename,
+                                        }),
+                                        markdown: this.preprocessMarkdown(markdown, source, article),
+                                    }, index);
+                                });
+                            });
                         });
                     });
-                });
+                } else {
+
+                    // If the source does not require a network request, ask the controller
+                    this.requestSource(item, (items, source) => {
+                        if (items.length) {
+
+                            // Add all items to the store
+                            items.forEach((item, index) => {
+                                this.props.actions.addArticles(source, {
+                                    meta: Object.assign({}, meta, {
+                                        path: '/resources/' + source + '/' + item.filename,
+                                        file: source + '/' + item.filename,
+                                    }),
+                                    markdown: this.preprocessMarkdown(item.markdown),
+                                }, index);
+                            });
+                        }
+                    });
+                }
             });
-        });
+        }
+    }
+
+    renderCurrentCards() {
+        const source = this.props.route.path.slice(1);
+
+        // If no source is found
+        if (!this.props.sources[source]) {
+            return [
+                <Card key={0}># Resource not found!</Card>,
+            ];
+        }
+
+        const cards = this.props.sources[source]
+        .map((child, index) => (
+            <Card
+                key={index}
+                meta={child.meta}>
+                {child.markdown}
+            </Card>
+        ));
+
+        // Return all the cards from the store
+        return this.filterCards(cards, source);
     }
 
     render() {
