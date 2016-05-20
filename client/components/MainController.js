@@ -16,7 +16,6 @@ class MainController extends ProtoController {
         super(...args);
 
         this.state = Object.assign({}, this.state, {
-            title: 'Leonard Schuetz',
             navigation: [
                 ['blog', 'Blog'],
                 ['about', 'About'],

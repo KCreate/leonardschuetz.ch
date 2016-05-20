@@ -15,37 +15,41 @@ class Header extends Component {
         super(...args);
         this.paralaxHandler = this.paralaxHandler.bind(this);
 
-        this.state = Object.assign({}, this.props, {
-            title: '',
-            titleToWrite: this.props.title,
-        });
+        this.state = {
+            progress: 0,
+        };
     }
 
     componentDidMount() {
 
+        // Paralax handling
         if (window) {
             window.addEventListener('scroll', this.paralaxHandler);
         }
 
-        let i = 0;
+        // Write animation
         setTimeout(() => {
             const interval = setInterval(() => {
 
-                // Change the title
                 this.setState({
-                    title: this.state.titleToWrite.substr(0, i),
+                    progress: this.state.progress + 1,
                 });
 
-                // Increment the counter
-                i++;
-
                 // If we reached the last char, notify the parent
-                if (i > this.state.titleToWrite.length) {
+                if (this.state.progress > this.props.title.length) {
                     clearInterval(interval);
                     this.props.writingAnimationFinished({});
                 }
             }, 60);
         }, 100);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.state.progress > this.props.title.length) {
+            this.setState({
+                progress: nextProps.title.length + 1,
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -88,17 +92,12 @@ class Header extends Component {
     }
 
     render() {
-
-        function shouldInclude(value) {
-            return (value !== undefined && value !== false) || value === undefined;
-        }
-
         return (
             <div className={classnames({ Header: true, expanded: this.props.expanded })} ref="Header">
                 <div>
-                    <h1><Link to="/">{this.state.title}</Link></h1>
+                    <h1><Link to="/">{this.props.title.slice(0, this.state.progress)}</Link></h1>
                     <ul>
-                        {this.props.navigation.filter(shouldInclude).map((item, index) => (
+                        {this.props.navigation.map((item, index) => (
                             <li key={index}>
                                 <Link to={'/' + item[0]} activeClassName="current">{item[1]}</Link>
                             </li>
