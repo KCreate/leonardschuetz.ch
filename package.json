@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "nodemon server/server.js -w server --ignore server/resources",
+    "serve": "nodemon server/server.js -w server",
     "start": "node server/server.js"
   },
   "author": "Leonard Schuetz",

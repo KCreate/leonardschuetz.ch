@@ -47,8 +47,11 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use(express.static('./dist'));
 app.use('/resources', require('./resources.js'));
+app.use('/todosapi', require('./todos/index.js'));
+
+// React front-page
+app.use(express.static('./dist'));
 app.use('/', (req, res) => {
     res.sendFile(path.resolve('./client/app/index.html'));
 });

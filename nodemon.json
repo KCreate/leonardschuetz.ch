@@ -1,0 +1,7 @@
+{
+    "verbose": true,
+    "ignore": [
+        "server/resources",
+        "data.json"
+    ]
+}
