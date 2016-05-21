@@ -9,16 +9,12 @@ import {
     IndexLink,
 } from 'react-router';
 
-import './Content.scss';
+import './scss/Content.scss';
 class Content extends Component {
     render() {
         return (
             <div className={classnames({ Content: true, expanded: this.props.expanded })}>
-                <DeferedContainerList
-                    delay={400}
-                    appliedClassName="deferedApplied">
-                    {this.props.children}
-                </DeferedContainerList>
+                {this.props.children}
             </div>
         );
     }

@@ -63,8 +63,13 @@ module.exports.articlesList = articlesList;
  * @param  {function} callback - callback function receiving the results
  */
 function getFile(category, name, file, callback) {
-    get('/resources/' + category + '/' + name + '/' + file, 'GET', {}, (err, res) => {
+    get('/resources/' + category + '/' + name + '/' + file, 'GET', {}, (err, res, xhr) => {
         if (err) throw err;
+
+        if (xhr.status === 404) {
+            return callback(false);
+        }
+
         callback(res);
     });
 };

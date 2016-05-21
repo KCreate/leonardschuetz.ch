@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import actions from '../redux/actions';
 import constants from '../redux/constants';
 
-import './App.scss';
+import './scss/App.scss';
 import './../style/master.scss';
 class App extends Component {
     render() {

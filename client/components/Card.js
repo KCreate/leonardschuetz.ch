@@ -38,28 +38,49 @@ import {
     IndexLink,
 } from 'react-router';
 
-import './Card.scss';
+import './scss/Card.scss';
 class Card extends Component {
 
     constructor(...args) {
         super(...args);
         this.getMarkdown = this.getMarkdown.bind(this);
+        this.preProcessMarkdown = this.preProcessMarkdown.bind(this);
         this.state = {
             shouldHighlight: false,
         };
     }
 
+    preProcessMarkdown(markdown, source, filename) {
+        return (
+            markdown
+            .split('%%PATH%%')
+            .join('/resources/' + source + '/' + filename)
+            .split('%%FILE%%')
+            .join(source + '/' + filename)
+        );
+    }
+
     getMarkdown() {
+
+        let processedMarkdown = this.props.children;
+        if (this.props.meta) {
+            processedMarkdown = this.preProcessMarkdown(
+                processedMarkdown,
+                this.props.meta.category,
+                this.props.meta.filename
+            );
+        }
+
         if (this.state.shouldHighlight) {
             return (
                 <Markdown className="Card-Content" container="div" options={MarkdownConfigHighlight}>
-                    {this.props.children}
+                    {processedMarkdown}
                 </Markdown>
             );
         } else {
             return (
                 <Markdown className="Card-Content" container="div" options={MarkdownConfigNoHighlight}>
-                    {this.props.children}
+                    {processedMarkdown}
                 </Markdown>
             );
         }
@@ -74,19 +95,10 @@ class Card extends Component {
     };
 
     render() {
-
-        let shareButton;
-        if (this.props.meta) {
-            shareButton = (
-                <Link to={'/article/' + this.props.meta.file} className="ShareButton">Direct Link</Link>
-            );
-        }
-
         return (
-        <div className={'Card' + (this.props.className || '')}>
-            {this.getMarkdown()}
-            {shareButton}
-        </div>
+            <div className={'Card' + (this.props.className || '')}>
+                {this.getMarkdown()}
+            </div>
         );
     }
 }

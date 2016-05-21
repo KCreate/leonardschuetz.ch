@@ -1,14 +1,14 @@
-@import "../style/global.scss";
+@import "../../style/global.scss";
 
 .Content {
     width: 100%;
     transform: translateY(-70px);
     opacity: 1;
-    transition: transform $durExtraLong $easing,
+    transition: transform $durExtraLong $easing 200ms,
                 opacity $durExtraLong $easing;
 
     &.expanded {
-        transform: translateY(50%);
+        transform: translateY(200px);
         opacity: 0;
     }
 

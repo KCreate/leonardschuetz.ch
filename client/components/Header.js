@@ -8,7 +8,7 @@ import {
     IndexLink,
 } from 'react-router';
 
-import './Header.scss';
+import './scss/Header.scss';
 class Header extends Component {
 
     constructor(...args) {
@@ -92,16 +92,20 @@ class Header extends Component {
     }
 
     render() {
+
+        const navigationItems = this.props.navigation
+        .map((item, index) => (
+            <li key={index}>
+                <Link to={'/' + item[0]} activeClassName="current">{item[1]}</Link>
+            </li>
+        ));
+
         return (
             <div className={classnames({ Header: true, expanded: this.props.expanded })} ref="Header">
                 <div>
                     <h1><Link to="/">{this.props.title.slice(0, this.state.progress)}</Link></h1>
                     <ul>
-                        {this.props.navigation.map((item, index) => (
-                            <li key={index}>
-                                <Link to={'/' + item[0]} activeClassName="current">{item[1]}</Link>
-                            </li>
-                        ))}
+                        {navigationItems}
                     </ul>
                 </div>
             </div>

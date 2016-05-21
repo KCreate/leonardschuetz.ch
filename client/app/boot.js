@@ -9,7 +9,7 @@ const store = configureStore();
 //import style from '../style/master.scss';
 import favicon from './favicon.png';
 import App from '../components/App.js';
-import MainController from '../components/MainController';
+import FrontPageController from '../components/FrontPageController';
 
 // Router
 import {
@@ -26,9 +26,8 @@ render((
         <Router history={browserHistory}>
             <Route path="/" component={App}>
                 <IndexRedirect to="/blog"></IndexRedirect>
-                <Route path="/blog" component={MainController}></Route>
-                <Route path="/about" component={MainController}></Route>
-                <Route path="/article/:category/:name" component={MainController}></Route>
+                <Route path="/blog" component={FrontPageController}></Route>
+                <Route path="/about" component={FrontPageController}></Route>
                 <Redirect from="/*" to="/blog"></Redirect>
             </Route>
         </Router>

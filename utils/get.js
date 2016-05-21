@@ -8,7 +8,7 @@ module.exports = function get(url, method, options, _callback) {
 
     // Wrap the _callback
     function callback(err) {
-        _callback(err, this.responseText);
+        _callback(err, this.responseText, this);
     };
 
     // Standard XMLHttpRequest
