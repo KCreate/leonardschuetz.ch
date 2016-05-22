@@ -3,6 +3,7 @@ const webpack         = require('webpack');
 const path            = require('path');
 const autoprefixer    = require('autoprefixer');
 const cssnano         = require('cssnano');
+const postcssfocus    = require('postcss-focus');
 
 // Production Switch
 const production = false;
@@ -106,5 +107,5 @@ module.exports = {
             speed: 4,
         },
     },
-    postcss: () => ([autoprefixer, cssnano]),
+    postcss: () => ([autoprefixer, cssnano, postcssfocus]),
 };
