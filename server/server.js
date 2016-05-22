@@ -26,19 +26,6 @@ app.use(compression());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-    console.log(req.body, req.query, req.params);
-    next();
-});
-
-// Webpack middleware, do not include in production
-if (!webpackConfig.production) {
-    app.use(webpackDevMiddleware(compiler, {
-        noInfo: true,
-        publicPath: webpackConfig.output.publicPath,
-    }));
-    app.use(webpackHotMiddleware(compiler));
-}
 
 // Redirect favicon.ico to favicon.png
 app.use((req, res, next) => {
@@ -53,6 +40,16 @@ app.use((req, res, next) => {
 // Routes
 app.use('/resources', require('./resources.js'));
 app.use('/todosapi', require('./todos/index.js'));
+app.use('/documents', require('./documents.js'));
+
+// Webpack middleware, do not include in production
+if (!webpackConfig.production) {
+    app.use(webpackDevMiddleware(compiler, {
+        noInfo: true,
+        publicPath: webpackConfig.output.publicPath,
+    }));
+    app.use(webpackHotMiddleware(compiler));
+}
 
 // React front-page
 app.use(express.static('./dist'));
