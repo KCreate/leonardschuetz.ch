@@ -2,12 +2,13 @@
 const express   = require('express');
 const path      = require('path');
 const fs        = require('fs');
+const config    = require('./config.json');
 const router    = new express.Router();
 
 // Check if the right password is set
 router.use((req, res, next) => {
 
-    if (req.body.password !== 'elpassworda2016') {
+    if (req.body.password !== config.password) {
         return res.json({
             ok: false,
             reason: 'Not authorized',
@@ -87,7 +88,7 @@ router.delete('/:id', (req, res) => {
         }
 
         // If no id was given in the url, default to appending to the list
-        var id = parseInt(req.params.id, 10);
+        const id = parseInt(req.params.id, 10);
         if (Number.isNaN(id)) {
             return res.json({
                 ok: false,

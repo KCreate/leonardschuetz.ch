@@ -3,3 +3,4 @@ dist
 .git
 server/resources
 server/todos/data.json
+server/todos/config.json
