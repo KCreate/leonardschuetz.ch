@@ -1,7 +1,6 @@
 // Dependencies
 import React, { Component, PropTypes } from 'react';
 import ProtoController from './ProtoController';
-import StaticBlogArticles from './StaticBlogArticles';
 import Card from './Card';
 import TodoList from './TodoList';
 import get from '../../utils/get';

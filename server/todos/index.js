@@ -2,7 +2,7 @@
 const express   = require('express');
 const path      = require('path');
 const fs        = require('fs');
-const config    = require('./config.json');
+const config    = require('./../config.json');
 const router    = new express.Router();
 
 // Check if the right password is set
