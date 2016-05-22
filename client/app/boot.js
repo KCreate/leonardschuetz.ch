@@ -10,6 +10,7 @@ const store = configureStore();
 import favicon from './favicon.png';
 import App from '../components/App.js';
 import FrontPageController from '../components/FrontPageController';
+import TodosController from '../components/TodosController';
 
 // Router
 import {
@@ -28,6 +29,7 @@ render((
                 <IndexRedirect to="/blog"></IndexRedirect>
                 <Route path="/blog" component={FrontPageController}></Route>
                 <Route path="/about" component={FrontPageController}></Route>
+                <Route path="/todos" component={TodosController}></Route>
                 <Redirect from="/*" to="/blog"></Redirect>
             </Route>
         </Router>

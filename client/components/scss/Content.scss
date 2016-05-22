@@ -4,7 +4,7 @@
     width: 100%;
     transform: translateY(-70px);
     opacity: 1;
-    transition: transform $durExtraLong $easing 200ms,
+    transition: transform $durExtraLong $easing 150ms,
                 opacity $durExtraLong $easing;
 
     &.expanded {

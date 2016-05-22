@@ -6,6 +6,7 @@ const router    = new express.Router();
 
 // Check if the right password is set
 router.use((req, res, next) => {
+
     if (req.body.password !== 'elpassworda2016') {
         return res.json({
             ok: false,
@@ -46,6 +47,12 @@ router.put('/', (req, res) => {
         try {
             data = JSON.parse(data);
         } catch (e) {
+            return res.json({
+                ok: false,
+            });
+        }
+
+        if (!req.body.text || req.body.text === '') {
             return res.json({
                 ok: false,
             });

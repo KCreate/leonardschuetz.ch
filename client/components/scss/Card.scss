@@ -16,6 +16,7 @@
                 margin $durMedium $easing,
                 border $durMedium $easing,
                 box-shadow $durMedium $easing;
+    will-change: transform, opacity;
 
     @include mobile {
         border-radius: 0;
@@ -34,7 +35,7 @@
     }
 
     $elementMargin: 16px;
-    > div > span {
+    > div > span, > div {
 
         > * {
             margin: $elementMargin 0;
@@ -246,6 +247,47 @@
                 background-color: $colorLight2;
                 tr th {
                     text-align: left;
+                }
+            }
+        }
+
+        /* Form Styles */
+        input, button, textarea {
+            display: block;
+            border: 3px solid $colorBlue1;
+            border-radius: 5px;
+            width: 100%;
+            height: 38px;
+
+            margin: ($elementMargin - 8px) 0;
+
+            background-color: $colorCard;
+            color: $colorDark1;
+            box-shadow: $shadow1;
+
+            padding: 4px 8px;
+            font-size: 16px;
+
+            transition: background $durShort $easing,
+                        color $durShort $easing;
+        }
+
+        button {
+            height: 37px;
+            padding: 0 16px;
+            border-radius: 3px;
+            background-color: $colorBlue1;
+            color: $colorCard;
+        }
+
+        button, input[type="submit"], input[type="button"] {
+            &:hover {
+                background-color: $colorBlue1;
+                color: $colorCard;
+                cursor: pointer;
+
+                &:not(input) {
+                    text-decoration: underline;
                 }
             }
         }

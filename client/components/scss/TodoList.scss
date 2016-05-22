@@ -1,0 +1,30 @@
+@import "../../style/global.scss";
+
+.TodoList {
+
+    padding-left: 0 !important; // Sorry
+
+    .TodoItem {
+        margin: 8px 0;
+        padding: 8px 8px;
+        border-radius: 3px;
+        background-color: $colorLight1;
+        box-shadow: $shadow1;
+        position: relative;
+
+        &::before {
+            content: "";
+        }
+
+        button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            margin: 0;
+
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            width: auto;
+        }
+    }
+}

@@ -14,11 +14,12 @@ module.exports = function get(url, method, options, _callback) {
     // Standard XMLHttpRequest
     const xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
+    xhr.setRequestHeader('Content-type', 'application/json');
 
     // Curry the callback
     xhr.addEventListener('load', callback.bind(xhr, undefined), false);
     xhr.addEventListener('abort', callback.bind(xhr, xhr), false);
-    xhr.send(options.payload);
+    xhr.send(JSON.stringify(options.payload));
 
     // Abort after a timeout of 20 seconds or use the value set in the options
     setTimeout(() => {
