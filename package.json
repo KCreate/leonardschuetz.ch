@@ -36,6 +36,7 @@
     "compression": "^1.6.1",
     "deferedcontainerlist": "^0.1.2-c",
     "express": "^4.13.4",
+    "express-ws": "^2.0.0-rc.1",
     "highlight.js": "^9.3.0",
     "morgan": "^1.7.0",
     "multer": "^1.1.0",

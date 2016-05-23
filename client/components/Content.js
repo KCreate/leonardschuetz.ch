@@ -1,7 +1,6 @@
 // Dependencies
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
-import DeferedContainerList from 'deferedcontainerlist';
 
 // Router
 import {

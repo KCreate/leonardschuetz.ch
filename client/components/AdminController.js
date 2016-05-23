@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import ProtoController from './ProtoController';
 import Card from './Card';
 import FileCard from './FileCard';
+import StatusView from './StatusView';
 import get from '../../utils/get';
 
 class AdminController extends ProtoController {
@@ -88,24 +89,11 @@ class AdminController extends ProtoController {
             <FileCard key={index} file={file}></FileCard>
         ));
 
-        let statusIndicator;
-        if (this.state.status) {
-            const className = ({
-                progress: 'blueText',
-                error: 'redText',
-                success: 'greenText',
-            })[this.state.status.type];
-
-            statusIndicator = (
-                <p className={className}>{this.state.status.text}</p>
-            );
-        }
-
         return (
             <div>
                 <Card>
                     # Upload File
-                    {statusIndicator}
+                    <StatusView status={this.state.status}></StatusView>
                     <form onSubmit={this.handleUpload} ref="uploadForm">
                         <input type="file" name="file"></input>
                         <input type="password" name="password" placeholder="Password"></input>

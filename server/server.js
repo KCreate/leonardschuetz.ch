@@ -8,6 +8,9 @@ const compression   = require('compression');
 const app           = express();
 const port          = 3000;
 
+// Websocket setup
+const expressWs     = require('express-ws')(app);
+
 // Webpack dependencies, do not include in production
 const webpackConfig = require('../webpack.config.js');
 if (!webpackConfig.production) {
@@ -41,6 +44,7 @@ app.use((req, res, next) => {
 app.use('/resources', require('./resources.js'));
 app.use('/todosapi', require('./todos/index.js'));
 app.use('/documents', require('./documents.js'));
+app.use('/livechatapi', require('./livechat.js'));
 
 // Webpack middleware, do not include in production
 if (!webpackConfig.production) {
