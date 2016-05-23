@@ -21,8 +21,13 @@
     @include mobile {
         border-radius: 0;
         margin: 0;
-        border-bottom: 3px solid $colorLight2;
+        border-bottom: 3px solid $colorDark4;
         box-shadow: none;
+
+        &:last-child {
+            border-bottom: none;
+            box-shadow: $shadow2;
+        }
     };
 
     &.deferedApplied {
