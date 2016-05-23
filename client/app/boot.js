@@ -12,6 +12,7 @@ import App from '../components/App.js';
 import FrontPageController from '../components/FrontPageController';
 import TodosController from '../components/TodosController';
 import AdminController from '../components/AdminController';
+import NotFoundController from '../components/NotFoundController';
 
 // Router
 import {
@@ -32,7 +33,7 @@ render((
                 <Route path="/about" component={FrontPageController}></Route>
                 <Route path="/todos" component={TodosController}></Route>
                 <Route path="/admin" component={AdminController}></Route>
-                <Redirect from="/*" to="/blog"></Redirect>
+                <Route path="/*" component={NotFoundController}></Route>
             </Route>
         </Router>
     </Provider>
