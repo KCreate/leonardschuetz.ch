@@ -1,10 +1,15 @@
+@import "./global.scss";
 .App {
-    > h1 {
-        color: red;
+    .Controller {
+        > p:last-child {
+            text-align: center;
+            margin-top: -40px;
+            margin-bottom: 32px;
+            color: $colorDark4;
 
-        &::first-letter {
-            color: blue;
-            font-size: 1.2em;
+            @include mobile {
+                color: transparentize($colorLight2, 0.7);
+            }
         }
     }
 }
