@@ -6,7 +6,7 @@ import configureStore from '../redux/store';
 
 const store = configureStore();
 
-//import style from '../style/master.scss';
+import style from '../style/master.scss';
 import favicon from './favicon.png';
 import App from '../components/App.js';
 import FrontPageController from '../components/FrontPageController';

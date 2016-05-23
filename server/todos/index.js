@@ -7,7 +7,6 @@ const router    = new express.Router();
 
 // Check if the right password is set
 router.use((req, res, next) => {
-
     if (req.body.password !== config.password) {
         return res.json({
             ok: false,

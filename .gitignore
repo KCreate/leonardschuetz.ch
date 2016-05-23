@@ -1,6 +1,6 @@
 node_modules
 dist
 .git
-server/resources
+server/resources/versionedDocuments
 server/config.json
 server/todos/data.json

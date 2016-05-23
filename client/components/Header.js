@@ -8,7 +8,7 @@ import {
     IndexLink,
 } from 'react-router';
 
-import './scss/Header.scss';
+import './../style/Header.scss';
 class Header extends Component {
 
     constructor(...args) {

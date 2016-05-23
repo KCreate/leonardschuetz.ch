@@ -9,7 +9,7 @@ import {
     IndexLink,
 } from 'react-router';
 
-import './scss/Content.scss';
+import './../style/Content.scss';
 class Content extends Component {
     render() {
         return (

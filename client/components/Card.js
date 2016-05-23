@@ -38,7 +38,7 @@ import {
     IndexLink,
 } from 'react-router';
 
-import './scss/Card.scss';
+import './../style/Card.scss';
 class Card extends Component {
 
     constructor(...args) {

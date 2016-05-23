@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import Card from './Card';
 
-import './scss/TodoList.scss';
+import './../style/TodoList.scss';
 class TodoList extends Component {
     render() {
         return (
