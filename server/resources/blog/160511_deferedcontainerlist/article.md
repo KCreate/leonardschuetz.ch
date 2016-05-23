@@ -7,9 +7,8 @@ All it does is, it defers the rendering of props changes by a specified delay. W
 
 This enables powerful animations, that were only possible with a huge blob of code.
 
-Below is a little screencap:
-
-![](%%PATH%%/example.gif)
+# Example
+The page transition on this page is powered by deferedcontainerlist.
 
 # Installation
 ```bash
