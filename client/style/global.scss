@@ -35,6 +35,11 @@ $colorRed2:  darken($colorRed1, $colorChangePercentage);
 $colorRed3:  darken($colorRed2, $colorChangePercentage);
 $colorRed4:  darken($colorRed3, $colorChangePercentage);
 
+$colorGreen1:  #43A047;
+$colorGreen2:  darken($colorGreen1, $colorChangePercentage);
+$colorGreen3:  darken($colorGreen2, $colorChangePercentage);
+$colorGreen4:  darken($colorGreen3, $colorChangePercentage);
+
 $colorLinks: saturate(lighten($colorBlue1, $colorChangePercentage), 100%);
 $colorLinksLight: mix($colorLinks, $colorLight1, 100%);
 
