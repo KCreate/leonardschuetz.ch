@@ -19,7 +19,7 @@ class NotFoundController extends ProtoController {
         return (
             <div>
                 <Card>
-                    <h1>404 Not Found</h1>
+                    <h1>Ooops...</h1>
                     <p>
                         This is not the web page you are looking for.
                     </p>

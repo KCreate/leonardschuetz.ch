@@ -172,6 +172,11 @@
                 border-radius: 50%;
             }
 
+            // Remove the bottom margin if the card is the last
+            &:last-child {
+                margin-bottom: -($elementMargin + 4px);
+            }
+
             &+ img {
                 margin-top: $elementMargin;
             }
