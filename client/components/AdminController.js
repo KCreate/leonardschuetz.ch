@@ -19,7 +19,6 @@ class AdminController extends ProtoController {
             ],
             files: [],
             status: false,
-            progress: false,
         });
 
         this.listFiles();
@@ -50,7 +49,10 @@ class AdminController extends ProtoController {
             noJSON: true,
             onprogress: (event) => {
                 this.setState({
-                    progress: parseInt((100 / event.total) * event.loaded, 10),
+                    status: {
+                        text: parseInt((100 / event.total) * event.loaded, 10),
+                        type: 'progress',
+                    },
                 });
             },
         }, (err, response) => {
@@ -61,16 +63,20 @@ class AdminController extends ProtoController {
             // Error handling
             if (response.error) {
                 return this.setState({
-                    status: response.error,
-                    progress: false,
+                    status: {
+                        text: response.error,
+                        type: 'error',
+                    },
                 });
             }
 
             // Clear the form and rerender the document list
             this.refs.uploadForm.reset();
             this.setState({
-                status: 'Successfully uploaded file!',
-                progress: false,
+                status: {
+                    text: 'Successfully uploaded file!',
+                    type: 'success',
+                },
             });
             this.listFiles();
         });
@@ -82,17 +88,16 @@ class AdminController extends ProtoController {
             <FileCard key={index} file={file}></FileCard>
         ));
 
-        let progressIndicator;
-        if (this.state.progress) {
-            progressIndicator = (
-                <p className="blueText">{this.state.progress}% Uploaded</p>
-            );
-        }
-
         let statusIndicator;
         if (this.state.status) {
+            const className = ({
+                progress: 'blueText',
+                error: 'redText',
+                success: 'greenText',
+            })[this.state.status.type];
+
             statusIndicator = (
-                <p className="redText">{this.state.status}</p>
+                <p className={className}>{this.state.status.text}</p>
             );
         }
 
@@ -101,7 +106,6 @@ class AdminController extends ProtoController {
                 <Card>
                     # Upload File
                     {statusIndicator}
-                    {progressIndicator}
                     <form onSubmit={this.handleUpload} ref="uploadForm">
                         <input type="file" name="file"></input>
                         <input type="password" name="password" placeholder="Password"></input>
