@@ -28,6 +28,11 @@
     font-weight: 400;
 }
 
+::selection {
+    background: $colorBlue1;
+    color: $colorLight1;
+}
+
 // FIXME: !important is an anti-pattern
 body {
     background-color: $colorLight1 !important;
