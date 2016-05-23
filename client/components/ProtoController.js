@@ -42,6 +42,11 @@ class ProtoController extends Component {
     }
 
     render() {
+
+        if (document) {
+            document.title = this.state.title;
+        }
+
         const expandedStyle = 'body{height:100vh;overflow:hidden}';
         return (
             <div className="Controller">
