@@ -27,7 +27,6 @@ module.exports = {
         "no-useless-escape": "error",
         "wrap-iife": ["error", "inside"],
         "no-loop-func": "error",
-        "prefer-rest-params": "error",
         "prefer-arrow-callback": ["error", {
             allowNamedFunctions: true
         }],

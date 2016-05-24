@@ -44,7 +44,10 @@ app.use((req, res, next) => {
 app.use('/resources', require('./resources.js'));
 app.use('/todosapi', require('./todos/index.js'));
 app.use('/documents', require('./documents.js'));
-app.use('/livechatapi', require('./livechat.js'));
+app.use('/livechatapi', (req, res, next) => {
+    req.expressWs = expressWs;
+    next();
+}, require('./livechat/route.js'));
 
 // Webpack middleware, do not include in production
 if (!webpackConfig.production) {

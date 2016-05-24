@@ -36,6 +36,7 @@ class LiveChatController extends ProtoController {
             ],
             livechat: {
                 name: '',
+                username: '',
                 joined: false,
             },
             status: {
@@ -52,6 +53,7 @@ class LiveChatController extends ProtoController {
     joinRoomHandler(event) {
         event.preventDefault();
         const roomName = String(event.target[0].value);
+        const username = String(event.target[1].value);
 
         if (roomName.length || roomName) {
             this.setState({
@@ -61,6 +63,7 @@ class LiveChatController extends ProtoController {
                 },
                 livechat: {
                     name: roomName,
+                    username,
                 },
             });
 
@@ -105,6 +108,7 @@ class LiveChatController extends ProtoController {
         this.websocket.sendJson({
             type: 'joinRequest',
             room: this.state.livechat.name,
+            username: this.state.livechat.username,
         });
     }
 
@@ -113,10 +117,10 @@ class LiveChatController extends ProtoController {
         data = JSON.parse(data);
 
         switch (data.type) {
-        case 'joinSuccess': {
+        case 'joinAccept': {
             this.setState({
                 status: {
-                    text: 'Connected to room: ' + data.room + '!',
+                    text: 'Connected to "' + data.room + '" as ' + this.state.livechat.username,
                     type: 'success',
                 },
                 livechat: {
@@ -126,14 +130,14 @@ class LiveChatController extends ProtoController {
             });
             break;
         }
-        case 'joinDeny': {
+        case 'cancelRequest': {
             this.closeWebsocketConnection();
             break;
         }
         case 'status': {
             this.setState({
-                users: data.room.users,
-                messages: data.room.messages,
+                users: data.users,
+                messages: data.messages,
             });
             break;
         }
@@ -148,6 +152,7 @@ class LiveChatController extends ProtoController {
             this.setState({
                 livechat: {
                     room: '',
+                    username: '',
                     joined: false,
                 },
                 status: {
@@ -164,9 +169,8 @@ class LiveChatController extends ProtoController {
         event.preventDefault();
         if (this.websocket) {
             this.websocket.sendJson({
-                type: 'message',
+                type: 'addMessage',
                 message: event.target[0].value,
-                room: this.state.livechat.room,
             });
             this.refs.messageForm.reset();
         }
@@ -177,12 +181,15 @@ class LiveChatController extends ProtoController {
         // Prompt the user for a roomname
         let headerCard;
         let chatCard;
+        let usersCard;
+        let messagesCard;
         if (!this.state.livechat.joined) {
             headerCard = (
                 <Card>
                     # Select chatroom
                     <form onSubmit={this.joinRoomHandler}>
-                        <input name="roomname" placeholder="Room name"></input>
+                        <input placeholder="Room name"></input>
+                        <input placeholder="Username"></input>
                         <input type="submit" value="Join room"></input>
                     </form>
                 </Card>
@@ -190,11 +197,33 @@ class LiveChatController extends ProtoController {
         } else {
             chatCard = (
                 <Card>
-                    {'# ' + this.state.livechat.room}
+                    # Write
                     <form onSubmit={this.messageSendHandler} ref="messageForm">
-                        <input name="roomname" placeholder="Message"></input>
+                        <input placeholder="Message"></input>
                         <input type="submit" value="Send"></input>
                     </form>
+                </Card>
+            );
+
+            usersCard = (
+                <Card>
+                    # Users
+                    <ul>
+                        {this.state.users.map((user, index) => (
+                            <li key={index}>{user.username} - {user.identifier.slice(0, 10)}</li>
+                        ))}
+                    </ul>
+                </Card>
+            );
+
+            messagesCard = (
+                <Card>
+                    # Chat History
+                    <ul>
+                        {this.state.messages.map((message, index) => (
+                            <li key={index}>{message.user.username} - {message.message}</li>
+                        ))}
+                    </ul>
                 </Card>
             );
         }
@@ -205,9 +234,11 @@ class LiveChatController extends ProtoController {
                 <Card>
                     # Status
                     <StatusView status={this.state.status}></StatusView>
-                    {JSON.stringify([this.state.users, this.state.messages])}
                 </Card>
                 {chatCard}
+                {messagesCard}
+                {usersCard}
+
             </div>
         );
     }
