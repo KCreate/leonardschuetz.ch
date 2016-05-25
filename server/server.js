@@ -61,7 +61,7 @@ if (!webpackConfig.production) {
 // React front-page
 app.use(express.static('./dist'));
 app.use('/', (req, res) => {
-    res.sendFile(path.resolve('./client/app/index.html'));
+    res.sendFile(path.resolve('./dist/index.html'));
 });
 
 // Listen

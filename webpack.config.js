@@ -1,12 +1,12 @@
+// Production Switch
+const production = true;
+
 // Dependencies
 const webpack         = require('webpack');
 const path            = require('path');
 const autoprefixer    = require('autoprefixer');
 const cssnano         = require('cssnano');
 const postcssfocus    = require('postcss-focus');
-
-// Production Switch
-const production = false;
 
 // Entry points
 const entry = ((production) => {
@@ -90,9 +90,13 @@ module.exports = {
                 loader: 'style!css!postcss!sass',
             },
             {
+                test: /\.(html|txt|md)/,
+                loader: 'file?name=[name].[ext]',
+            },
+            {
                 test: /.*\.(gif|png|jpe?g|svg)$/i,
                 loaders: [
-                    'file?hash=sha512&digest=hex&name=[hash].[ext]',
+                    'file?name=[name].[ext]',
                     'image-webpack',
                 ],
             },
