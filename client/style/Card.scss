@@ -287,6 +287,9 @@
             border-radius: 3px;
             background-color: $colorBlue1;
             color: $colorCard;
+            box-shadow: $shadow1;
+
+            transition: box-shadow $durMedium $easing;
         }
 
         button, input[type="submit"], input[type="button"] {
@@ -294,6 +297,7 @@
                 background-color: $colorBlue1;
                 color: $colorCard;
                 cursor: pointer;
+                box-shadow: $shadow2;
 
                 &:not(input) {
                     text-decoration: underline;

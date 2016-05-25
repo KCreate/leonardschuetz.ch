@@ -89,8 +89,6 @@ const LiveChat = function() {
 
         const messagesAmount = this.rooms[roomName].messages.length;
 
-        console.log(messages);
-
         // Select only the messages specified by the filter
         const messages = this.rooms[roomName].messages
         .slice(0) // To work on a copy of the array not the reference
@@ -98,14 +96,25 @@ const LiveChat = function() {
         .slice(0, limit || messagesAmount)
         .reverse();
 
-        console.log(messages);
-
         return messages;
+    };
+
+    // Returns true or false wether a string can be used as a room name
+    this.validRoomName = function(roomName) {
+        return (
+            roomName.length >= 4 &&
+            roomName.length <= 15
+        );
     };
 
     // Add a new message to a specific room
     this.addMessage = function(roomName, message, user, time) {
         if (!this.roomExists(roomName) || !this.userExists(user.identifier)) {
+            return false;
+        }
+
+        // Check if the message isn't empty
+        if (message.length === 0) {
             return false;
         }
 
@@ -189,14 +198,21 @@ const LiveChat = function() {
     // Add a user
     this.addUser = function(roomName, user) {
 
+        // Check if the username is long enough
+        if (user.username.length < 4) {
+            return false;
+        }
+
         // Check if the user already exists
         if (this.userExists(user.websocketKey, user.username)) {
             return false;
         }
 
         // Add the room if it doesn't exist already
-        if (!this.roomExists(roomName)) {
+        if (!this.roomExists(roomName) && this.validRoomName(roomName)) {
             this.addRoom(roomName);
+        } else if (!this.roomExists(roomName) && this.validRoomName(roomName)) {
+            return false;
         }
 
         // Add the user to the livechat

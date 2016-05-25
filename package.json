@@ -34,6 +34,7 @@
     "body-parser": "^1.15.0",
     "classnames": "^2.2.5",
     "compression": "^1.6.1",
+    "dateformat": "^1.0.12",
     "deferedcontainerlist": "^0.1.2-c",
     "express": "^4.13.4",
     "express-ws": "^2.0.0-rc.1",

@@ -1,21 +1,10 @@
 @import "./global.scss";
 
-.TodoList {
+.List {
 
     padding-left: 0 !important; // Sorry
 
-    .TodoItem {
-        margin: 8px 0;
-        padding: 8px 8px;
-        border-radius: 3px;
-        background-color: $colorLight1;
-        box-shadow: $shadow1;
-        position: relative;
-
-        &::before {
-            content: "";
-        }
-
+    .ListItem {
         button {
             position: absolute;
             right: 0;

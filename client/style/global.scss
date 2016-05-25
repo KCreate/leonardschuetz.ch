@@ -25,7 +25,7 @@ $colorDark2: lighten($colorDark1, $colorChangePercentage);
 $colorDark3: lighten($colorDark2, $colorChangePercentage);
 $colorDark4: lighten($colorDark3, $colorChangePercentage);
 
-$colorBlue1:  #3B69CC;
+$colorBlue1:  #536DFE;
 $colorBlue2:  darken($colorBlue1, $colorChangePercentage);
 $colorBlue3:  darken($colorBlue2, $colorChangePercentage);
 $colorBlue4:  darken($colorBlue3, $colorChangePercentage);

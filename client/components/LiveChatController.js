@@ -3,6 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import ProtoController from './ProtoController';
 import Card from './Card';
 import StatusView from './StatusView';
+import List from './List';
+import MessagesView from './MessagesView';
 
 if (WebSocket) {
     WebSocket.prototype.sendJson = function(object) {
@@ -119,12 +121,14 @@ class LiveChatController extends ProtoController {
         switch (data.type) {
         case 'joinAccept': {
             this.setState({
+                title: data.room,
                 status: {
                     text: 'Connected to "' + data.room + '" as ' + this.state.livechat.username,
                     type: 'success',
                 },
                 livechat: {
                     room: data.room,
+                    username: this.state.livechat.username,
                     joined: true,
                 },
             });
@@ -150,6 +154,7 @@ class LiveChatController extends ProtoController {
             this.websocket = undefined;
 
             this.setState({
+                title: 'Livechat',
                 livechat: {
                     room: '',
                     username: '',
@@ -180,9 +185,9 @@ class LiveChatController extends ProtoController {
 
         // Prompt the user for a roomname
         let headerCard;
-        let chatCard;
         let usersCard;
         let messagesCard;
+        let closeButton;
         if (!this.state.livechat.joined) {
             headerCard = (
                 <Card>
@@ -190,55 +195,51 @@ class LiveChatController extends ProtoController {
                     <form onSubmit={this.joinRoomHandler}>
                         <input placeholder="Room name"></input>
                         <input placeholder="Username"></input>
-                        <input type="submit" value="Join room"></input>
+                        <button type="submit">Send</button>
                     </form>
                 </Card>
             );
         } else {
-            chatCard = (
-                <Card>
-                    # Write
-                    <form onSubmit={this.messageSendHandler} ref="messageForm">
-                        <input placeholder="Message"></input>
-                        <input type="submit" value="Send"></input>
-                    </form>
-                </Card>
-            );
-
             usersCard = (
                 <Card>
                     # Users
-                    <ul>
+                    <List>
                         {this.state.users.map((user, index) => (
-                            <li key={index}>{user.username} - {user.identifier.slice(0, 10)}</li>
+                            user.username + '-' + user.identifier.slice(0, 10)
                         ))}
-                    </ul>
+                    </List>
                 </Card>
             );
 
             messagesCard = (
                 <Card>
-                    # Chat History
-                    <ul>
-                        {this.state.messages.map((message, index) => (
-                            <li key={index}>{message.user.username} - {message.message}</li>
-                        ))}
-                    </ul>
+                    # Chat
+                    <MessagesView
+                        messages={this.state.messages}
+                        livechat={this.state.livechat}>
+                    </MessagesView>
+                    <form onSubmit={this.messageSendHandler} ref="messageForm">
+                        <input placeholder="Message"></input>
+                        <button type="submit">Send</button>
+                    </form>
                 </Card>
+            );
+
+            closeButton = (
+                <button onClick={this.closeWebsocketConnection}>Exit chatroom</button>
             );
         }
 
         return (
             <div>
                 {headerCard}
+                {messagesCard}
+                {usersCard}
                 <Card>
                     # Status
                     <StatusView status={this.state.status}></StatusView>
+                    {closeButton}
                 </Card>
-                {chatCard}
-                {messagesCard}
-                {usersCard}
-
             </div>
         );
     }
