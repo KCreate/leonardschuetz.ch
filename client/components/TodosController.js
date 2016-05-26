@@ -83,7 +83,7 @@ class TodosController extends ProtoController {
                     # Add todo
                     <form onSubmit={this.handleUpload}>
                         <input placeholder="Do something..." ref="todoInput"></input>
-                        <input type="submit" value="Add Todo"></input>
+                        <button type="submit">Add Todo</button>
                     </form>
                 </Card>
             );

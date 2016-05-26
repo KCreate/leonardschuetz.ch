@@ -97,7 +97,7 @@ class AdminController extends ProtoController {
                     <form onSubmit={this.handleUpload} ref="uploadForm">
                         <input type="file" name="file"></input>
                         <input type="password" name="password" placeholder="Password"></input>
-                        <input type="submit" value="Upload"></input>
+                        <button type="submit">Upload</button>
                     </form>
                 </Card>
                 {fileCards}
