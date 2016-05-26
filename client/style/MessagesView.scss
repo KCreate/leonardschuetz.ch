@@ -6,7 +6,9 @@
     $messageOffset: 20px;
     $messageBorderRadius: 4px;
 
-    background-color: $colorLight1;
+    width: calc(100% + 32px);
+    transform: translateX(-16px);
+
     border-radius: 3px;
     padding: $messageMargin 0;
     overflow: hidden;
@@ -32,13 +34,6 @@
             padding-bottom: 3px;
         }
 
-        > .messages {
-            > p:not(:only-child) {
-                padding: 4px 0;
-                border-bottom: 1px solid $colorDark1;
-            }
-        }
-
         > .time {
             width: 100%;
             display: block;
@@ -55,10 +50,6 @@
 
             > .title {
                 border-bottom: 2px solid $colorCard;
-            }
-
-            > .messages > p:not(:only-child) {
-                border-bottom: 1px solid $colorCard;
             }
 
             &+ .currentUser {
