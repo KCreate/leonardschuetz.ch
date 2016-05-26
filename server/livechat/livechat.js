@@ -52,6 +52,15 @@ const LiveChat = function() {
             );
             break;
         }
+        case 'clearChat': {
+            if (this.ownsRoom(
+                (savedUser.room),
+                savedUser.identifier
+            )) {
+                this.clearChat(savedUser.room);
+            }
+            break;
+        }
         }
 
         // If the actions requires a broadcast, do so
@@ -68,12 +77,33 @@ const LiveChat = function() {
     };
 
     // Add a room to the livechat
-    this.addRoom = function(roomName) {
+    this.addRoom = function(roomName, user) {
         if (!this.roomExists(roomName)) {
             this.rooms[roomName] = {
                 messages: [],
+                owner: Object.assign({}, user),
             };
         }
+    };
+
+    // Checks if a specific user owns a chatroom
+    this.ownsRoom = function(roomName, userIdentifier) {
+        if (this.roomExists(roomName)) {
+            if (this.userExists(userIdentifier)) {
+                if (this.roomHasUser(roomName, userIdentifier)) {
+                    if (this.rooms[roomName].owner.identifier === userIdentifier) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    };
+
+    // Clears all messages inside a specific room
+    this.clearChat = function(roomName) {
+        this.rooms[roomName].messages = [];
     };
 
     // Get all users in a given room
@@ -210,7 +240,11 @@ const LiveChat = function() {
 
         // Add the room if it doesn't exist already
         if (!this.roomExists(roomName) && this.validRoomName(roomName)) {
-            this.addRoom(roomName);
+            this.addRoom(roomName, {
+                identifier: user.websocketKey,
+                username: user.username,
+                room: roomName,
+            });
         } else if (!this.roomExists(roomName) && this.validRoomName(roomName)) {
             return false;
         }
@@ -259,6 +293,7 @@ const LiveChat = function() {
                 users: this.usersInRoom(roomName),
                 room: roomName,
                 messages: this.messagesInRoom(roomName, this.messageLimit),
+                ownerOfRoom: this.rooms[roomName].owner.username,
             }));
         });
     };

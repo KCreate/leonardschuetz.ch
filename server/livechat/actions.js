@@ -41,6 +41,10 @@ const actions = function() {
             },
             requiresBroadcast: true,
         },
+        clearChat: {
+            params: {},
+            requiresBroadcast: true,
+        },
     };
 
     // Checks if a given type, is a correct function name

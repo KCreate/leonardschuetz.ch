@@ -30,6 +30,7 @@ class LiveChatController extends ProtoController {
         this.websocketConnectionEstablished = this.websocketConnectionEstablished.bind(this);
         this.websocketOnMessage = this.websocketOnMessage.bind(this);
         this.messageSendHandler = this.messageSendHandler.bind(this);
+        this.clearChatRoom = this.clearChatRoom.bind(this);
 
         this.state = Object.assign({}, this.state, {
             title: 'Livechat',
@@ -37,9 +38,10 @@ class LiveChatController extends ProtoController {
                 ['livechat', 'Livechat'],
             ],
             livechat: {
-                name: '',
+                roomname: '',
                 username: '',
                 joined: false,
+                ownerOfRoom: '',
             },
             status: {
                 text: 'Not connected!',
@@ -63,10 +65,10 @@ class LiveChatController extends ProtoController {
                     text: 'Joining room',
                     type: 'success',
                 },
-                livechat: {
-                    name: roomName,
+                livechat: Object.assign({}, this.state.livechat, {
+                    roomname: roomName,
                     username,
-                },
+                }),
             });
 
             this.establishWebsocketConnection();
@@ -109,7 +111,7 @@ class LiveChatController extends ProtoController {
         // Request to connect to a specific room
         this.websocket.sendJson({
             type: 'joinRequest',
-            room: this.state.livechat.name,
+            room: this.state.livechat.roomname,
             username: this.state.livechat.username,
         });
     }
@@ -126,11 +128,11 @@ class LiveChatController extends ProtoController {
                     text: 'Connected to "' + data.room + '" as ' + this.state.livechat.username,
                     type: 'success',
                 },
-                livechat: {
-                    room: data.room,
+                livechat: Object.assign({}, this.state.livechat, {
+                    roomname: data.room,
                     username: this.state.livechat.username,
                     joined: true,
-                },
+                }),
             });
             break;
         }
@@ -142,6 +144,9 @@ class LiveChatController extends ProtoController {
             this.setState({
                 users: data.users,
                 messages: data.messages,
+                livechat: Object.assign({}, this.state.livechat, {
+                    ownerOfRoom: data.ownerOfRoom,
+                }),
             });
             break;
         }
@@ -159,6 +164,7 @@ class LiveChatController extends ProtoController {
                     room: '',
                     username: '',
                     joined: false,
+                    ownerOfRoom: false,
                 },
                 status: {
                     text: 'Not connected!',
@@ -181,6 +187,15 @@ class LiveChatController extends ProtoController {
         }
     }
 
+    clearChatRoom() {
+        event.preventDefault();
+        if (this.websocket) {
+            this.websocket.sendJson({
+                type: 'clearChat',
+            });
+        }
+    }
+
     content(navItems, routerParams, routerPath) {
 
         // Prompt the user for a roomname
@@ -188,6 +203,7 @@ class LiveChatController extends ProtoController {
         let usersCard;
         let messagesCard;
         let closeButton;
+        let clearButton;
         if (!this.state.livechat.joined) {
             headerCard = (
                 <Card>
@@ -228,6 +244,12 @@ class LiveChatController extends ProtoController {
             closeButton = (
                 <button onClick={this.closeWebsocketConnection}>Exit chatroom</button>
             );
+
+            if (this.state.livechat.ownerOfRoom === this.state.livechat.username) {
+                clearButton = (
+                    <button onClick={this.clearChatRoom}>Clear chatroom</button>
+                );
+            }
         }
 
         return (
@@ -239,6 +261,7 @@ class LiveChatController extends ProtoController {
                     # Status
                     <StatusView status={this.state.status}></StatusView>
                     {closeButton}
+                    {clearButton}
                 </Card>
             </div>
         );
