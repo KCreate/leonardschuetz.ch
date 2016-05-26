@@ -279,6 +279,26 @@
 
             transition: background $durShort $easing,
                         color $durShort $easing;
+
+            &[type="file"] {
+                padding: 0;
+                overflow: hidden;
+
+                &::-webkit-file-upload-button {
+                    height: 100%;
+                    width: 34%;
+                    display: block;
+                    border: none;
+                    background-color: $colorBlue1;
+                    color: $colorCard;
+                    box-shadow: $shadow4;
+
+                    &:hover {
+                        cursor: pointer;
+                        text-decoration: underline;
+                    }
+                }
+            }
         }
 
         button {
