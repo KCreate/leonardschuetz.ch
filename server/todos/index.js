@@ -60,6 +60,7 @@ router.put('/', (req, res) => {
 
         data.todos[data.todos.length] = {
             text: req.body.text,
+            isLink: req.body.isLink === 'on',
         };
 
         res.json({
