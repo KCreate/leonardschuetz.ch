@@ -57,6 +57,7 @@ class TodosController extends ProtoController {
             payload: {
                 password: this.state.password,
                 text: this.refs.todoInput.value,
+                isLink: this.refs.todoInputIsLink.checked,
             },
         }, (err, res) => {
             this.refs.todoInput.value = '';
@@ -83,6 +84,7 @@ class TodosController extends ProtoController {
                     # Add todo
                     <form onSubmit={this.handleUpload}>
                         <input placeholder="Do something..." ref="todoInput"></input>
+                        Todo is a link:<input type="checkbox" ref="todoInputIsLink"></input>
                         <button type="submit">Add Todo</button>
                     </form>
                 </Card>
