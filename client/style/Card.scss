@@ -88,7 +88,7 @@
         }
 
         /* Horizontal rulers */
-        > hr {
+        hr {
             width: calc(100% - 8px);
             margin: $elementMargin auto;
             display: block;
@@ -129,7 +129,7 @@
         }
 
         /* blockquotes */
-        > blockquote > p {
+        blockquote > p {
             background-color: $colorLight1;
             padding: 10px 8px;
             border-left: 4px solid $colorBlue1;
@@ -138,7 +138,7 @@
         }
 
         /* Images */
-        > img {
+        img {
             width: calc(100% + 32px);
             transform: translateX(-16px);
             margin: 0;
@@ -209,7 +209,7 @@
         }
 
         /* Code */
-        > pre > code {
+        pre > code {
             background-color: $colorDark3;
             color: $colorLight1;
             padding: 16px 18px;
@@ -228,7 +228,7 @@
         }
 
         /* Tables */
-        > table {
+        table {
             width: 100%;
             background-color: $colorLight1;
             box-shadow: $shadow1;
