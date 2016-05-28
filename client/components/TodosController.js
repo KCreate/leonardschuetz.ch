@@ -83,8 +83,9 @@ class TodosController extends ProtoController {
                 <Card>
                     # Add todo
                     <form onSubmit={this.handleUpload}>
-                        <input placeholder="Do something..." ref="todoInput"></input>
-                        Todo is a link:<input type="checkbox" ref="todoInputIsLink"></input>
+                        <input placeholder="Todo" ref="todoInput"></input>
+                        <input type="checkbox" ref="todoInputIsLink" name="todoInputIsLink"></input>
+                        <label for="todoInputIsLink">Todo is a link</label>
                         <button type="submit">Add Todo</button>
                     </form>
                 </Card>
