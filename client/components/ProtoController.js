@@ -62,7 +62,7 @@ class ProtoController extends Component {
                 <Content expanded={this.state.expanded}>
                     {this.content(this.state.navigation, this.props.params, this.props.route)}
                 </Content>
-                <p>Copyright © 2016 - present Leonard Schuetz</p>
+                <p>Copyright © (2016 - present) Leonard Schuetz</p>
             </div>
         );
     }
