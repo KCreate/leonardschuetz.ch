@@ -25,22 +25,22 @@ $colorDark2: lighten($colorDark1, $colorChangePercentage);
 $colorDark3: lighten($colorDark2, $colorChangePercentage);
 $colorDark4: lighten($colorDark3, $colorChangePercentage);
 
-$colorBlue1:  #536DFE;
+$colorBlue1:  #3F51B5;
 $colorBlue2:  darken($colorBlue1, $colorChangePercentage);
 $colorBlue3:  darken($colorBlue2, $colorChangePercentage);
 $colorBlue4:  darken($colorBlue3, $colorChangePercentage);
 
-$colorRed1:  #F44336;
+$colorRed1:  #F50057;
 $colorRed2:  darken($colorRed1, $colorChangePercentage);
 $colorRed3:  darken($colorRed2, $colorChangePercentage);
 $colorRed4:  darken($colorRed3, $colorChangePercentage);
 
-$colorGreen1:  #43A047;
+$colorGreen1:  #00897B;
 $colorGreen2:  darken($colorGreen1, $colorChangePercentage);
 $colorGreen3:  darken($colorGreen2, $colorChangePercentage);
 $colorGreen4:  darken($colorGreen3, $colorChangePercentage);
 
-$colorLinks: saturate(lighten($colorBlue1, $colorChangePercentage), 100%);
+$colorLinks: $colorBlue2;
 $colorLinksLight: mix($colorLinks, $colorLight1, 100%);
 
 // Shadows
