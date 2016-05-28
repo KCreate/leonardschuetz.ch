@@ -40,8 +40,7 @@
     }
 
     $elementMargin: 16px;
-    > div > span, > div {
-
+    > div > span, > div, > div > div {
         > * {
             margin: $elementMargin 0;
             font-size: 18px;
