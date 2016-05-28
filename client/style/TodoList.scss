@@ -1,19 +1,19 @@
 @import "./global.scss";
 
-.List {
+.List .ListItem {
 
-    padding-left: 0 !important; // Sorry
+    padding-right: 100px !important; // Sorry
 
-    .ListItem {
-        button {
-            position: absolute;
-            right: 0;
-            top: 0;
-            margin: 0;
+    button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin: 0;
 
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            width: auto;
-        }
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+
+        width: auto;
+        height: 100%;
     }
 }
