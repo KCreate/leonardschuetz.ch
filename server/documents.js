@@ -153,6 +153,13 @@ router.post('/', multer({
         });
     }
 
+    // If no file was passed, return an error
+    if (!req.files['file']) {
+        return res.json({
+            error: 'No file uploaded!',
+        });
+    }
+
     // Get the file buffer
     var fileBuffer = new Buffer(req.files['file'][0].buffer);
     fs.writeFile(
