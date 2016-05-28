@@ -2,6 +2,7 @@
     "verbose": true,
     "ignore": [
         "server/resources",
-        "data.json"
+        "data.json",
+        "config.json"
     ]
 }

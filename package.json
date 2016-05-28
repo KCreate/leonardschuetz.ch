@@ -7,9 +7,9 @@
     "serve": "nodemon server/server.js -w server",
     "start": "node server/server.js",
     "setup": "./scripts/setup.sh",
-    "buildClient": "rm -rf dist; webpack",
-    "buildServer": "rm -rf serverBuild; ./scripts/buildServer.sh",
-    "buildComplete": "npm run buildClient; npm run buildServer"
+    "build_client": "rm -rf dist; webpack",
+    "build_server": "rm -rf serverBuild; ./scripts/buildServer.sh",
+    "build": "npm run buildClient; npm run buildServer"
   },
   "author": "Leonard Schuetz",
   "license": "MIT",
