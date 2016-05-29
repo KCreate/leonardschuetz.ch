@@ -1,5 +1,5 @@
 // Production Switch
-const production = false;
+const production = true;
 
 // Dependencies
 const webpack         = require('webpack');

@@ -1,6 +1,10 @@
+/* eslint-disable no-var */
+
 // Dependencies
 const express       = require('express');
+var expressWs     = require('express-ws'); // Has to be reassigned later
 const path          = require('path');
+const fs            = require('fs');
 const bodyParser    = require('body-parser');
 const morgan        = require('morgan');
 const compression   = require('compression');
@@ -8,16 +12,34 @@ const compression   = require('compression');
 const app           = express();
 const port          = 3000;
 
-// Websocket setup
-const expressWs     = require('express-ws')(app);
-
-// Webpack dependencies, do not include in production
+// Webpack dependencies, not required on production
 const webpackConfig = require('../webpack.config.js');
 if (!webpackConfig.production) {
     const webpack               = require('webpack');
     const webpackDevMiddleware  = require('webpack-dev-middleware');
     const webpackHotMiddleware  = require('webpack-hot-middleware');
     const compiler              = webpack(webpackConfig);
+}
+
+// HTTPS Configuration
+if (webpackConfig.production) {
+    const https         = require('https');
+    const privateKey    = fs.readFileSync('/etc/letsencrypt/archive/leonardschuetz.ch/privkey2.pem', 'utf8');
+    const certificate   = fs.readFileSync('/etc/letsencrypt/archive/leonardschuetz.ch/cert2.pem', 'utf8');
+    const credentials   = {
+        key: privateKey,
+        cert: certificate,
+    };
+
+    // Create the https server
+    const server = https.createServer(credentials, app);
+
+    // Apply the express-ws constructor to the app using the server
+    expressWs = expressWs(app, server);
+} else {
+
+    // Apply the express-ws constructo the app
+    expressWs = expressWs(app);
 }
 
 // App configuration
@@ -71,7 +93,13 @@ app.use('/', (req, res) => {
 
 // Listen
 console.log('Starting express server on localhost:' + port);
-app.listen(port, (err) => {
-    if (err) throw err;
-    console.log('Express server listening on localhost:' + port);
-});
+
+if (webpackConfig.production) {
+    // Listen on a secured connection
+    server.listen(port);
+} else {
+    app.listen(port, (err) => {
+        if (err) throw err;
+        console.log('Express server listening on localhost:' + port);
+    });
+}

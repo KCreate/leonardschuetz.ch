@@ -88,11 +88,20 @@ class LiveChatController extends ProtoController {
 
     establishWebsocketConnection() {
         if (!this.websocket && window) {
-            this.websocket = new WebSocket(
-                'ws://' +
-                window.location.host +
-                '/livechatapi'
-            );
+
+            if (process.env.NODE_ENV === 'production') {
+                this.websocket = new WebSocket(
+                    'wss://' +
+                    window.location.host +
+                    '/livechatapi'
+                );
+            } else {
+                this.websocket = new WebSocket(
+                    'ws://' +
+                    window.location.host +
+                    '/livechatapi'
+                );
+            }
 
             this.websocket.onopen = this.websocketConnectionEstablished;
             this.websocket.onclose = this.closeWebsocketConnection;
