@@ -1,0 +1,88 @@
+/*
+The MIT License (MIT)
+Copyright (c) <2016 - present> <Leonard Schütz, leni.schuetz@me.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+#app {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.row {
+    display: block;
+    overflow: auto;
+}
+
+.tile {
+    width: 40px;
+    height: 40px;
+    float: left;
+    background-color: gray;
+    border: 1px solid black;
+    text-align: center;
+    line-height: 40px;
+    font-size: 25px;
+}
+
+.tile.flagged {
+    background-color: gold;
+    position: relative;
+}
+
+.tile.flagged::after {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.tile.bomb {
+    background-color: gold;
+}
+
+.tile.bombs-0.open {
+    background-color: white;
+}
+.tile.bombs-1.open {
+    background-color: lightblue;
+}
+.tile.bombs-2.open {
+    background-color: lightgreen;
+}
+.tile.bombs-3.open {
+    background-color: violet;
+}
+.tile.bombs-4.open {
+    background-color: yellow;
+}
+.tile.bombs-5.open {
+    background-color: purple;
+}
+.tile.bombs-6.open {
+    background-color: brown;
+}
+.tile.bombs-7.open {
+    background-color: red;
+}
+.tile.bombs-8.open {
+    background-color: black;
+    color: white;
+}
