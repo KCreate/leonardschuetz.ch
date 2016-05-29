@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 
 import './index.html';
 import style from '../style/master.scss';
-import favicon from './favicon.png';
+import favicon from './favicon.ico';
 
 import App from '../components/App.js';
 import FrontPageController from '../components/FrontPageController';

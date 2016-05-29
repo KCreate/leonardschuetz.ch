@@ -53,16 +53,6 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Redirect favicon.ico to favicon.png
-app.use((req, res, next) => {
-    if (req.originalUrl !== '/favicon.ico') {
-        return next();
-    }
-
-    // Redirect to favicon.png
-    res.redirect('/favicon.png');
-});
-
 // Routes
 app.use('/resources', require('./resources.js'));
 app.use('/todosapi', require('./todos/index.js'));
