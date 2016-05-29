@@ -10,9 +10,19 @@ router.use((req, res, next) => {
     // Get the filename from the url
     const filename = req.path.split('/').reduce((last, current) => current, '');
 
-    // Only apply the Cache-Control headers if the requested resource is not blacklisted
-    if (!filename.match(/\.(md|json)$/gmi)) {
-        res.setHeader('Cache-Control', 'public, max-age=432000');
+    // Blog Articles and JSON - 2 weeks
+    if (filename.match(/\.(md|json)$/gmi)) {
+        res.setHeader('Cache-Control', 'public, max-age=1209600');
+    }
+
+    // Images and videos - 2 weeks
+    if (filename.match(/\.(png|jpe?g|mov|mp4|gif|ico)$/gmi)) {
+        res.setHeader('Cache-Control', 'public, max-age=1209600');
+    }
+
+    // Fonts - 1 year
+    if (filename.match(/\.(ttf)$/gmi)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000');
     }
 
     next();
