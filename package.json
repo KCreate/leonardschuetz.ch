@@ -9,7 +9,8 @@
     "setup": "./scripts/setup.sh",
     "build_client": "rm -rf dist; webpack",
     "build_server": "rm -rf serverBuild; ./scripts/buildServer.sh; rm -rf dist",
-    "build": "npm run build_client; npm run build_server"
+    "build": "npm run build_client; npm run build_server",
+    "update": "./scripts/pull.sh"
   },
   "author": "Leonard Schuetz",
   "license": "MIT",
