@@ -94,7 +94,7 @@ module.exports = {
                 loader: 'file?name=[name].[ext]',
             },
             {
-                test: /.*\.(gif|png|jpe?g|svg)$/i,
+                test: /.*\.(gif|png|jpe?g|svg|ico)$/i,
                 loaders: [
                     'file?name=[name].[ext]',
                     'image-webpack',
