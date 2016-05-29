@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import Markdown from 'react-remarkable';
 import highlight from 'highlight.js';
-import 'highlight.js/styles/material.css';
+import '../style/material.css';
 
 const cachedMarkdown = { sources: [], highlighted: [] };
 const MarkdownConfigHighlight = {
