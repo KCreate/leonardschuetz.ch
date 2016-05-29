@@ -11,6 +11,7 @@ const compression   = require('compression');
 
 const app           = express();
 const port          = 3000;
+const portProduction = 443;
 
 // Webpack dependencies, not required on production
 const webpackConfig = require('../webpack.config.js');
@@ -96,10 +97,21 @@ console.log('Starting express server on localhost:' + port);
 
 if (webpackConfig.production) {
     // Listen on a secured connection
-    server.listen(port);
+    server.listen(portProduction);
 } else {
     app.listen(port, (err) => {
         if (err) throw err;
         console.log('Express server listening on localhost:' + port);
     });
+}
+
+// Redirect all http to https
+if (webpackConfig.production) {
+    require('http').createServer((req, res) => {
+        res.writeHead(301, {
+            Location: 'https://leonardschuetz.ch' + req.url,
+        });
+        res.end();
+    })
+    .listen(80);
 }
