@@ -6,12 +6,10 @@
     $messageOffset: 20px;
     $messageBorderRadius: 4px;
 
-    width: calc(100% + 32px);
-    transform: translateX(-16px);
+    width: 100%;
 
     border-radius: 3px;
     padding: $messageMargin 0;
-    overflow: hidden;
 
     &:empty {
         padding: 0;
@@ -22,9 +20,10 @@
         background-color: $colorLight3;
         margin: $messageMargin 0;
         position: relative;
-        width: calc(100% - #{$messageOffset});
+        width: 100%;
         padding: 3px 6px;
         box-shadow: $shadow1;
+        border-radius: 3px;
 
         > .title {
             width: 100%;
@@ -42,14 +41,12 @@
         }
 
         &.currentUser {
-            left: $messageOffset;
             background-color: $colorBlue1;
             color: $colorCard;
-            border-top-left-radius: $messageBorderRadius;
-            border-bottom-left-radius: $messageBorderRadius;
+            padding-top: 6px;
 
             > .title {
-                border-bottom: 2px solid $colorCard;
+                display: none;
             }
 
             &+ .currentUser {
