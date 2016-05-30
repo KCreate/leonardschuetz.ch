@@ -49,6 +49,7 @@
     "cheerio": "^0.20.0",
     "compression": "^1.6.1",
     "express": "^4.13.4",
+    "express-session": "^1.13.0",
     "express-ws": "^2.0.0-rc.1",
     "morgan": "^1.7.0",
     "multer": "^1.1.0",

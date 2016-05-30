@@ -12,6 +12,7 @@ import TodosController from '../components/TodosController';
 import AdminController from '../components/AdminController';
 import NotFoundController from '../components/NotFoundController';
 import LiveChatController from '../components/LiveChatController';
+import LoginController from '../components/LoginController';
 
 // Router
 import {
@@ -32,6 +33,7 @@ render((
             <Route path="/todos" component={TodosController}></Route>
             <Route path="/admin" component={AdminController}></Route>
             <Route path="/livechat" component={LiveChatController}></Route>
+            <Route path="/auth" component={LoginController}></Route>
             <Route path="/*" component={NotFoundController}></Route>
         </Route>
     </Router>
