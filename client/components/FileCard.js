@@ -14,7 +14,9 @@ class FileCard extends Component {
 
                         return (
                             <li key={index}>
-                                <a href={link}>{version.htime}</a> - {version.size / 1000}KB
+                                <a href={link}>{version.htime}</a>
+                                - {version.size / 1000}KB
+                                - <button onClick={this.props.deleteVersion.bind(this, index)}>Delete version</button>
                             </li>
                         );
                     })}
@@ -24,5 +26,16 @@ class FileCard extends Component {
         );
     }
 }
+
+FileCard.defaultProps = {
+    file: {
+        filename: 'Loading',
+        versions: [],
+        time: 0,
+    },
+    deleteVersion: (version, file) => {
+        console.log(version, file);
+    },
+};
 
 export default FileCard;

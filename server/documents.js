@@ -12,7 +12,7 @@ config = Object.assign(config, {
     path: path.resolve(__dirname, './resources/versionedDocuments'),
 });
 
-// Populate the req.files with a list of all files and their versions
+// Populate req.documents with a list of all files and their versions
 router.use((req, res, next) => {
     fs.readdir(config.path, (err, files) => {
         if (err) res.json(err);
@@ -79,63 +79,12 @@ router.use((req, res, next) => {
     });
 });
 
-// List all files together with all their versions
-router.get('/', (req, res, next) => {
+// List all files and post new ones
+router.route('/')
+.get((req, res) => {
     res.json(req.documents);
-});
-
-// Download the newest version of a document
-router.get('/:filename', (req, res) => {
-
-    var foundIndex = -1;
-    req.documents.forEach((file, index) => {
-        if (file.filename === req.params.filename) {
-            foundIndex = index;
-        }
-    });
-
-    // If the file exists
-    if (foundIndex > -1) {
-
-        // Get the newest timestamp of the file
-        const newestTimestamp = req.documents[foundIndex].versions.reverse()[0].time; // hacky
-        const filepath = config.path + '/' + newestTimestamp + '-' + req.params.filename;
-
-        // Check if the file really exists
-        fs.lstat(filepath, (err, stats) => {
-
-            // If the file was not found
-            if (err) return res.json({
-                error: 'File not found.',
-            });
-
-            res.sendFile(filepath);
-        });
-
-    } else {
-        res.json({
-            error: 'File not found.',
-        });
-    }
-});
-
-// Download a specific document
-router.get('/:filename/:version', (req, res) => {
-
-    const filepath = config.path + '/' + req.params.version + '-' + req.params.filename;
-    fs.lstat(filepath, (err, stats) => {
-
-        // If the file was not found
-        if (err) return res.json({
-            error: 'File not found.',
-        });
-
-        res.sendFile(filepath);
-    });
-});
-
-// Upload new documents to the server
-router.post('/', multer({
+})
+.post(multer({
     inMemory: true,
     limits: {
         fileSize: 100000000,
@@ -145,13 +94,6 @@ router.post('/', multer({
 }).fields([
     { name: 'file', maxCount: 1 },
 ]), (req, res) => {
-
-    // Check if the password is correct
-    if (req.body.password !== config.password) {
-        return res.json({
-            error: 'Incorrect password',
-        });
-    }
 
     // If no file was passed, return an error
     if (!req.files['file']) {
@@ -175,6 +117,64 @@ router.post('/', multer({
             });
         }
     );
+});
+
+// Download the newest version of a document
+router.route('/:filename')
+.all((req, res, next) => {
+    var foundIndex = -1;
+    req.documents.forEach((file, index) => {
+        if (file.filename === req.params.filename) {
+            foundIndex = index;
+        }
+    });
+
+    if (foundIndex > -1) {
+        // I use slice because reverse() modifies the array in place
+        const newestTimestamp = req.documents[foundIndex].versions.slice(0).reverse()[0].time;
+        req.filepath = config.path + '/' + newestTimestamp + '-' + req.params.filename;
+
+        next();
+    } else {
+        res.json({
+            error: 'File not found',
+        });
+    }
+})
+.get((req, res, next) => {
+    res.sendFile(req.filepath);
+})
+.delete((req, res, next) => {
+    fs.unlink(req.filepath, (err) => {
+        if (err) return res.json({
+            error: 'Could not delete file!',
+        });
+        res.sendStatus(200);
+    });
+});
+
+router.route('/:filename/:version')
+.all((req, res, next) => {
+    const filepath = config.path + '/' + req.params.version + '-' + req.params.filename;
+    fs.lstat(filepath, (err, stats) => {
+        if (err) return res.json({
+            error: 'File not found.',
+        });
+
+        req.filepath = filepath;
+        next();
+    });
+})
+.get((req, res) => {
+    res.sendFile(req.filepath);
+})
+.delete((req, res) => {
+    fs.unlink(req.filepath, (err) => {
+        if (err) return res.json({
+            error: 'Could not delete file!',
+        });
+        res.sendStatus(200);
+    });
 });
 
 function renameFile(filename) {

@@ -12,6 +12,7 @@ class AdminController extends ProtoController {
         super(...args);
         this.listFiles = this.listFiles.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
+        this.handleDeleteVersion = this.handleDeleteVersion.bind(this);
 
         this.state = Object.assign({}, this.state, {
             title: 'Admin',
@@ -95,6 +96,15 @@ class AdminController extends ProtoController {
         });
     }
 
+    handleDeleteVersion(file, version, event) {
+        event.preventDefault();
+
+        const timestamp = file.versions[version].time;
+        get('/documents/' + file.filename + '/' + timestamp, 'DELETE', {}, (err, response) => {
+            this.listFiles();
+        });
+    }
+
     content(navItems, routerParams, routerPath) {
         return (
             <div>
@@ -103,12 +113,14 @@ class AdminController extends ProtoController {
                     <StatusView status={this.state.status}></StatusView>
                     <form onSubmit={this.handleUpload} ref="uploadForm">
                         <input type="file" name="file"></input>
-                        <input type="password" name="password" placeholder="Password"></input>
                         <button type="submit">Upload</button>
                     </form>
                 </Card>
                 {this.state.files.map((file, index) => (
-                    <FileCard key={index} file={file}></FileCard>
+                    <FileCard
+                        key={index}
+                        file={file}
+                        deleteVersion={this.handleDeleteVersion.bind(this, file)}></FileCard>
                 ))}
             </div>
         );
