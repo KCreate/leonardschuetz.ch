@@ -20,23 +20,35 @@ class AdminController extends ProtoController {
             ],
             files: [],
             status: false,
+            needsAuthentication: true,
         });
+    }
 
+    componentDidMount() {
+        if (this.state.authenticated) {
+            this.listFiles();
+        }
+    }
+
+    authenticated() {
         this.listFiles();
     }
 
     listFiles() {
-        get('/documents', 'GET', {}, (err, res) => {
-            this.setState({
-                files: JSON.parse(res),
-            });
+        get('/documents', 'GET', {}, (err, response) => {
+            response = JSON.parse(response);
+            if (!response.error) {
+                this.setState({
+                    files: response,
+                });
+            }
         });
     }
 
     handleUpload(event) {
         event.preventDefault();
 
-        // Clear the error message
+        // Clear any error message that has happened before
         this.setState({
             status: false,
         });
@@ -84,11 +96,6 @@ class AdminController extends ProtoController {
     }
 
     content(navItems, routerParams, routerPath) {
-
-        const fileCards = this.state.files.map((file, index) => (
-            <FileCard key={index} file={file}></FileCard>
-        ));
-
         return (
             <div>
                 <Card>
@@ -100,7 +107,9 @@ class AdminController extends ProtoController {
                         <button type="submit">Upload</button>
                     </form>
                 </Card>
-                {fileCards}
+                {this.state.files.map((file, index) => (
+                    <FileCard key={index} file={file}></FileCard>
+                ))}
             </div>
         );
     }

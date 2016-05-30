@@ -59,6 +59,10 @@ class ProtoController extends Component {
         }
     }
 
+    /*
+        The authenticated method can be viewed as a second componentDidMount,
+        but for being authenticated.
+    */
     authenticated() {
         return undefined;
     }
