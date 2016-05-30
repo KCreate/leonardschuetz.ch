@@ -61,7 +61,7 @@ class TodosController extends ProtoController {
         }
     }
 
-    authenticated() {
+    appGotAuthenticated() {
         this.listTodos();
     }
 

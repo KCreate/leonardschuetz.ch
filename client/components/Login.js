@@ -27,24 +27,8 @@ class Login extends Component {
         }, (err, response) => {
             response = JSON.parse(response);
 
-            this.setState({
-                status: {
-                    type: 'progress',
-                    text: 'Response received',
-                },
-                loginStatus: response,
-            });
-
             if (response.authenticated) {
-
-                this.setState({
-                    status: {
-                        type: 'success',
-                        text: 'Authenticated!',
-                    },
-                }, () => {
-                    this.props.onauthentication(response);
-                });
+                this.props.onauthentication(response);
             } else {
                 this.setState({
                     status: {

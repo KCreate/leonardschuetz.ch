@@ -4,6 +4,7 @@ import Card from './Card';
 import Header from './Header';
 import Content from './Content';
 import Login from './Login';
+import get from '../../utils/get';
 
 // Router
 import {
@@ -17,8 +18,8 @@ class ProtoController extends Component {
         super(...args);
         this.writingAnimationFinished = this.writingAnimationFinished.bind(this);
         this.content = this.content.bind(this);
-        this.handleAuthentication = this.handleAuthentication.bind(this);
-        this.authenticated = this.authenticated.bind(this);
+        this.authenticate = this.authenticate.bind(this);
+        this.appGotAuthenticated = this.appGotAuthenticated.bind(this);
 
         this.state = {
             title: 'Leonard Schuetz',
@@ -27,6 +28,8 @@ class ProtoController extends Component {
             needsAuthentication: false,
             authenticated: false,
         };
+
+        this.authenticate();
     }
 
     writingAnimationFinished(event) {
@@ -50,20 +53,41 @@ class ProtoController extends Component {
         );
     }
 
-    handleAuthentication(event) {
-        if (event.authenticated) {
-            this.authenticated();
-            this.setState({
-                authenticated: event.authenticated,
-            });
+    /*
+        The ProtoController's own authentication request
+        If the user is already logged in, he won't see the login dialog
+    */
+    authenticate(event) {
+
+        if (event) {
+            if (event.authenticated) {
+                this.appGotAuthenticated();
+                this.setState({
+                    authenticated: event.authenticated,
+                });
+                return;
+            }
         }
+
+        // Get the authorization status
+        get('/auth/status', 'POST', {}, (err, response) => {
+            if (!err) {
+                response = JSON.parse(response);
+                if (!this.state.authenticated) {
+                    this.setState({
+                        authenticated: response.authenticated,
+                    });
+                    this.appGotAuthenticated();
+                }
+            }
+        });
     }
 
     /*
-        The authenticated method can be viewed as a second componentDidMount,
+        The appGotAuthenticated method can be viewed as a second componentDidMount,
         but for being authenticated.
     */
-    authenticated(authenticated) {
+    appGotAuthenticated(authenticated) {
         return authenticated;
     }
 
@@ -77,7 +101,7 @@ class ProtoController extends Component {
         if (!this.state.authenticated && this.state.needsAuthentication) {
             content = (
                 <Content expanded={this.state.expanded}>
-                    <Login onauthentication={this.handleAuthentication}></Login>
+                    <Login onauthentication={this.authenticate}></Login>
                 </Content>
             );
         } else {

@@ -47,7 +47,7 @@ router.use((req, res, next) => {
 
 router.use('/auth/logout', (req, res) => {
     req.session.destroy();
-    res.json('Destroyed Session');
+    res.redirect('/');
 });
 
 router.use('/auth/status', (req, res) => {

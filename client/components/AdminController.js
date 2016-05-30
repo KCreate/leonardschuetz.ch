@@ -31,7 +31,7 @@ class AdminController extends ProtoController {
         }
     }
 
-    authenticated() {
+    appGotAuthenticated() {
         this.listFiles();
     }
 
