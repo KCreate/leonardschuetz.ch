@@ -23,11 +23,6 @@
         margin: 0;
         border-bottom: 3px solid $colorBlue1;
         box-shadow: none;
-
-        &:last-child {
-            border-bottom: none;
-            box-shadow: $shadow1;
-        }
     };
 
     &.deferedApplied {
