@@ -12,6 +12,10 @@
     "build": "npm run build_client; npm run build_server",
     "update": "./scripts/pull.sh"
   },
+  "repository": {
+      "type" : "git",
+      "url" : "https://github.com/KCreate/leonardschuetz.ch.git"
+  },
   "author": "Leonard Schuetz",
   "license": "MIT",
   "devDependencies": {

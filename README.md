@@ -1,1 +1,1 @@
-# Personal homepage written in React / Redux
+# Personal homepage written in React
