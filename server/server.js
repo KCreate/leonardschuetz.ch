@@ -2,11 +2,10 @@
 
 // Dependencies
 const express       = require('express');
-var expressWs     = require('express-ws'); // Has to be reassigned later
+var expressWs       = require('express-ws'); // Has to be reassigned later
 const path          = require('path');
 const fs            = require('fs');
 const bodyParser    = require('body-parser');
-const morgan        = require('morgan');
 const compression   = require('compression');
 const auth          = require('./auth.js');
 
@@ -21,6 +20,11 @@ if (!webpackConfig.production) {
     const webpackDevMiddleware  = require('webpack-dev-middleware');
     const webpackHotMiddleware  = require('webpack-hot-middleware');
     const compiler              = webpack(webpackConfig);
+}
+
+// Dependencies only needed in development
+if (!webpackConfig.production) {
+    const morgan        = require('morgan');
 }
 
 // HTTPS Configuration
@@ -50,7 +54,9 @@ app.disable('x-powered-by');
 app.use(compression());
 
 // Middleware
-app.use(morgan('dev'));
+if (!webpackConfig.production) {
+    app.use(morgan('dev'));
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -61,7 +67,6 @@ app.use(auth.router);
 app.use('/resources',   require('./resources.js'));
 app.use('/todosapi',    auth.requiresAuthentication, require('./todos/index.js'));
 app.use('/documents',   auth.requiresAuthentication, require('./documents.js'));
-app.use('/menu',        require('./menu.js'));
 app.use('/livechatapi', (req, res, next) => {
     req.expressWs = expressWs;
     next();
