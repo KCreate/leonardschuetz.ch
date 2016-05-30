@@ -51,4 +51,20 @@ router.use('/status', (req, res) => {
     });
 });
 
-module.exports = router;
+module.exports.router = router;
+module.exports.requiresAuthentication = (req, res, next) => {
+
+    // Send the error
+    function err(res) {
+        res.status(401).json({
+            error: 'This route requires you to be authenticated.',
+        });
+    }
+
+    // If there is no session or not authenticated
+    if (!req.session) return err(res);
+    if (!req.session.authenticated) return err(res);
+
+    // If properly authenticated, call the next route
+    next();
+};

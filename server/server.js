@@ -8,6 +8,7 @@ const fs            = require('fs');
 const bodyParser    = require('body-parser');
 const morgan        = require('morgan');
 const compression   = require('compression');
+const auth          = require('./auth.js');
 
 const app           = express();
 const port          = 3000;
@@ -54,12 +55,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Authentication
-app.use('/auth', require('./auth.js'));
+app.use('/auth', auth.router);
 
 // Routes
 app.use('/resources',   require('./resources.js'));
 app.use('/todosapi',    require('./todos/index.js'));
-app.use('/documents',   require('./documents.js'));
+app.use('/documents',   auth.requiresAuthentication, require('./documents.js'));
 app.use('/menu',        require('./menu.js'));
 app.use('/livechatapi', (req, res, next) => {
     req.expressWs = expressWs;
