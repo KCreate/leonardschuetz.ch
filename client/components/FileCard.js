@@ -16,12 +16,15 @@ class FileCard extends Component {
                             <li key={index}>
                                 <a href={link}>{version.htime}</a>
                                 - {version.size / 1000}KB
-                                - <button onClick={this.props.deleteVersion.bind(this, index)}>Delete version</button>
+                                - <button
+                                    className="inline"
+                                    onClick={this.props.deleteVersion.bind(this, index)}>
+                                Delete version</button>
                             </li>
                         );
                     })}
                 </ul>
-                <a href={'/documents/' + this.props.file.filename}>Download newest version</a>
+                <a href={'/documents/' + this.props.file.filename} download>Download newest version</a>
             </Card>
         );
     }

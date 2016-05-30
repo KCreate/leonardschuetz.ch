@@ -346,12 +346,11 @@
             background-color: $colorBlue1;
             color: $colorCard;
             box-shadow: $shadow1;
-
             transition: box-shadow $durMedium $easing;
         }
 
         button, input[type="submit"], input[type="button"] {
-            &:hover {
+            &:not(.inline):hover {
                 background-color: $colorBlue1;
                 color: $colorCard;
                 cursor: pointer;
@@ -359,6 +358,24 @@
 
                 &:not(input) {
                     text-decoration: underline;
+                }
+            }
+
+            &.inline {
+                width: auto;
+                height: auto;
+                display: inline-block;
+                margin: 0;
+                padding: 0;
+                font-size: 18px;
+                background-color: rgba(0,0,0,0);
+                color: $colorBlue1;
+                border: none;
+                box-shadow: none;
+
+                &:hover {
+                    text-decoration: underline;
+                    cursor: pointer;
                 }
             }
         }
