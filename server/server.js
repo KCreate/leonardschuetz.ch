@@ -55,7 +55,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Authentication
-app.use('/auth', auth.router);
+app.use(auth.router);
 
 // Routes
 app.use('/resources',   require('./resources.js'));

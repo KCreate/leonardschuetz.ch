@@ -45,7 +45,12 @@ router.use((req, res, next) => {
     });
 });
 
-router.use('/status', (req, res) => {
+router.use('/auth/logout', (req, res) => {
+    req.session.destroy();
+    res.json('Destroyed Session');
+});
+
+router.use('/auth/status', (req, res) => {
     res.json({
         authenticated: req.session.authenticated,
     });
@@ -55,15 +60,16 @@ module.exports.router = router;
 module.exports.requiresAuthentication = (req, res, next) => {
 
     // Send the error
-    function err(res) {
+    function err(res, message) {
         res.status(401).json({
             error: 'This route requires you to be authenticated.',
+            message,
         });
     }
 
     // If there is no session or not authenticated
-    if (!req.session) return err(res);
-    if (!req.session.authenticated) return err(res);
+    if (!req.session) return err(res, 'No session found');
+    if (!req.session.authenticated) return err(res, 'Not authenticated');
 
     // If properly authenticated, call the next route
     next();
