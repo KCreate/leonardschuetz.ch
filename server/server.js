@@ -59,7 +59,7 @@ app.use(auth.router);
 
 // Routes
 app.use('/resources',   require('./resources.js'));
-app.use('/todosapi',    require('./todos/index.js'));
+app.use('/todosapi',    auth.requiresAuthentication, require('./todos/index.js'));
 app.use('/documents',   auth.requiresAuthentication, require('./documents.js'));
 app.use('/menu',        require('./menu.js'));
 app.use('/livechatapi', (req, res, next) => {

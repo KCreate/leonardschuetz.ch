@@ -5,18 +5,6 @@ const fs        = require('fs');
 const config    = require('./../config.json');
 const router    = new express.Router();
 
-// Check if the right password is set
-router.use((req, res, next) => {
-    if (req.body.password !== config.password) {
-        return res.json({
-            ok: false,
-            reason: 'Not authorized',
-        });
-    }
-
-    next();
-});
-
 // List all todos
 router.post('/', (req, res) => {
 

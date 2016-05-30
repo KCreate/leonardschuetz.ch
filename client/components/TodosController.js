@@ -13,7 +13,6 @@ class TodosController extends ProtoController {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
         this.listTodos = this.listTodos.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
 
         this.state = Object.assign({}, this.state, {
             title: 'Todos',
@@ -22,16 +21,12 @@ class TodosController extends ProtoController {
             ],
             todos: [],
             password: '',
-            authorized: false,
+            needsAuthentication: true,
         });
     }
 
     listTodos() {
-        get('/todosapi', 'POST', {
-            payload: {
-                password: this.state.password,
-            },
-        }, (err, res) => {
+        get('/todosapi', 'POST', {}, (err, res) => {
             this.setState({
                 todos: JSON.parse(res).todos,
                 authorized: !JSON.parse(res).reason,
@@ -40,11 +35,7 @@ class TodosController extends ProtoController {
     }
 
     handleDelete(index) {
-        get('/todosapi/' + index, 'DELETE', {
-            payload: {
-                password: this.state.password,
-            },
-        }, (err, res) => {
+        get('/todosapi/' + index, 'DELETE', {}, (err, res) => {
             this.listTodos();
         });
     }
@@ -55,7 +46,6 @@ class TodosController extends ProtoController {
 
         get('/todosapi', 'PUT', {
             payload: {
-                password: this.state.password,
                 text: this.refs.todoInput.value,
                 isLink: this.refs.todoInputIsLink.checked,
             },
@@ -65,59 +55,42 @@ class TodosController extends ProtoController {
         });
     }
 
-    handlePasswordChange(event) {
-        this.setState({
-            password: event.target.value,
-        }, () => {
+    componentDidMount() {
+        if (this.state.authenticated) {
             this.listTodos();
-        });
+        }
+    }
+
+    authenticated() {
+        this.listTodos();
     }
 
     content(navItems, routerParams, routerPath) {
-
-        let todoInput;
-        let todoList;
-        let passwordInput;
-        if (this.state.authorized) {
-            todoInput = (
-                <Card>
-                    # Add todo
-                    <form onSubmit={this.handleUpload}>
-                        <input placeholder="Todo" ref="todoInput"></input>
-                        <input type="checkbox" ref="todoInputIsLink" name="todoInputIsLink"></input>
-                        <label for="todoInputIsLink">Todo is a link</label>
-                        <button type="submit">Add Todo</button>
-                    </form>
-                </Card>
-            );
-            todoList = (
-                <Card>
-                    # Todos
-                    <span>
-                        <TodoList
-                            todos={this.state.todos}
-                            oncomplete={this.handleDelete}
-                        ></TodoList>
-                    </span>
-                </Card>
-            );
-        } else {
-            passwordInput = (
-                <Card>
-                    # Enter password
-                    <input
-                        type="password"
-                        onChange={this.handlePasswordChange}
-                        value={this.state.password}
-                        placeholder="Password">
-                    </input>
-                </Card>
-            );
-        }
+        const todoInput = (
+            <Card>
+                # Add todo
+                <form onSubmit={this.handleUpload}>
+                    <input placeholder="Todo" ref="todoInput"></input>
+                    <input type="checkbox" ref="todoInputIsLink" name="todoInputIsLink"></input>
+                    <label for="todoInputIsLink">Todo is a link</label>
+                    <button type="submit">Add Todo</button>
+                </form>
+            </Card>
+        );
+        const todoList = (
+            <Card>
+                # Todos
+                <span>
+                    <TodoList
+                        todos={this.state.todos}
+                        oncomplete={this.handleDelete}
+                    ></TodoList>
+                </span>
+            </Card>
+        );
 
         return (
             <div>
-                {passwordInput}
                 {todoInput}
                 {todoList}
             </div>
