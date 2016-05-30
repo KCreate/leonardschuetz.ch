@@ -108,6 +108,10 @@ class ProtoController extends Component {
             content = (
                 <Content expanded={this.state.expanded}>
                     {this.content(this.state.navigation, this.props.params, this.props.route)}
+                    <Card>
+                        # Logout
+                        <button><a href="/auth/logout">Log out</a></button>
+                    </Card>
                 </Content>
             );
         }
