@@ -4,7 +4,7 @@
 git pull origin master
 
 # Build the server
-npm run Build
+npm run build
 
 # Update the process in pm2
 pm2 restart server
