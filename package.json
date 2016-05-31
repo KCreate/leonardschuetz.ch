@@ -8,8 +8,7 @@
     "start": "node server/server.js",
     "setup": "./scripts/setup.sh",
     "build_client": "rm -rf dist; webpack",
-    "build_server": "rm -rf serverBuild; ./scripts/buildServer.sh; rm -rf dist",
-    "build": "npm run build_client; npm run build_server",
+    "build": "npm run build_client",
     "update": "./scripts/pull.sh"
   },
   "repository": {
