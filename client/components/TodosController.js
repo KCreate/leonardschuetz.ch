@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import ProtoController from './ProtoController';
 import Card from './Card';
 import TodoList from './TodoList';
+import LimitedInput from './LimitedInput';
 import get from '../../utils/get';
 
 class TodosController extends ProtoController {
@@ -26,7 +27,7 @@ class TodosController extends ProtoController {
     }
 
     listTodos() {
-        get('/todosapi', 'POST', {}, (err, res) => {
+        get('/todosapi', 'GET', {}, (err, res) => {
             this.setState({
                 todos: JSON.parse(res).todos,
                 authorized: !JSON.parse(res).reason,
@@ -41,16 +42,17 @@ class TodosController extends ProtoController {
     }
 
     handleUpload(event) {
-
         event.preventDefault();
+        event.persist();
+        console.dir(event.target);
 
         get('/todosapi', 'PUT', {
             payload: {
-                text: this.refs.todoInput.value,
-                isLink: this.refs.todoInputIsLink.checked,
+                text: event.target[0].value,
+                isLink: event.target[1].checked,
             },
         }, (err, res) => {
-            this.refs.todoInput.value = '';
+            event.target.reset();
             this.listTodos();
         });
     }
@@ -70,8 +72,11 @@ class TodosController extends ProtoController {
             <Card>
                 # Add todo
                 <form onSubmit={this.handleUpload}>
-                    <input placeholder="Todo" ref="todoInput"></input>
-                    <input type="checkbox" ref="todoInputIsLink" name="todoInputIsLink"></input>
+                    <LimitedInput
+                        placeholder="Todo"
+                        maxlength={200}
+                    ></LimitedInput>
+                    <input type="checkbox" name="todoInputIsLink"></input>
                     <label for="todoInputIsLink">Todo is a link</label>
                     <button type="submit">Add Todo</button>
                 </form>

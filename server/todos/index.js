@@ -6,9 +6,7 @@ const config    = require('./../config.json');
 const router    = new express.Router();
 
 // List all todos
-router.post('/', (req, res) => {
-
-    // Read contents of the data.json file
+router.get('/', (req, res) => {
     fs.readFile(__dirname + '/data.json', 'utf8', (err, data) => {
         if (err) return console.log(err);
 
@@ -16,7 +14,9 @@ router.post('/', (req, res) => {
             data = JSON.parse(data);
             res.json(data);
         } catch (e) {
-            res.json([]);
+            res.json({
+                todos: [],
+            });
         }
     });
 });
@@ -41,6 +41,12 @@ router.put('/', (req, res) => {
         }
 
         if (!req.body.text || req.body.text === '') {
+            return res.json({
+                ok: false,
+            });
+        }
+
+        if (req.body.text.length > 200) {
             return res.json({
                 ok: false,
             });
