@@ -58,7 +58,7 @@ class AdminController extends ProtoController {
             onprogress: (event) => {
                 this.setState({
                     status: {
-                        text: parseInt((100 / event.total) * event.loaded, 10),
+                        text: parseInt((100 / event.total) * event.loaded, 10) + '% uploaded...',
                         type: 'progress',
                     },
                 });
