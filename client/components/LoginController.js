@@ -1,6 +1,7 @@
 // Dependencies
 import React, { Component } from 'react';
 import ProtoController from './ProtoController';
+import StatusView from './StatusView';
 import Card from './Card';
 import get from '../../utils/get';
 
@@ -16,7 +17,7 @@ class LoginController extends ProtoController {
             navigation: [
                 ['auth', 'Authentication'],
             ],
-            status: undefined,
+            status: {},
         });
     }
 
@@ -44,12 +45,34 @@ class LoginController extends ProtoController {
     }
 
     content(navItems, routerParams, routerPath) {
+
+        let status;
+        if (this.state.status.authenticated) {
+            status = (
+                <StatusView
+                    status={{
+                        type: 'success',
+                        text: 'Authenticated!',
+                    }}
+                ></StatusView>
+            );
+        } else {
+            status = (
+                <StatusView
+                    status={{
+                        type: 'error',
+                        text: 'Not authenticated!',
+                    }}
+                ></StatusView>
+            );
+        }
+
         return (
             <div>
                 <Card>
                     # Status
                     <pre>
-                        {JSON.stringify(this.state.status, null, 4)}
+                        {status}
                     </pre>
                 </Card>
                 <Card>
