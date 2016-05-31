@@ -148,6 +148,11 @@ const LiveChat = function() {
             return false;
         }
 
+        // Check if the max-length of the message wasn't crossed
+        if (message.length > 500) {
+            return false;
+        }
+
         // Append to the messages array of the room
         this.rooms[roomName].messages.push({
             message,
@@ -229,7 +234,7 @@ const LiveChat = function() {
     this.addUser = function(roomName, user) {
 
         // Check if the username is long enough
-        if (user.username.length < 4) {
+        if (user.username.length < 4 || user.username.length > 20) {
             return false;
         }
 
