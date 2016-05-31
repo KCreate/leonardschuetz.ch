@@ -34,7 +34,7 @@ class LimitedInput extends Component {
                     onChange={this.onchange}
                     placeholder={this.props.placeholder}></input>
                 <span>
-                    {(this.props.maxlength - this.state.value.length || this.props.maxlength)}
+                    {(this.props.maxlength - this.state.value.length)}
                 </span>
             </div>
         );
