@@ -5,6 +5,7 @@ import Card from './Card';
 import StatusView from './StatusView';
 import List from './List';
 import MessagesView from './MessagesView';
+import LimitedInput from './LimitedInput';
 
 if (WebSocket) {
     WebSocket.prototype.sendJson = function(object) {
@@ -219,7 +220,9 @@ class LiveChatController extends ProtoController {
                     # Select chatroom
                     <form onSubmit={this.joinRoomHandler}>
                         <input placeholder="Room name"></input>
-                        <input placeholder="Username"></input>
+                            <LimitedInput
+                                placeholder="Username"
+                                maxlength={20}></LimitedInput>
                         <button type="submit">Send</button>
                     </form>
                 </Card>
@@ -244,7 +247,9 @@ class LiveChatController extends ProtoController {
                         livechat={this.state.livechat}>
                     </MessagesView>
                     <form onSubmit={this.messageSendHandler} ref="messageForm">
-                        <input placeholder="Message"></input>
+                        <LimitedInput
+                            placeholder="Message"
+                            maxlength={500}></LimitedInput>
                         <button type="submit">Send</button>
                     </form>
                 </Card>
