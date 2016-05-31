@@ -41,3 +41,10 @@ render((
 Array.from(document.querySelectorAll('noscript')).forEach((element) => {
     element.parentElement.removeChild(element);
 });
+
+// Reset scroll position
+window.addEventListener('load', (event) => {
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+    }, 10);
+});
