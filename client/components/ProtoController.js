@@ -1,16 +1,10 @@
 // Dependencies
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Card from './Card';
 import Header from './Header';
 import Content from './Content';
 import Login from './Login';
 import get from '../../utils/get';
-
-// Router
-import {
-    Link,
-    IndexLink,
-} from 'react-router';
 
 class ProtoController extends Component {
 

@@ -1,5 +1,5 @@
 // Dependencies
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 import './../style/App.scss';
 class App extends Component {

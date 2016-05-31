@@ -18,10 +18,8 @@ import LoginController from '../components/LoginController';
 import {
     Router,
     Route,
-    Redirect,
     IndexRedirect,
     browserHistory,
-    IndexRoute,
 } from 'react-router';
 
 render((

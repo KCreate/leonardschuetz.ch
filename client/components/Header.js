@@ -1,11 +1,10 @@
 // Dependencies
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
 
 // Router
 import {
     Link,
-    IndexLink,
 } from 'react-router';
 
 import './../style/Header.scss';

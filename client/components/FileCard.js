@@ -1,5 +1,5 @@
 // Dependencies
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Card from './Card';
 
 class FileCard extends Component {
@@ -36,9 +36,7 @@ FileCard.defaultProps = {
         versions: [],
         time: 0,
     },
-    deleteVersion: (version, file) => {
-        console.log(version, file);
-    },
+    deleteVersion: (version, file) => {},
 };
 
 export default FileCard;

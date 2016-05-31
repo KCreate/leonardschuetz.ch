@@ -1,5 +1,5 @@
 // Dependencies
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Markdown from 'react-remarkable';
 import highlight from 'highlight.js';
 import '../style/material.css';
@@ -31,12 +31,6 @@ const MarkdownConfigHighlight = {
 const MarkdownConfigNoHighlight = {
     imagesAreBlocks: true,
 };
-
-// Router
-import {
-    Link,
-    IndexLink,
-} from 'react-router';
 
 import './../style/Card.scss';
 class Card extends Component {

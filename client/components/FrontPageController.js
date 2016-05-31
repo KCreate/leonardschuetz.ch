@@ -1,5 +1,5 @@
 // Dependencies
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import ProtoController from './ProtoController';
 import StaticBlogArticles from './StaticBlogArticles';
 

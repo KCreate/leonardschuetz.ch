@@ -1,5 +1,5 @@
 // Dependencies
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import DeferedContainerList from 'deferedcontainerlist';
 import Card from './Card.js';
 import {

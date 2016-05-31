@@ -1,5 +1,5 @@
 // Dependencies
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import ProtoController from './ProtoController';
 import Card from './Card';
 import FileCard from './FileCard';
@@ -23,12 +23,6 @@ class AdminController extends ProtoController {
             status: false,
             needsAuthentication: true,
         });
-    }
-
-    componentDidMount() {
-        if (this.state.authenticated) {
-            this.listFiles();
-        }
     }
 
     appGotAuthenticated() {
