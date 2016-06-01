@@ -98,7 +98,7 @@ class ProtoController extends Component {
                     <Login onauthentication={this.authenticate}></Login>
                 </Content>
             );
-        } else {
+        } else if (this.state.authenticated) {
             content = (
                 <Content expanded={this.state.expanded}>
                     {this.content(this.state.navigation, this.props.params, this.props.route)}
@@ -106,6 +106,12 @@ class ProtoController extends Component {
                         # Logout
                         <button><a href="/auth/logout">Log out</a></button>
                     </Card>
+                </Content>
+            );
+        } else {
+            content = (
+                <Content expanded={this.state.expanded}>
+                    {this.content(this.state.navigation, this.props.params, this.props.route)}
                 </Content>
             );
         }
