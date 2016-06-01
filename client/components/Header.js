@@ -78,7 +78,7 @@ class Header extends Component {
         }
 
         // Paralax modifier
-        const modifier = 0.15;
+        const modifier = 0.5;
         const xModified = x * modifier;
         const yModified = y * modifier;
 
