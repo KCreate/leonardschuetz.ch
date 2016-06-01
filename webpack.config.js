@@ -64,6 +64,9 @@ const babelPresets = ((production) => {
     }
 })(production);
 
+// Devtool
+const devtool = (production ? undefined : 'cheap-module-source-map');
+
 // Webpack config
 module.exports = {
     production, // Production flag is now publicly available
@@ -74,7 +77,7 @@ module.exports = {
         filename: 'bundle.js',
         publicPath: '/',
     },
-    devtool: 'cheap-module-source-map',
+    devtool,
     module: {
         loaders: [
             {
