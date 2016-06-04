@@ -52,7 +52,7 @@ const LiveChat = function() {
         }
         case 'clearChat': {
             if (this.ownsRoom(
-                (savedUser.room),
+                savedUser.room,
                 savedUser.identifier
             )) {
                 this.clearChat(savedUser.room);
@@ -152,10 +152,10 @@ const LiveChat = function() {
         });
 
         // Remove any message older than the message limit
-        ths.rooms[roomName].messages = this.rooms[roomName].messages
+        this.rooms[roomName].messages = this.rooms[roomName].messages
         .slice(0)
         .reverse()
-        .slice(this.messageLimit)
+        .slice(0, this.messageLimit)
         .reverse();
     };
 
@@ -230,6 +230,8 @@ const LiveChat = function() {
 
     // Add a user
     this.addUser = function(roomName, user) {
+
+        user.username = user.username.trim();
 
         // Check if the username is long enough
         if (user.username.length < 4 || user.username.length > 20) {

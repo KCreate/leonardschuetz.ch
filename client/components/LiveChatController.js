@@ -121,8 +121,8 @@ class LiveChatController extends ProtoController {
         // Request to connect to a specific room
         this.websocket.sendJson({
             type: 'joinRequest',
-            room: this.state.livechat.roomname,
-            username: this.state.livechat.username,
+            room: this.state.livechat.roomname.trim(),
+            username: this.state.livechat.username.trim(),
         });
     }
 
