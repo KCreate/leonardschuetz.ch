@@ -1,5 +1,3 @@
-/* eslint-disable no-var */
-
 // Dependencies
 const express   = require('express');
 const path      = require('path');
@@ -7,7 +5,7 @@ const fs        = require('fs');
 const multer    = require('multer');
 const router    = new express.Router();
 
-var config      = require('./config.json');
+let config      = require('./config.json');
 config = Object.assign(config, {
     path: path.resolve(__dirname, './resources/versionedDocuments'),
 });
@@ -45,7 +43,7 @@ router.use((req, res, next) => {
         files = files.reduce((last, current, index) => {
 
             // Check if the document already exists
-            var foundIndex = -1;
+            let foundIndex = -1;
             last.forEach((item, index) => {
                 if (item.filename === current.filename) {
                     foundIndex = index;
@@ -103,7 +101,7 @@ router.route('/')
     }
 
     // Get the file buffer
-    var fileBuffer = new Buffer(req.files['file'][0].buffer);
+    let fileBuffer = new Buffer(req.files['file'][0].buffer);
     fs.writeFile(
         config.path + '/' + renameFile(req.files['file'][0].originalname),
         fileBuffer,
@@ -122,7 +120,7 @@ router.route('/')
 // Download the newest version of a document
 router.route('/:filename')
 .all((req, res, next) => {
-    var foundIndex = -1;
+    let foundIndex = -1;
     req.documents.forEach((file, index) => {
         if (file.filename === req.params.filename) {
             foundIndex = index;

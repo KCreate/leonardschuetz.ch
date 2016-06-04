@@ -1,5 +1,3 @@
-/* eslint-disable no-var */
-
 // Dependencies
 const express   = require('express');
 const path      = require('path');

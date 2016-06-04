@@ -1,4 +1,3 @@
-/* eslint-disable no-var */
 // List of all actions, their parameters and action creators
 const actions = function() {
 
@@ -88,7 +87,7 @@ const actions = function() {
     this.createWebsocketInstruction = function(type, message) {
 
         // Construct the instruction
-        var instruction = Object.assign({}, { type }, message);
+        let instruction = Object.assign({}, { type }, message);
 
         // Parse the instruction
         instruction = JSON.stringify(instruction);
@@ -100,7 +99,7 @@ const actions = function() {
     this.createLivechatInstruction = function(type, message, options, callback) {
 
         // Construct the instruction
-        var instruction = Object.assign({}, { type }, message, options, {
+        let instruction = Object.assign({}, { type }, message, options, {
             oncomplete: callback,
         });
 

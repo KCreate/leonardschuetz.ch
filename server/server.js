@@ -1,50 +1,57 @@
-/* eslint-disable no-var */
-
 // Dependencies
 const express       = require('express');
-var expressWs       = require('express-ws'); // Has to be reassigned later
 const path          = require('path');
 const fs            = require('fs');
 const bodyParser    = require('body-parser');
 const compression   = require('compression');
 const auth          = require('./auth.js');
 
+let expressWs       = require('express-ws'); // Has to be reassigned later
+
 const app           = express();
 const port          = 3000;
 const portProduction = 443;
 
-// Webpack dependencies, not required on production
+const config        = require('./config.json');
 const webpackConfig = require('../webpack.config.js');
-if (!webpackConfig.production) {
-    const webpack               = require('webpack');
-    const webpackDevMiddleware  = require('webpack-dev-middleware');
-    const webpackHotMiddleware  = require('webpack-hot-middleware');
-    const compiler              = webpack(webpackConfig);
-}
 
-// Dependencies only needed in development
+// Stuff only needed in development
+let morgan;
+let webpack;
+let webpackDevMiddleware;
+let webpackHotMiddleware;
+let compiler;
 if (!webpackConfig.production) {
-    const morgan        = require('morgan');
+
+    // Webpack
+    webpack               = require('webpack');
+    webpackDevMiddleware  = require('webpack-dev-middleware');
+    webpackHotMiddleware  = require('webpack-hot-middleware');
+    compiler              = webpack(webpackConfig);
+
+    // Additional dependencies
+    morgan        = require('morgan');
 }
 
 // HTTPS Configuration
+let https;
+let privateKey;
+let certificate;
+let credentials;
+let server;
 if (webpackConfig.production) {
-    const https         = require('https');
-    const privateKey    = fs.readFileSync('/etc/letsencrypt/archive/leonardschuetz.ch/privkey2.pem', 'utf8');
-    const certificate   = fs.readFileSync('/etc/letsencrypt/archive/leonardschuetz.ch/cert2.pem', 'utf8');
-    const credentials   = {
+    https         = require('https');
+    privateKey    = fs.readFileSync(config.privateKey, 'utf8');
+    certificate   = fs.readFileSync(config.certificate, 'utf8');
+    credentials   = {
         key: privateKey,
         cert: certificate,
     };
 
     // Create the https server
-    const server = https.createServer(credentials, app);
-
-    // Apply the express-ws constructor to the app using the server
+    server = https.createServer(credentials, app);
     expressWs = expressWs(app, server);
 } else {
-
-    // Apply the express-ws constructo the app
     expressWs = expressWs(app);
 }
 

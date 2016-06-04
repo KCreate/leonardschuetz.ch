@@ -1,5 +1,3 @@
-/* eslint-disable no-var */
-
 const actions = new (require('./actions.js'))();
 
 // Livechat api
@@ -21,7 +19,7 @@ const LiveChat = function() {
         const instruction = instructionBlock.instruction;
 
         // In case the user get's removed before the broadcast can happen, save him here
-        var savedUser = this.userForIdentifier(instruction.websocketKey);
+        let savedUser = this.userForIdentifier(instruction.websocketKey);
 
         // Handle actions
         switch (type) {
@@ -180,7 +178,7 @@ const LiveChat = function() {
         }
 
         // Search the user
-        var indexOfUser = -1;
+        let indexOfUser = -1;
         this.users.forEach((user, index) => {
             if (indexOfUser === -1) {
                 if (user.identifier === userIdentifier) {
@@ -205,7 +203,7 @@ const LiveChat = function() {
         }
 
         // Search the user
-        var indexOfUser = -1;
+        let indexOfUser = -1;
         this.users.forEach((user, index) => {
             if (indexOfUser === -1) {
                 if (user.identifier === userIdentifier) {
