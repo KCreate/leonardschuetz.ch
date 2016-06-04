@@ -191,7 +191,7 @@ class LiveChatController extends ProtoController {
         if (this.websocket) {
             this.websocket.sendJson({
                 type: 'addMessage',
-                message: event.target[0].value,
+                message: event.target[0].value.trim(),
             });
             this.refs.messageForm.reset();
         }

@@ -115,16 +115,7 @@ const LiveChat = function() {
             return false;
         }
 
-        const messagesAmount = this.rooms[roomName].messages.length;
-
-        // Select only the messages specified by the filter
-        const messages = this.rooms[roomName].messages
-        .slice(0) // To work on a copy of the array not the reference
-        .reverse()
-        .slice(0, limit || messagesAmount)
-        .reverse();
-
-        return messages;
+        return this.rooms[roomName].messages;
     };
 
     // Returns true or false wether a string can be used as a room name
@@ -140,6 +131,8 @@ const LiveChat = function() {
         if (!this.roomExists(roomName) || !this.userExists(user.identifier)) {
             return false;
         }
+
+        message = message.trim();
 
         // Check if the message isn't empty
         if (message.length === 0) {
@@ -157,6 +150,13 @@ const LiveChat = function() {
             user,
             time,
         });
+
+        // Remove any message older than the message limit
+        ths.rooms[roomName].messages = this.rooms[roomName].messages
+        .slice(0)
+        .reverse()
+        .slice(this.messageLimit)
+        .reverse();
     };
 
     // Check if a specific room has a specific user in it
