@@ -4,8 +4,8 @@ import ProtoController from './ProtoController';
 import Card from './Card';
 import StatusView from './StatusView';
 import List from './List';
-import MessagesView from './MessagesView';
-import LimitedInput from './LimitedInput';
+import Chat from './Chat';
+import ChatroomSelector from './ChatroomSelector';
 
 if (WebSocket) {
     WebSocket.prototype.sendJson = function(object) {
@@ -186,14 +186,12 @@ class LiveChatController extends ProtoController {
         }
     }
 
-    messageSendHandler(event) {
-        event.preventDefault();
+    messageSendHandler(message) {
         if (this.websocket) {
             this.websocket.sendJson({
                 type: 'addMessage',
-                message: event.target[0].value.trim(),
+                message: message.trim(),
             });
-            this.refs.messageForm.reset();
         }
     }
 
@@ -216,16 +214,9 @@ class LiveChatController extends ProtoController {
         let clearButton;
         if (!this.state.livechat.joined) {
             headerCard = (
-                <Card>
-                    # Select chatroom
-                    <form onSubmit={this.joinRoomHandler}>
-                        <input placeholder="Room name"></input>
-                            <LimitedInput
-                                placeholder="Username"
-                                maxlength={20}></LimitedInput>
-                        <button type="submit">Send</button>
-                    </form>
-                </Card>
+                <ChatroomSelector
+                    submitHandler={this.joinRoomHandler}>
+                </ChatroomSelector>
             );
         } else {
             usersCard = (
@@ -240,19 +231,12 @@ class LiveChatController extends ProtoController {
             );
 
             messagesCard = (
-                <Card>
-                    # Chat
-                    <MessagesView
-                        messages={this.state.messages}
-                        livechat={this.state.livechat}>
-                    </MessagesView>
-                    <form onSubmit={this.messageSendHandler} ref="messageForm">
-                        <LimitedInput
-                            placeholder="Message"
-                            maxlength={500}></LimitedInput>
-                        <button type="submit">Send</button>
-                    </form>
-                </Card>
+                <Chat
+                    messages={this.state.messages}
+                    livechat={this.state.livechat}
+                    newMessageHandler={this.messageSendHandler}
+                    messageMaxLength={500}>
+                </Chat>
             );
 
             closeButton = (

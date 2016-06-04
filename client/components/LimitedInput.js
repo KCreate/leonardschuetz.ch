@@ -6,23 +6,11 @@ class LimitedInput extends Component {
 
     constructor(...args) {
         super(...args);
-
         this.onchange = this.onchange.bind(this);
-        this.state = {
-            value: '',
-        };
     }
 
     onchange(event) {
-        this.setState({
-            value: event.target.value.slice(0, this.props.maxlength),
-        });
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            value: '',
-        });
+        this.props.onChange(event.target.value.slice(0, this.props.maxlength));
     }
 
     render() {
@@ -30,11 +18,11 @@ class LimitedInput extends Component {
             <div className="LimitedInput">
                 <input
                     type="text"
-                    value={this.state.value}
+                    value={this.props.value}
                     onChange={this.onchange}
                     placeholder={this.props.placeholder}></input>
                 <span>
-                    {(this.props.maxlength - this.state.value.length)}
+                    {(this.props.maxlength - this.props.value.length)}
                 </span>
             </div>
         );
