@@ -49,7 +49,12 @@ class AdminController extends ProtoController {
         });
 
         // Construct the payload
-        const payload = new FormData(event.target);
+        console.dir(event.target);
+        const payload = new FormData();
+        payload.append('file', event.target[0].files[0]); // file
+        payload.append('destination', event.target[1].value); // location selector
+
+        console.log(payload);
 
         // Upload the file
         get('/documents', 'POST', {

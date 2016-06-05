@@ -2,17 +2,25 @@
 const express   = require('express');
 const path      = require('path');
 const fs        = require('fs');
-const multer    = require('multer');
+const multer    = require('multer')({
+    inMemory: true,
+    limits: {
+        fileSize: 100000000,
+        files: 1,
+        includeEmptyFields: true,
+    },
+});
 const router    = new express.Router();
 
 let config      = require('./config.json');
 config = Object.assign(config, {
-    path: path.resolve(__dirname, './resources/versionedDocuments'),
+    versionedPath: path.resolve(__dirname, './resources/versionedDocuments'),
+    publicPath: path.resolve(__dirname, './resources/documents/'),
 });
 
 // Populate req.documents with a list of all files and their versions
 router.use((req, res, next) => {
-    fs.readdir(config.path, (err, files) => {
+    fs.readdir(config.versionedPath, (err, files) => {
         if (err) res.json(err);
 
         // Filter out unwanted files
@@ -23,7 +31,7 @@ router.use((req, res, next) => {
 
         files = files.map((file, index) => {
             const parts = file.split('-');
-            const stats = fs.lstatSync(config.path + '/' + file);
+            const stats = fs.lstatSync(config.versionedPath + '/' + file);
 
             // Reference: http://stackoverflow.com/questions/10645994/node-js-how-to-format-a-date-string-in-utc
             const humanReadableTime = new Date(Number(parts[0]))
@@ -79,42 +87,36 @@ router.use((req, res, next) => {
 
 // List all files and post new ones
 router.route('/')
+.all((req, res, next) => {
+    req.body = undefined;
+
+    next();
+})
 .get((req, res) => {
     res.json(req.documents);
 })
-.post(multer({
-    inMemory: true,
-    limits: {
-        fileSize: 100000000,
-        files: 1,
-        includeEmptyFields: true,
-    },
-}).fields([
-    { name: 'file', maxCount: 1 },
-]), (req, res) => {
+.post(multer.single('file'), (req, res) => {
+
+    console.log(req.body);
 
     // If no file was passed, return an error
-    if (!req.files['file']) {
+    if (!req.file) {
         return res.json({
             error: 'No file uploaded!',
         });
     }
 
     // Get the file buffer
-    let fileBuffer = new Buffer(req.files['file'][0].buffer);
-    fs.writeFile(
-        config.path + '/' + renameFile(req.files['file'][0].originalname),
-        fileBuffer,
-        (err) => {
-            if (err) return res.json({
-                error: 'Could not save file!',
-            });
+    const fileBuffer = new Buffer(req.file.buffer);
+    fs.writeFile(config.versionedPath + '/' + renameFile(req.file.originalname), fileBuffer, (err) => {
+        if (err) return res.json({
+            error: 'Could not save file!',
+        });
 
-            res.json({
-                message: 'File saved!',
-            });
-        }
-    );
+        res.json({
+            message: 'File saved!',
+        });
+    });
 });
 
 // Download the newest version of a document
@@ -130,7 +132,7 @@ router.route('/:filename')
     if (foundIndex > -1) {
         // I use slice because reverse() modifies the array in place
         const newestTimestamp = req.documents[foundIndex].versions.slice(0).reverse()[0].time;
-        req.filepath = config.path + '/' + newestTimestamp + '-' + req.params.filename;
+        req.filepath = config.versionedPath + '/' + newestTimestamp + '-' + req.params.filename;
 
         next();
     } else {
@@ -153,7 +155,7 @@ router.route('/:filename')
 
 router.route('/:filename/:version')
 .all((req, res, next) => {
-    const filepath = config.path + '/' + req.params.version + '-' + req.params.filename;
+    const filepath = config.versionedPath + '/' + req.params.version + '-' + req.params.filename;
     fs.lstat(filepath, (err, stats) => {
         if (err) return res.json({
             error: 'File not found.',
