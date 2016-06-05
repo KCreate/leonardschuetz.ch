@@ -112,6 +112,10 @@ class AdminController extends ProtoController {
                     <StatusView status={this.state.status}></StatusView>
                     <form onSubmit={this.handleUpload} ref="uploadForm">
                         <input type="file" name="file"></input>
+                        <select>
+                            <option value="versioned_documents">Versioned Documents</option>
+                            <option value="public_documents">Public Documents</option>
+                        </select>
                         <button type="submit">Upload</button>
                     </form>
                 </Card>

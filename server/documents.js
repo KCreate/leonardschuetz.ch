@@ -106,9 +106,19 @@ router.route('/')
         });
     }
 
+    // Get the save path
+    let savePath;
+    if (!req.body.destination) {
+        savePath = config.versionedPath  + '/' + renameFile(req.file.originalname);
+    } else if (req.body.destination === 'public_documents') {
+        savePath = config.publicPath + '/' + renameFile(req.file.originalname, { notimestamp: true });
+    } else {
+        savePath = config.versionedPath  + '/' + renameFile(req.file.originalname);
+    }
+
     // Get the file buffer
     const fileBuffer = new Buffer(req.file.buffer);
-    fs.writeFile(config.versionedPath + '/' + renameFile(req.file.originalname), fileBuffer, (err) => {
+    fs.writeFile(savePath, fileBuffer, (err) => {
         if (err) return res.json({
             error: 'Could not save file!',
         });
@@ -177,14 +187,19 @@ router.route('/:filename/:version')
     });
 });
 
-function renameFile(filename) {
+function renameFile(filename, options = {}) {
 
     // Basename
     filename = filename.split('/').reduce((last, current) => current);
     filename = filename.split('\\').reduce((last, current) => current);
 
+    // Timestmap
+    if (!options.notimestamp) {
+        filename = Date.now() + '-' + filename;
+    }
+
     // Date and lowercase
-    return Date.now() + '-' + filename;
+    return filename;
 }
 
 module.exports = router;
