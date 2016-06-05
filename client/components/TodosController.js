@@ -14,6 +14,7 @@ class TodosController extends ProtoController {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
         this.listTodos = this.listTodos.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
 
         this.state = Object.assign({}, this.state, {
             title: 'Todos',
@@ -23,6 +24,7 @@ class TodosController extends ProtoController {
             todos: [],
             password: '',
             needsAuthentication: true,
+            addTodoValue: '',
         });
     }
 
@@ -44,7 +46,6 @@ class TodosController extends ProtoController {
     handleUpload(event) {
         event.preventDefault();
         event.persist();
-        console.dir(event.target);
 
         get('/todosapi', 'PUT', {
             payload: {
@@ -53,6 +54,9 @@ class TodosController extends ProtoController {
             },
         }, (err, res) => {
             event.target.reset();
+            this.setState({
+                addTodoValue: '',
+            });
             this.listTodos();
         });
     }
@@ -67,6 +71,12 @@ class TodosController extends ProtoController {
         this.listTodos();
     }
 
+    handleInputChange(value) {
+        this.setState({
+            addTodoValue: value,
+        });
+    }
+
     content(navItems, routerParams, routerPath) {
         const todoInput = (
             <Card>
@@ -75,7 +85,9 @@ class TodosController extends ProtoController {
                     <LimitedInput
                         placeholder="Todo"
                         maxlength={200}
-                    ></LimitedInput>
+                        value={this.state.addTodoValue}
+                        onChange={this.handleInputChange}>
+                    </LimitedInput>
                     <input type="checkbox" name="todoInputIsLink"></input>
                     <label for="todoInputIsLink">Todo is a link</label>
                     <button type="submit">Add Todo</button>
@@ -85,12 +97,10 @@ class TodosController extends ProtoController {
         const todoList = (
             <Card>
                 # Todos
-                <span>
-                    <TodoList
-                        todos={this.state.todos}
-                        oncomplete={this.handleDelete}
-                    ></TodoList>
-                </span>
+                <TodoList
+                    todos={this.state.todos}
+                    oncomplete={this.handleDelete}>
+                </TodoList>
             </Card>
         );
 
