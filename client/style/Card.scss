@@ -145,7 +145,7 @@
                 }
             }
 
-            &[alt="framed"], &[alt="circular"], &[alt="circular-small"] {
+            &[alt*="framed"], &[alt*="circular"], &[alt*="circular-small"] {
                 width: 100%;
                 transform: translateX(0);
                 box-shadow: $shadow2;
@@ -156,25 +156,24 @@
                 }
             }
 
-            &[alt="framed"] {
+            &[alt*="framed"] {
                 border-radius: 3px;
             }
 
-            &[alt="circular"] {
+            &[alt*="circular"] {
                 border-radius: 50%;
             }
 
             // Reference: http://stackoverflow.com/questions/14068103/disable-antialising-when-scaling-images
-            &[alt="no-smooth"] {
+            &[alt*="no-smooth"] {
                 image-rendering: pixelated;
                 -ms-interpolation-mode: nearest-neighbor;
             }
 
-            &[alt="circular-small"] {
+            &[alt*="small"] {
                 width: 240px;
                 margin: 0 auto;
                 display: block;
-                border-radius: 50%;
             }
 
             // Remove the bottom margin if the card is the last
