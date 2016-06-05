@@ -9,7 +9,7 @@ Today I mainly do Web Stuff. Backend and Front-Side are both areas I'm really in
 ****
 # TL;DR
 
-Below is a list of stuff I have worked with. I'm not saying I'm an expert at these, they are just things i have used.
+Below is a list of stuff I have worked with. I'm not saying I'm an expert at these, they are just things I have used.
 
 **JavaScript**
 **Node.js**
@@ -17,6 +17,7 @@ Below is a list of stuff I have worked with. I'm not saying I'm an expert at the
 **Express.js**
 **React.js**
 **Webpack**
+**PM2**
 **Gulp**
 **ESLint**
 **Git**
@@ -25,7 +26,9 @@ Below is a list of stuff I have worked with. I'm not saying I'm an expert at the
 **Bash**
 **Ubuntu**
 **Debian**
+**openSUSE**
 **HTML**
+**CSS**
 **SCSS**
 **Objective-C**
 **MongoDB**

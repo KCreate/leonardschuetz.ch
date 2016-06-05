@@ -1,6 +1,6 @@
 # About me
 
-Hello there, I'm Leonard Schuetz. I'm a 16y old guy, interested in technolgy and design. Here I write about stuff I've made and what's on my mind. Currently I'm an apprentice at Siemens in Zuerich.
+Hello stranger, I'm Leonard Schuetz. I'm a 16y old guy, interested in technolgy and design. Here I write about stuff I've made and what's on my mind. Currently I'm an apprentice at Siemens in Zürich / Switzerland.
 
 ![circular-small](%%PATH%%/selfie.jpg)
 
