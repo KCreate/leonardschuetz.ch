@@ -6,15 +6,15 @@ const {
     imageBufferToText,
 } = require('txt-png');
 
-router.post((req, res, next) => {
+router.get('/', (req, res, next) => {
 
-    if (!req.body.message) {
+    if (!req.query.message) {
         return res.json({
             error: 'No message was transfered!',
         });
     }
 
-    textToImageBuffer(req.body.message, (buffer) => {
+    textToImageBuffer(req.query.message, (buffer) => {
         res.writeHead(200, {
             'Content-Type': 'image/png',
             'Content-Disposition': 'inline; filename=output.png',

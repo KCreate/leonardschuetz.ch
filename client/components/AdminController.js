@@ -4,6 +4,7 @@ import ProtoController from './ProtoController';
 import Card from './Card';
 import FileCard from './FileCard';
 import StatusView from './StatusView';
+import PNGEncoder from './PNGEncoder';
 import get from '../../utils/get';
 
 class AdminController extends ProtoController {
@@ -18,6 +19,7 @@ class AdminController extends ProtoController {
             title: 'Admin',
             navigation: [
                 ['admin', 'Admin'],
+                ['pngencoder', 'PNGEncoder'],
             ],
             files: [],
             status: false,
@@ -49,12 +51,9 @@ class AdminController extends ProtoController {
         });
 
         // Construct the payload
-        console.dir(event.target);
         const payload = new FormData();
         payload.append('file', event.target[0].files[0]); // file
         payload.append('destination', event.target[1].value); // location selector
-
-        console.log(payload);
 
         // Upload the file
         get('/documents', 'POST', {
@@ -105,28 +104,42 @@ class AdminController extends ProtoController {
     }
 
     content(navItems, routerParams, routerPath) {
-        return (
-            <div>
-                <Card>
-                    # Upload File
-                    <StatusView status={this.state.status}></StatusView>
-                    <form onSubmit={this.handleUpload} ref="uploadForm">
-                        <input type="file" name="file"></input>
-                        <select>
-                            <option value="versioned_documents">Versioned Documents</option>
-                            <option value="public_documents">Public Documents</option>
-                        </select>
-                        <button type="submit">Upload</button>
-                    </form>
-                </Card>
-                {this.state.files.map((file, index) => (
-                    <FileCard
-                        key={index}
-                        file={file}
-                        deleteVersion={this.handleDeleteVersion.bind(this, file)}></FileCard>
-                ))}
-            </div>
-        );
+        switch (routerPath.path.slice(1)) {
+        case 'admin': {
+            return (
+                <div>
+                    <Card>
+                        # Upload File
+                        <StatusView status={this.state.status}></StatusView>
+                        <form onSubmit={this.handleUpload} ref="uploadForm">
+                            <input type="file" name="file"></input>
+                            <select>
+                                <option value="versioned_documents">Versioned Documents</option>
+                                <option value="public_documents">Public Documents</option>
+                            </select>
+                            <button type="submit">Upload</button>
+                        </form>
+                    </Card>
+                    {this.state.files.map((file, index) => (
+                        <FileCard
+                            key={index}
+                            file={file}
+                            deleteVersion={this.handleDeleteVersion.bind(this, file)}></FileCard>
+                    ))}
+                </div>
+            );
+        }
+        case 'pngencoder': {
+            return (
+                <div>
+                    <Card>
+                        # PNGEncoder
+                        <PNGEncoder></PNGEncoder>
+                    </Card>
+                </div>
+            );
+        }
+        }
     }
 }
 

@@ -30,6 +30,7 @@ render((
             <Route path="/about" component={FrontPageController}></Route>
             <Route path="/todos" component={TodosController}></Route>
             <Route path="/admin" component={AdminController}></Route>
+            <Route path="/pngencoder" component={AdminController}></Route>
             <Route path="/livechat" component={LiveChatController}></Route>
             <Route path="/auth" component={LoginController}></Route>
             <Route path="/*" component={NotFoundController}></Route>
