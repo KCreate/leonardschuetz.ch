@@ -12,8 +12,8 @@
     "update": "./scripts/pull.sh"
   },
   "repository": {
-      "type" : "git",
-      "url" : "https://github.com/KCreate/leonardschuetz.ch.git"
+    "type": "git",
+    "url": "https://github.com/KCreate/leonardschuetz.ch.git"
   },
   "author": "Leonard Schuetz",
   "license": "MIT",
@@ -54,6 +54,7 @@
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "express-ws": "^2.0.0-rc.1",
-    "multer": "^1.1.0"
+    "multer": "^1.1.0",
+    "txt-png": "^0.1.3-a"
   }
 }
