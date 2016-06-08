@@ -9,13 +9,32 @@ class PNGEncoder extends Component {
 
         this.state = {
             src: '',
+            inputText: 'helloworld',
         };
+
+        // Debounce input change
+        this.debouncedWrite = undefined;
     }
 
     handleChange(event) {
+
         this.setState({
-            src: event.target.value,
+            inputText: event.target.value,
         });
+
+        // Cancel if an action is currently being debounced
+        if (this.debouncedWrite) {
+            clearTimeout(this.debouncedWrite);
+            this.debouncedWrite = undefined;
+        }
+
+        this.debouncedWrite = setTimeout(() => {
+            this.setState({
+                src: this.state.inputText,
+            });
+
+            this.debouncedWrite = undefined;
+        }, 750); // Debounce delay
     }
 
     render() {
@@ -28,7 +47,7 @@ class PNGEncoder extends Component {
                 <input
                     type="text"
                     onChange={this.handleChange}
-                    value={this.state.src}
+                    value={this.state.inputText}
                     placeholder="Text to encode">
                 </input>
             </div>
