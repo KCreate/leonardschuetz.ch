@@ -42,7 +42,7 @@ class PNGEncoder extends Component {
             <div>
                 <img
                     src={'/apps/txt-png?message=' + (this.state.src || 'helloworld')}
-                    alt="no-smooth">
+                    alt="no-smooth small">
                 </img>
                 <input
                     type="text"
