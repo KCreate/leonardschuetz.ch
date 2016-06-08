@@ -38,11 +38,6 @@ render((
     </Router>
 ), document.getElementById('app'));
 
-// Remove all noscript element from the page
-Array.from(document.querySelectorAll('noscript')).forEach((element) => {
-    element.parentElement.removeChild(element);
-});
-
 // Reset scroll position
 window.addEventListener('load', (event) => {
     setTimeout(() => {
