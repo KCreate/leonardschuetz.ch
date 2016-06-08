@@ -119,6 +119,7 @@ class AdminController extends ProtoController {
                             </select>
                             <button type="submit">Upload</button>
                         </form>
+                        <a href="/resources/documents">Public documents</a>
                     </Card>
                     {this.state.files.map((file, index) => (
                         <FileCard
