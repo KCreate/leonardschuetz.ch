@@ -116,6 +116,7 @@ class AdminController extends ProtoController {
                             <select>
                                 <option value="versioned_documents">Versioned Documents</option>
                                 <option value="public_documents">Public Documents</option>
+                                <option value="dist_folder">Dist Folder</option>
                             </select>
                             <button type="submit">Upload</button>
                         </form>

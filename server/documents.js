@@ -2,6 +2,7 @@
 const express   = require('express');
 const path      = require('path');
 const fs        = require('fs');
+const router    = new express.Router();
 const multer    = require('multer')({
     inMemory: true,
     limits: {
@@ -10,12 +11,12 @@ const multer    = require('multer')({
         includeEmptyFields: true,
     },
 });
-const router    = new express.Router();
 
-let config      = require('./config.json');
+let config = require('./config.json');
 config = Object.assign(config, {
     versionedPath: path.resolve(__dirname, './resources/versionedDocuments'),
     publicPath: path.resolve(__dirname, './resources/documents/'),
+    distFolder: path.resolve(__dirname, '../dist/'),
 });
 
 // Populate req.documents with a list of all files and their versions
@@ -112,6 +113,8 @@ router.route('/')
         savePath = config.versionedPath  + '/' + renameFile(req.file.originalname);
     } else if (req.body.destination === 'public_documents') {
         savePath = config.publicPath + '/' + renameFile(req.file.originalname, { notimestamp: true });
+    } else if (req.body.destination === 'dist_folder') {
+        savePath = config.distFolder + '/' + renameFile(req.file.originalname, { notimestamp: true });
     } else {
         savePath = config.versionedPath  + '/' + renameFile(req.file.originalname);
     }
