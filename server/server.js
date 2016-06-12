@@ -72,6 +72,9 @@ app.use(auth.router);
 
 // Routes
 app.use('/resources',   require('./resources.js'));
+app.use('/d/:file',           (req, res) => {
+    res.redirect('/resources/documents/' + req.params.file);
+});
 app.use('/apps',        require('./apps.js'));
 app.use('/todosapi',    auth.requiresAuthentication, require('./todos/index.js'));
 app.use('/documents',   auth.requiresAuthentication, require('./documents.js'));
