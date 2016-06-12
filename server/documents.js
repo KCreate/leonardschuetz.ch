@@ -120,7 +120,7 @@ router.route('/')
         try {
             fs.statSync(savePath);
             return res.json({
-                message: 'File already exists, aborted!',
+                error: 'File already exists, aborted!',
             });
         } catch (e) {
             /*
