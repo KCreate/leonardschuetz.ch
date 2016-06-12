@@ -115,6 +115,20 @@ router.route('/')
         savePath = config.publicPath + '/' + renameFile(req.file.originalname, { notimestamp: true });
     } else if (req.body.destination === 'dist_folder') {
         savePath = config.distFolder + '/' + renameFile(req.file.originalname, { notimestamp: true });
+
+        // Check if the file already exists
+        try {
+            fs.statSync(savePath);
+            return res.json({
+                message: 'File already exists, aborted!',
+            });
+        } catch (e) {
+            /*
+                fs.statSync throws an error when the file doesn't exist,
+                which is bascically what we want. So just ignore the error message
+            */
+            console.log(e);
+        }
     } else {
         savePath = config.versionedPath  + '/' + renameFile(req.file.originalname);
     }
