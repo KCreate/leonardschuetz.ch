@@ -5,6 +5,7 @@ import Card from './Card';
 import FileCard from './FileCard';
 import StatusView from './StatusView';
 import PNGEncoder from './PNGEncoder';
+import MarkdownPreviewer from './MarkdownPreviewer';
 import get from '../../utils/get';
 
 class AdminController extends ProtoController {
@@ -20,6 +21,7 @@ class AdminController extends ProtoController {
             navigation: [
                 ['admin', 'Admin'],
                 ['pngencoder', 'PNGEncoder'],
+                ['markdown', 'Markdown'],
             ],
             files: [],
             status: false,
@@ -138,6 +140,13 @@ class AdminController extends ProtoController {
                         # PNGEncoder
                         <PNGEncoder></PNGEncoder>
                     </Card>
+                </div>
+            );
+        }
+        case 'markdown': {
+            return (
+                <div>
+                    <MarkdownPreviewer></MarkdownPreviewer>
                 </div>
             );
         }

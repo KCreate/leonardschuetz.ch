@@ -31,6 +31,7 @@ render((
             <Route path="/todos" component={TodosController}></Route>
             <Route path="/admin" component={AdminController}></Route>
             <Route path="/pngencoder" component={AdminController}></Route>
+            <Route path="/markdown" component={AdminController}></Route>
             <Route path="/livechat" component={LiveChatController}></Route>
             <Route path="/auth" component={LoginController}></Route>
             <Route path="/*" component={NotFoundController}></Route>
