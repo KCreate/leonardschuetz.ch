@@ -82,6 +82,7 @@ app.use('/livechatapi', (req, res, next) => {
     req.expressWs = expressWs;
     next();
 }, require('./livechat/route.js'));
+app.use('/tbz-va-2016', express.static(path.resolve(__dirname, './resources/documents/tbz-va-2016/')));
 
 // Webpack middleware, do not include in production
 if (!webpackConfig.production) {

@@ -2,7 +2,7 @@
 
 /node_modules
 /npm-debug.log
-
+*.swp
 /dist
 
 /server/resources/versionedDocuments
