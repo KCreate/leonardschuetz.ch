@@ -98,8 +98,6 @@ router.route('/')
 })
 .post(multer.single('file'), (req, res) => {
 
-    console.log(req.body);
-
     // If no file was passed, return an error
     if (!req.file) {
         return res.json({
