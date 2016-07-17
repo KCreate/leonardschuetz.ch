@@ -1,5 +1,5 @@
 // Production Switch
-const production = process.env.NODE_ENV === 'production';
+const production = process.env.NODE_ENV === 'app_production';
 
 // Dependencies
 const webpack         = require('webpack');
