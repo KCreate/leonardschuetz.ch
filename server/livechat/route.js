@@ -1,6 +1,15 @@
 // Dependencies
 const express   = require('express');
 const path      = require('path');
+const fs        = require('fs');
+const multer    = require('multer')({
+    inMemory: true,
+    limits: {
+        fileSize: 1000000,
+        files: 1,
+        includeEmptyFields: true,
+    },
+});
 const router    = new express.Router();
 const livechat  = new (require('./livechat.js'))();
 const actions   = new (require('./actions.js'))();
@@ -83,5 +92,40 @@ router.ws('/', (ws, req) => {
         }));
     });
 });
+
+router.post('/', multer.single('file'), (req, res) => {
+
+    // If no file was passed, return an error
+    if (!req.file) {
+        return res.json({
+            error: 'No file uploaded!',
+        });
+    }
+
+    // Generate a random filename
+    const filename = Date.now() + '_' + req.file.originalname;
+
+    // Filepath for temporary files
+    const savePath = path.resolve(__dirname, './tmp/' + filename);
+
+    // Save the file
+    const fileBuffer = new Buffer(req.file.buffer);
+
+    // Save the file
+    fs.writeFile(savePath, fileBuffer, (err) => {
+        if (err) return res.json({
+            message: 'Could not save file!',
+            ok: false,
+        });
+
+        res.json({
+            message: 'Saved file!',
+            link: '/livechatapi/tmp/' + filename,
+            ok: true,
+        });
+    });
+});
+
+router.use('/tmp', express.static(path.resolve(__dirname, './tmp/')));
 
 module.exports = router;
