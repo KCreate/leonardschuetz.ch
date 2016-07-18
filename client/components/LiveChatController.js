@@ -31,6 +31,7 @@ class LiveChatController extends ProtoController {
         this.websocketConnectionEstablished = this.websocketConnectionEstablished.bind(this);
         this.websocketOnMessage = this.websocketOnMessage.bind(this);
         this.messageSendHandler = this.messageSendHandler.bind(this);
+        this.filesSendHandler = this.filesSendHandler.bind(this);
         this.clearChatRoom = this.clearChatRoom.bind(this);
 
         this.state = Object.assign({}, this.state, {
@@ -195,6 +196,43 @@ class LiveChatController extends ProtoController {
         }
     }
 
+    filesSendHandler(files) {
+    
+        // Iterate over all files
+        files.forEach((file, index) => {
+
+            // Create a FormData object to send the file
+            const data = new FormData();
+            data.append('file', file, file.name);
+
+            // Upload the file to the temporary file storage
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/livechatapi', true);
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+
+                    // Parse the response from the api
+                    const response = JSON.parse(xhr.responseText);
+                    
+                    // Send the link to the socket
+                    if (this.websocket) {
+                        this.websocket.sendJson({
+                            type: 'addFile',
+                            apiResponse: response,
+                            file: {
+                                lastModified: file.lastModified,
+                                name: file.name,
+                                size: file.size,
+                                type: file.type,
+                            },
+                        });
+                    }
+                }
+            };
+            xhr.send(data);
+        });
+    }
+
     clearChatRoom() {
         event.preventDefault();
         if (this.websocket) {
@@ -235,6 +273,7 @@ class LiveChatController extends ProtoController {
                     messages={this.state.messages}
                     livechat={this.state.livechat}
                     newMessageHandler={this.messageSendHandler}
+                    newFilesHandler={this.filesSendHandler}
                     messageMaxLength={500}>
                 </Chat>
             );

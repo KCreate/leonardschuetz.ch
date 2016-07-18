@@ -11,6 +11,7 @@ class MessagesView extends Component {
 
         this.messagesReducer = this.messagesReducer.bind(this);
         this.messagesFormat = this.messagesFormat.bind(this);
+        this.displayMessage = this.displayMessage.bind(this);
     }
 
     messagesReducer(last, current, index) {
@@ -37,15 +38,44 @@ class MessagesView extends Component {
     }
 
     messagesFormat(message, index) {
-        return {
-            username: message.user.username,
-            messages: [message.message],
-            time: message.time,
-        };
+        if (message.file) {
+            return {
+                username: message.user.username,
+                messages: [message.file],
+                time: message.time,
+            };
+        } else {
+            return {
+                username: message.user.username,
+                messages: [message.message],
+                time: message.time,
+            };
+        }
+    }
+
+    displayMessage(item, index) {
+        if (typeof item !== 'string') {
+            return (
+                <div key={index} className="embededImage">
+                    <div>
+                        <img src={item.apiResponse.link}/>
+                    </div>
+                    <div>
+                        <p>{item.file.lastModified}</p>
+                        <p>{item.file.name}</p>
+                        <p>{item.file.size}</p>
+                        <p>{item.file.type}</p>
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <p key={index}>{item}</p>
+            );
+        }
     }
 
     render() {
-
         const messages = this.props.messages
         .map(this.messagesFormat)
         .reduce(this.messagesReducer, [])
@@ -65,9 +95,7 @@ class MessagesView extends Component {
                 <div key={index} className={classNames}>
                     <span className="title">{message.username}</span>
                     <span className="messages">
-                        {message.messages.map((message, index) => (
-                            <p key={index}>{message}</p>
-                        ))}
+                        {message.messages.map(this.displayMessage)}
                     </span>
                     <span className="time">{formatedTime}</span>
                 </div>

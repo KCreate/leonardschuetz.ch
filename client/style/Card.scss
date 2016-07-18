@@ -353,6 +353,11 @@
             }
         }
 
+        .dropzone-active button {
+            background-color: $colorGreen1;
+            border-color: $colorGreen1;
+        }
+
         button, input[type="submit"], input[type="button"] {
             &:not(.inline):hover {
                 background-color: $colorBlue1;

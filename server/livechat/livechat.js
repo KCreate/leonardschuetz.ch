@@ -50,6 +50,18 @@ const LiveChat = function() {
             );
             break;
         }
+        case 'addFile': {
+            this.addFile(
+                this.userForIdentifier(instruction.websocketKey).room,
+                {
+                    apiResponse: instruction.apiResponse,
+                    file: instruction.file,
+                },
+                this.userForIdentifier(instruction.websocketKey),
+                instructionBlock.time
+            );
+            break;
+        }
         case 'clearChat': {
             if (this.ownsRoom(
                 savedUser.room,
@@ -150,13 +162,19 @@ const LiveChat = function() {
             user,
             time,
         });
+    };
+    
+    // Add a new message to a specific room
+    this.addFile = function(roomName, options, user, time) {
+        if (!this.roomExists(roomName) || !this.userExists(user.identifier)) {
+            return false;
+        }
 
-        // Remove any message older than the message limit
-        this.rooms[roomName].messages = this.rooms[roomName].messages
-        .slice(0)
-        .reverse()
-        .slice(0, this.messageLimit)
-        .reverse();
+        this.rooms[roomName].messages.push({
+            user,
+            time,
+            file: options,
+        });
     };
 
     // Check if a specific room has a specific user in it
@@ -278,6 +296,13 @@ const LiveChat = function() {
 
     // Broadcast a status upgrade inside a given room
     this.broadcastStatusForRoom = function(roomName) {
+        
+        // Remove any message older than the message limit
+        this.rooms[roomName].messages = this.rooms[roomName].messages
+        .slice(0)
+        .reverse()
+        .slice(0, this.messageLimit)
+        .reverse();
 
         // Get all users in the specified room
         const usersInRoom = this.usersInRoom(roomName);

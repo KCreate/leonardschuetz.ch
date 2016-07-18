@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import LimitedInput from './LimitedInput';
 import Card from './Card';
 import MessagesView from './MessagesView';
+import Dropzone from 'react-dropzone';
 
 class Chat extends Component {
 
@@ -11,6 +12,7 @@ class Chat extends Component {
 
         this.newMessageHandler = this.newMessageHandler.bind(this);
         this.valueChange = this.valueChange.bind(this);
+        this.onDrop = this.onDrop.bind(this);
 
         this.state = {
             value: '',
@@ -31,6 +33,10 @@ class Chat extends Component {
         });
     }
 
+    onDrop(files) {
+        this.props.newFilesHandler(files);
+    }
+
     render() {
         return (
             <Card>
@@ -40,12 +46,18 @@ class Chat extends Component {
                     livechat={this.props.livechat}>
                 </MessagesView>
                 <form onSubmit={this.newMessageHandler}>
-                    <LimitedInput
-                        placeholder="Message"
-                        maxlength={this.props.messageMaxLength}
-                        value={this.state.value}
-                        onChange={this.valueChange}></LimitedInput>
-                    <button type="submit">Send</button>
+                    <Dropzone 
+                        onDrop={this.onDrop} 
+                        className="dropzone" 
+                        activeClassName="dropzone-active"
+                        disableClick={true}>
+                        <LimitedInput
+                            placeholder="Message"
+                            maxlength={this.props.messageMaxLength}
+                            value={this.state.value}
+                            onChange={this.valueChange}></LimitedInput> 
+                        <button type="submit">Send</button>
+                    </Dropzone>
                 </form>
             </Card>
         );
@@ -56,6 +68,7 @@ Chat.propTypes = {
     messages: PropTypes.array.isRequired,
     livechat: PropTypes.object.isRequired,
     newMessageHandler: PropTypes.func.isRequired,
+    newFilesHandler: PropTypes.func.isRequired,
     messageMaxLength: PropTypes.number.isRequired,
 };
 

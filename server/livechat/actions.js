@@ -26,6 +26,13 @@ const actions = function() {
             },
             requiresBroadcast: true,
         },
+        addFile: {
+            params: {
+                apiResponse: Object,
+                file: Object,
+            },
+            requiresBroadcast: true,
+        },
         status: {
             params: {
                 users: Array,

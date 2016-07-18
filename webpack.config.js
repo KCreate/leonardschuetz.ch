@@ -90,7 +90,7 @@ module.exports = {
             },
             {
                 test: /\.s?css$/,
-                loader: 'style!css!postcss!sass',
+                loader: 'style!css?-url!postcss!sass',
             },
             {
                 test: /\.(html|txt|md)/,

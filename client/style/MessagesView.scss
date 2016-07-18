@@ -40,6 +40,30 @@
             margin-top: 8px;
         }
 
+        > .messages {
+            > .embededImage {
+                overflow: auto;
+
+                > div {
+                    float: left;
+                    height: 70px;
+                }
+
+                > div:nth-child(1) {
+                    width: 100px;
+
+                    img {
+                        width: 100%;
+                        margin-bottom: 0;
+                        transform: translateX(0);
+                    }
+                }
+                > div:nth-child(2) {
+                    background-color: blue;
+                }
+            }
+        }
+
         &.currentUser {
             background-color: $colorBlue1;
             color: $colorCard;
