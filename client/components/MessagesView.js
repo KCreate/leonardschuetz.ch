@@ -57,8 +57,10 @@ class MessagesView extends Component {
         if (typeof item !== 'string') {
 
             // Format the filename
-            if (item.file.name.length > 25) {
-                item.file.name = item.file.name.slice(0, 25) + '...';
+            let filename = item.file.name;
+            const maxlength = 40;
+            if (filename.length > maxlength) {
+                filename = filename.slice(0, maxlength) + '...';
             }
 
             switch (item.file.type) {
@@ -71,7 +73,7 @@ class MessagesView extends Component {
                             <img src={item.apiResponse.link}/>
                         </div>
                         <div class="meta">
-                            <p class="filename">{item.file.name}</p>
+                            <p class="filename">{filename}</p>
                             <p class="size">Size: {item.file.size} bytes</p>
                             <a href={item.apiResponse.link} download={item.file.name}>
                                 <button>Download</button>
@@ -90,7 +92,7 @@ class MessagesView extends Component {
                             <img src="/resources/livechat/document.png"/>
                         </div>
                         <div class="meta">
-                            <p class="filename">{item.file.name}</p>
+                            <p class="filename">{filename}</p>
                             <p class="size">Size: {item.file.size} bytes</p>
                             <a href={item.apiResponse.link} download={item.file.name}>
                                 <button>Download</button>
