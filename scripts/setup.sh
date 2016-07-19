@@ -2,6 +2,7 @@
 
 # Create some dirs and files, excluded by git
 mkdir server/resources/versionedDocuments
+mkdir server/livechat/tmp
 touch server/config.json; echo '{"password": "testpw1234"}' > server/config.json
 touch server/todos/data.json; echo '{"todos": []}' > server/todos/data.json
 
