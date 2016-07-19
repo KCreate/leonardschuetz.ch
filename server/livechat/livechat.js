@@ -1,4 +1,6 @@
-const actions = new (require('./actions.js'))();
+const actions   = new (require('./actions.js'))();
+const fs        = require('fs');
+const path      = require('path');
 
 // Livechat api
 const LiveChat = function() {
@@ -300,6 +302,25 @@ const LiveChat = function() {
 
     // Broadcast a status upgrade inside a given room
     this.broadcastStatusForRoom = function(roomName) {
+
+        // Get all messages that will be removed
+        const removedMessages = this.rooms[roomName].messages.slice(
+            0,
+            Math.max(this.rooms[roomName].messages.length - this.messageLimit, 0)
+        );
+
+        // If some of them are files, delete the according files from the file system
+        removedMessages.forEach((message) => {
+            if (message.file) {
+                const filepath = message.file.apiResponse.link.split('/')
+                .slice(2)
+                .join('/');
+
+                fs.unlink(path.resolve(__dirname, filepath), () => {
+                    console.log('Deleted file:', filepath);
+                });
+            }
+        });
 
         // Remove any message older than the message limit
         this.rooms[roomName].messages = this.rooms[roomName].messages
