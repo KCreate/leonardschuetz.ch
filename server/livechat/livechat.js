@@ -33,8 +33,10 @@ const LiveChat = function() {
                 instruction.websocket.send(actions.createWebsocketInstruction('cancelRequest'));
             }
 
-            // Update the savedUser set previously
-            savedUser = this.userForIdentifier(instruction.websocketKey);
+            if (addUserSuccess) {
+                // Update the savedUser set previously
+                savedUser = this.userForIdentifier(instruction.websocketKey);
+            }
             break;
         }
         case 'removeUser': {
@@ -74,10 +76,12 @@ const LiveChat = function() {
         }
 
         // If the actions requires a broadcast, do so
-        if (actions.requiresBroadcast(type)) {
-            this.broadcastStatusForRoom(
-                savedUser.room
-            );
+        if (savedUser) {
+            if (actions.requiresBroadcast(type)) {
+                this.broadcastStatusForRoom(
+                    savedUser.room
+                );
+            }
         }
     };
 
@@ -163,7 +167,7 @@ const LiveChat = function() {
             time,
         });
     };
-    
+
     // Add a new message to a specific room
     this.addFile = function(roomName, options, user, time) {
         if (!this.roomExists(roomName) || !this.userExists(user.identifier)) {
@@ -296,7 +300,7 @@ const LiveChat = function() {
 
     // Broadcast a status upgrade inside a given room
     this.broadcastStatusForRoom = function(roomName) {
-        
+
         // Remove any message older than the message limit
         this.rooms[roomName].messages = this.rooms[roomName].messages
         .slice(0)

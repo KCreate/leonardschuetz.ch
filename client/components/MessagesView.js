@@ -55,19 +55,54 @@ class MessagesView extends Component {
 
     displayMessage(item, index) {
         if (typeof item !== 'string') {
-            return (
-                <div key={index} className="embededImage">
-                    <div>
-                        <img src={item.apiResponse.link}/>
+
+            // Format the filename
+            if (item.file.name.length > 25) {
+                item.file.name = item.file.name.slice(0, 25) + '...';
+            }
+
+            switch (item.file.type) {
+            case ('image/jpeg'):
+            case ('image/png'):
+            case ('image/gif'): {
+                return (
+                    <div key={index} className="embeded image">
+                        <div>
+                            <img src={item.apiResponse.link}/>
+                        </div>
+                        <div class="meta">
+                            <p class="filename">{item.file.name}</p>
+                            <p class="size">Size: {item.file.size} bytes</p>
+                            <a href={item.apiResponse.link} download={item.file.name}>
+                                <button>Download</button>
+                            </a>
+                            <a href={item.apiResponse.link} target="_blank">
+                                <button>Open</button>
+                            </a>
+                        </div>
                     </div>
-                    <div>
-                        <p>{item.file.lastModified}</p>
-                        <p>{item.file.name}</p>
-                        <p>{item.file.size}</p>
-                        <p>{item.file.type}</p>
+                );
+            }
+            default: {
+                return (
+                    <div key={index} className="embeded document">
+                        <div>
+                            <img src="/resources/livechat/document.png"/>
+                        </div>
+                        <div class="meta">
+                            <p class="filename">{item.file.name}</p>
+                            <p class="size">Size: {item.file.size} bytes</p>
+                            <a href={item.apiResponse.link} download={item.file.name}>
+                                <button>Download</button>
+                            </a>
+                            <a href={item.apiResponse.link} target="_blank">
+                                <button>Open</button>
+                            </a>
+                        </div>
                     </div>
-                </div>
-            );
+                );
+            }
+            }
         } else {
             return (
                 <p key={index}>{item}</p>

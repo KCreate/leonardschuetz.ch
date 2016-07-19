@@ -29,6 +29,8 @@
     "cssnano": "^3.5.2",
     "dateformat": "^1.0.12",
     "deferedcontainerlist": "^0.1.2-c",
+    "eslint": "^3.1.1",
+    "eslint-plugin-react": "^5.2.2",
     "file-loader": "^0.8.5",
     "highlight.js": "^9.3.0",
     "image-webpack-loader": "^1.8.0",
