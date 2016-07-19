@@ -126,6 +126,14 @@ router.post('/', multer.single('file'), (req, res) => {
     });
 });
 
-router.use('/tmp', express.static(path.resolve(__dirname, './tmp/')));
+router.use('/tmp', (req, res, next) => {
+    res.set('Content-Type', 'text/plain');
+    next();
+}, express.static(path.resolve(__dirname, './tmp/')));
+
+router.use('/tmp', (req, res, next) => {
+    res.removeHeader('Content-Type');
+    next();
+});
 
 module.exports = router;
