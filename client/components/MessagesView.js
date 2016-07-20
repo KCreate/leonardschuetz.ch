@@ -72,9 +72,9 @@ class MessagesView extends Component {
                         <div>
                             <img src={item.apiResponse.link}/>
                         </div>
-                        <div class="meta">
-                            <p class="filename">{filename}</p>
-                            <p class="size">Size: {item.file.size} bytes</p>
+                        <div className="meta">
+                            <p className="filename">{filename}</p>
+                            <p className="size">Size: {item.file.size} bytes</p>
                             <a href={item.apiResponse.link} download={item.file.name}>
                                 <button>Download</button>
                             </a>
@@ -91,9 +91,9 @@ class MessagesView extends Component {
                         <div>
                             <img src="/resources/livechat/document.png"/>
                         </div>
-                        <div class="meta">
-                            <p class="filename">{filename}</p>
-                            <p class="size">Size: {item.file.size} bytes</p>
+                        <div className="meta">
+                            <p className="filename">{filename}</p>
+                            <p className="size">Size: {item.file.size} bytes</p>
                             <a href={item.apiResponse.link} download={item.file.name}>
                                 <button>Download</button>
                             </a>
