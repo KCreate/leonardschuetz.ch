@@ -213,6 +213,11 @@ class LiveChatController extends ProtoController {
 
                     // Parse the response from the api
                     const response = JSON.parse(xhr.responseText);
+
+                    // Check if there was an error
+                    if (!response.ok) {
+                        return alert('Error: ' + response.message);
+                    }
                     
                     // Send the link to the socket
                     if (this.websocket) {
@@ -227,8 +232,6 @@ class LiveChatController extends ProtoController {
                             },
                         });
                     }
-                } else if (xhr.status === 500) {
-                    alert('There was an error: ' + xhr.responseText);
                 }
             };
             xhr.send(data);

@@ -93,44 +93,57 @@ router.ws('/', (ws, req) => {
     });
 });
 
-router.post('/', multer.single('file'), (req, res) => {
+// Allow a single file with a maximum size of 10 megabytes to be uploaded to the tmp directory
+router.post('/', (req, res) => {
+    multer.single('file')(req, res, (err) => {
 
-    // If no file was passed, return an error
-    if (!req.file) {
-        return res.json({
-            error: 'No file uploaded!',
-        });
-    }
+        if (err) {
+            return res.json({
+                ok: false,
+                message: err.message,
+            });
+        }
 
-    // Generate a random filename
-    const filename = Date.now() + '_' + req.file.originalname;
+        // If no file was passed, return an error
+        if (!req.file) {
+            return res.json({
+                message: 'No file uploaded!',
+                ok: false,
+            });
+        }
 
-    // Filepath for temporary files
-    const savePath = path.resolve(__dirname, './tmp/' + filename);
+        // Generate a random filename
+        const filename = Date.now() + '_' + req.file.originalname;
 
-    // Save the file
-    const fileBuffer = new Buffer(req.file.buffer);
+        // Filepath for temporary files
+        const savePath = path.resolve(__dirname, './tmp/' + filename);
 
-    // Save the file
-    fs.writeFile(savePath, fileBuffer, (err) => {
-        if (err) return res.json({
-            message: 'Could not save file!',
-            ok: false,
-        });
+        // Save the file
+        const fileBuffer = new Buffer(req.file.buffer);
 
-        res.json({
-            message: 'Saved file!',
-            link: '/livechatapi/tmp/' + filename,
-            ok: true,
+        // Save the file
+        fs.writeFile(savePath, fileBuffer, (err) => {
+            if (err) return res.json({
+                message: 'Could not save file!',
+                ok: false,
+            });
+
+            res.json({
+                message: 'Saved file!',
+                link: '/livechatapi/tmp/' + filename,
+                ok: true,
+            });
         });
     });
 });
 
+// Serve plain text files from the tmp directory
 router.use('/tmp', (req, res, next) => {
     res.set('Content-Type', 'text/plain');
     next();
 }, express.static(path.resolve(__dirname, './tmp/')));
 
+// If express.static didn't find anything, reset the content-type
 router.use('/tmp', (req, res, next) => {
     res.removeHeader('Content-Type');
     next();
