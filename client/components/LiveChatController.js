@@ -227,6 +227,8 @@ class LiveChatController extends ProtoController {
                             },
                         });
                     }
+                } else if (xhr.status === 500) {
+                    alert('There was an error: ' + xhr.responseText);
                 }
             };
             xhr.send(data);
