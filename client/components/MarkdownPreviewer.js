@@ -57,7 +57,11 @@ class MarkdownPreviewer extends Component {
                         placeholder="Source URL"
                         value={this.state.source}
                         onChange={this.onchange}
-                        onKeyDown={(event) => {if(event.keyCode===13){this.onchange(event);}}}>
+                        onKeyDown={(event) => {
+                            if (event.keyCode === 13) {
+                                this.onchange(event);
+                            }
+                        }}>
                     </input>
                     <button onClick={this.onchange.bind(null, null)}>Update</button>
                 </Card>
