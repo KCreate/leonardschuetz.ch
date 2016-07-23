@@ -40,3 +40,7 @@ Below is a list of stuff I have worked with. I'm not saying I'm an expert at the
 **Wordpress**
 **Java**
 **Python**
+**PHP**
+**GitLab**
+**PHPCS**
+**TravisCI**
