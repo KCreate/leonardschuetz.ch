@@ -9,3 +9,5 @@
 /server/config.json
 /server/todos/data.json
 /server/livechat/tmp
+
+/server/logs

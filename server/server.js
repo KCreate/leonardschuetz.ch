@@ -4,125 +4,95 @@ const path          = require('path');
 const fs            = require('fs');
 const bodyParser    = require('body-parser');
 const compression   = require('compression');
+const morgan        = require('morgan');
 const auth          = require('./auth.js');
-
-let expressWs       = require('express-ws'); // Has to be reassigned later
-
+const http          = require('http');
+const https         = require('https');
+const websocket     = require('express-ws');
 const app           = express();
-const port          = 3000;
-const portProduction = 443;
 
+/*
+ * Load config
+ * */
 const config        = require('./config.json');
-const webpackConfig = require('../webpack.config.js');
+const portHTTP      = config.portHTTP;
+const portPROD      = config.portPROD;
+const portDEV       = config.portDEV;
 
-// Stuff only needed in development
-let morgan;
+/*
+ * Initialize webpack related middlewares
+ * */
+const webpackConfig = require('../webpack.config.js');
 let webpack;
 let webpackDevMiddleware;
 let webpackHotMiddleware;
 let compiler;
 if (!webpackConfig.production) {
-
-    // Webpack
     webpack               = require('webpack');
     webpackDevMiddleware  = require('webpack-dev-middleware');
     webpackHotMiddleware  = require('webpack-hot-middleware');
     compiler              = webpack(webpackConfig);
-
-    // Additional dependencies
-    morgan        = require('morgan');
 }
 
-// HTTPS Configuration
-let https;
-let privateKey;
-let certificate;
-let credentials;
+/*
+ * Configure the server
+ *
+ * In production, use HTTPS
+ * In development, use HTTP
+ * */
 let server;
 if (webpackConfig.production) {
-    https         = require('https');
-    privateKey    = fs.readFileSync(config.privateKey, 'utf8');
-    certificate   = fs.readFileSync(config.certificate, 'utf8');
-    credentials   = {
-        key: privateKey,
-        cert: certificate,
+    const credentials = {
+        key: fs.readFileSync(config.privateKey, 'utf8'),
+        cert: fs.readFileSync(config.certificate, 'utf8'),
     };
-
-    // Create the https server
     server = https.createServer(credentials, app);
-    expressWs = expressWs(app, server);
 } else {
-    expressWs = expressWs(app);
+    server = http.createServer(app);
 }
 
-// App configuration
-app.enable('strict routing');
-app.disable('x-powered-by');
-app.use(compression());
-
-// Middleware
-if (!webpackConfig.production) {
-    app.use(morgan('dev'));
-}
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Authentication
-app.use(auth.router);
-
-// Routes
-app.use('/resources',   require('./resources.js'));
-app.use('/d/:file',           (req, res) => {
-    res.redirect('/resources/documents/' + req.params.file);
-});
-app.use('/apps',        require('./apps.js'));
-app.use('/todosapi',    auth.requiresAuthentication, require('./todos/index.js'));
-app.use('/documents',   auth.requiresAuthentication, require('./documents.js'));
-app.use('/livechatapi', (req, res, next) => {
-    req.expressWs = expressWs;
-    next();
-}, require('./livechat/route.js'));
-app.use('/tbz-va-2016', express.static(path.resolve(__dirname, './resources/documents/tbz-va-2016/')));
-
-// Webpack middleware, do not include in production
-if (!webpackConfig.production) {
-    app.use(webpackDevMiddleware(compiler, {
+/*
+ * App configuration
+ * The app is not being reassigned, because the app is being passed by reference
+ * */
+require('./routes.js')({
+    express,
+    path,
+    fs,
+    auth,
+    morgan,
+    compression,
+    bodyParser,
+    app,
+    loggingStream: fs.createWriteStream(path.resolve(__dirname, 'logs/', Date.now() + '.txt')),
+    expressWs: websocket(app, server),
+    production: webpackConfig.production,
+    webpackDevMiddleware: webpackDevMiddleware(compiler, {
         noInfo: true,
         publicPath: webpackConfig.output.publicPath,
-    }));
-    app.use(webpackHotMiddleware(compiler));
-}
-
-// React front-page
-app.use(express.static('./dist'));
-app.use('/', (req, res) => {
-    if (webpackConfig.production) {
-        res.sendFile(path.resolve('./dist/index.html'));
-    } else {
-        res.sendFile(path.resolve('./client/app/index.html'));
-    }
+    }),
+    webpackHotMiddleware: webpackHotMiddleware(compiler),
 });
 
-// Listen
-console.log('Starting express server on localhost:' + port);
-
+/*
+ * Start listening on the pre-configured ports
+ * */
+console.log('Starting express server on localhost');
 if (webpackConfig.production) {
-    // Listen on a secured connection
-    server.listen(portProduction);
-} else {
-    app.listen(port, (err) => {
-        if (err) throw err;
-        console.log('Express server listening on localhost:' + port);
+    server.listen(portHTTPS, () => {
+        console.log('Express server listening on localhost:' + portHTTPS);
     });
-}
-
-// Redirect all http to https
-if (webpackConfig.production) {
-    require('http').createServer((req, res) => {
+    http.createServer((req, res) => {
         res.writeHead(301, {
             Location: 'https://leonardschuetz.ch' + req.url,
         });
         res.end();
-    })
-    .listen(80);
+    }).listen(portHTTP, () => {
+        console.log('HTTP to HTTPS redirection listening on localhost:' + portHTTP);
+    });
+} else {
+    server.listen(portDEV, () => {
+        console.log('Express server listening on localhost:' + portDEV);
+    });
 }
+
