@@ -78,7 +78,6 @@ require('./routes.js')({
  * Start listening on the pre-configured ports
  * */
 console.log('Starting express server on localhost');
-console.log(webpackConfig);
 if (webpackConfig.production) {
     server.listen(portPROD, () => {
         console.log('Express server listening on localhost:' + portPROD);
