@@ -24,8 +24,8 @@ const portDEV       = config.portDEV;
  * */
 const webpackConfig = require('../webpack.config.js');
 let webpack;
-let webpackDevMiddleware = ()=>undefined;
-let webpackHotMiddleware = ()=>undefined;
+let webpackDevMiddleware = () => undefined;
+let webpackHotMiddleware = () => undefined;
 let compiler;
 if (!webpackConfig.production) {
     webpack               = require('webpack');
