@@ -24,8 +24,8 @@ const portDEV       = config.portDEV;
  * */
 const webpackConfig = require('../webpack.config.js');
 let webpack;
-let webpackDevMiddleware;
-let webpackHotMiddleware;
+let webpackDevMiddleware = ()=>undefined;
+let webpackHotMiddleware = ()=>undefined;
 let compiler;
 if (!webpackConfig.production) {
     webpack               = require('webpack');
@@ -78,10 +78,13 @@ require('./routes.js')({
  * Start listening on the pre-configured ports
  * */
 console.log('Starting express server on localhost');
+console.log(webpackConfig);
 if (webpackConfig.production) {
-    server.listen(portHTTPS, () => {
-        console.log('Express server listening on localhost:' + portHTTPS);
+    server.listen(portPROD, () => {
+        console.log('Express server listening on localhost:' + portPROD);
     });
+
+    // HTTP to HTTPS redirection
     http.createServer((req, res) => {
         res.writeHead(301, {
             Location: 'https://leonardschuetz.ch' + req.url,
