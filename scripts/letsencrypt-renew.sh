@@ -3,4 +3,4 @@ hash certbot 2>/dev/null || {
     exit 1;
 }
 
-certbot certonly --webroot -w /var/github/KCreate/leonardschuetz.ch/dist -d leonardschuetz.ch
+certbot certonly --webroot -w ./dist -d leonardschuetz.ch
