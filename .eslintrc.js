@@ -48,7 +48,9 @@ module.exports = {
         "brace-style": ["error",
             "1tbs"
         ],
-        indent: "error",
+        indent: ["error", 4, {
+            "MemberExpression": 0
+        }],
         "space-before-blocks": "error",
         "keyword-spacing": ["error", {
             before: true,

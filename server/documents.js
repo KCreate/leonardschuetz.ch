@@ -36,9 +36,9 @@ router.use((req, res, next) => {
 
             // Reference: http://stackoverflow.com/questions/10645994/node-js-how-to-format-a-date-string-in-utc
             const humanReadableTime = new Date(Number(parts[0]))
-                .toISOString()
-                .replace(/T/, ' ')
-                .replace(/\..+/, '');
+            .toISOString()
+            .replace(/T/, ' ')
+            .replace(/\..+/, '');
 
             return {
                 filename: parts.slice(1).join('-'),
