@@ -1,1 +1,2 @@
-eslint . -f table # Javascript linting
+# Javascript linting
+eslint .
