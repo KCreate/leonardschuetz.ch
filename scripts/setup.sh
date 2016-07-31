@@ -8,9 +8,10 @@ mkdir server/logs
 # Create configuration files
 touch server/config.json; echo '{
     "password": "testpw1234",
-    "portHTTP": 80,
-    "portPROD": 443,
-    "portDEV": 3000
+    "portPROD": 3000,
+    "portDEV": 3000,
+    "privKey": "",
+    "certificate": ""
 }' > server/config.json
 touch server/todos/data.json; echo '{
     "todos": []
