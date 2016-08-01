@@ -8,6 +8,10 @@
             "script": "server/proxy.js",
             "name": "proxy",
             "args": "production"
+        },
+        {
+            "script": "server/http-redirection.js",
+            "name": "http-redirection"
         }
     ]
 }
