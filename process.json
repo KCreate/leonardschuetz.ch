@@ -2,7 +2,10 @@
     "apps": [
         {
             "script": "server/server.js",
-            "name": "server"
+            "name": "server",
+            "env": {
+                "NODE_ENV": "app_production"
+            }
         }
     ]
 }

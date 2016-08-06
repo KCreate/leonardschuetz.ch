@@ -10,7 +10,7 @@
     "build": "rm -rf dist; webpack",
     "update": "./scripts/pull.sh",
     "test": "./scripts/test.sh",
-    "prod": "npm run build; npm run start"
+    "prod": "npm run build; pm2 start process.json"
   },
   "repository": {
     "type": "git",
