@@ -91,20 +91,22 @@ class LiveChatController extends ProtoController {
     establishWebsocketConnection() {
         if (!this.websocket && window) {
 
-            if (process.env.NODE_ENV === 'production') {
-                this.websocket = new WebSocket(
-                    'wss://' +
-                    window.location.host +
-                    '/livechatapi'
-                );
+            // Check what protocol should be used
+            let protocol = window.location.protocol;
+            if (protocol === 'http:') {
+                protocol = 'ws://';
             } else {
-                this.websocket = new WebSocket(
-                    'ws://' +
-                    window.location.host +
-                    '/livechatapi'
-                );
+                protocol = 'wss://';
             }
 
+            // Connect to the endpoint
+            this.websocket = new WebSocket(
+                protocol +
+                window.location.host +
+                '/livechatapi'
+            );
+
+            // Add event handlers
             this.websocket.onopen = this.websocketConnectionEstablished;
             this.websocket.onclose = this.closeWebsocketConnection;
         }
@@ -197,7 +199,7 @@ class LiveChatController extends ProtoController {
     }
 
     filesSendHandler(files) {
-    
+
         // Iterate over all files
         files.forEach((file, index) => {
 
@@ -218,7 +220,7 @@ class LiveChatController extends ProtoController {
                     if (!response.ok) {
                         return alert('Error: ' + response.message);
                     }
-                    
+
                     // Send the link to the socket
                     if (this.websocket) {
                         this.websocket.sendJson({

@@ -7,11 +7,10 @@
     "serve": "nodemon server/server.js -w server",
     "start": "node server/server.js",
     "setup": "./scripts/setup.sh",
-    "build_client": "rm -rf dist; webpack",
-    "build": "npm run build_client",
+    "build": "rm -rf dist; webpack",
     "update": "./scripts/pull.sh",
     "test": "./scripts/test.sh",
-    "prod": "./scripts/prod.sh"
+    "prod": "npm run build; pm2 start process.json"
   },
   "repository": {
     "type": "git",

@@ -10,8 +10,6 @@ touch server/config.json; echo '{
     "password": "testpw1234",
     "portPROD": 3000,
     "portDEV": 3000,
-    "privateKey": "",
-    "certificate": ""
 }' > server/config.json
 
 # Database for the todos app
