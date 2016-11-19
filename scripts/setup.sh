@@ -9,7 +9,7 @@ mkdir server/logs
 touch server/config.json; echo '{
     "password": "testpw1234",
     "portPROD": 3000,
-    "portDEV": 3000,
+    "portDEV": 3000
 }' > server/config.json
 
 # Database for the todos app
