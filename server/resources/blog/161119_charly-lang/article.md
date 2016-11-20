@@ -1,14 +1,16 @@
 # The Charly programming language
 ## 20. November 2016
 
-I've recently been working on my own programming language. I called it Charly.
+I've recently been working on my own programming language.
+
+I call it Charly.
 
 Charly is a interpreted, dynamically-typed and object-oriented programming language. It borrows some concepts from Ruby, such as operator overloading or treating the primitive types as objects. The syntax is inspired by JavaScript.
 
 # Hello World
 This is the simplest way to print "Hello World" in Charly.
 
-> Note: All syntax samples are highlighted using the javascript highlighter. Since both languages share a lot of their syntax and grammar, this works out most of the time.
+> Note: All syntax samples are highlighted using the JavaScript highlighter. Since both languages share a lot of their syntax and grammar, this works out most of the time.
 
 ```javascript
 print("Hello World")
@@ -85,7 +87,7 @@ module Charly::Internals
 end
 ```
 
-After you've recompiled and reinstalled the interpreter, you are now able to link against the method inside your charly program like this:
+After you've recompiled and reinstalled the interpreter, you are able to link against the method inside your charly program like this:
 
 ```javascript
 const mymethod = __internal__method("mymethod")
