@@ -3,6 +3,7 @@ const express   = require('express');
 const path      = require('path');
 const fs        = require('fs');
 const router    = new express.Router();
+const auth      = require('./auth');
 
 // Return the file for the given filename, with cache-headers
 router.use((req, res, next) => {
@@ -27,6 +28,24 @@ router.use((req, res, next) => {
 
     next();
 });
+
+router.use('/logs/list', auth.requiresAuthentication, (req, res) => {
+    fs.readdir(path.resolve(__dirname, 'logs/'), (err, items) => {
+        if (err) {
+            res.status(500).json({
+                ok: false,
+                reason: "Could not list log files"
+            });
+        } else {
+            res.status(200).json({
+                logs: items
+            });
+        }
+    })
+})
+
+router.use('/logs', auth.requiresAuthentication, express.static(path.join(__dirname, './logs')));
+
 router.use(express.static(path.join(__dirname, 'resources')));
 
 // Return an error message if the file was not found
