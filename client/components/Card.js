@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import Markdown from 'react-remarkable';
 import highlight from 'highlight.js';
-import '../style/material.css';
+import '../style/highlightjs/tomorrow-night-blue.css';
 
 const cachedMarkdown = { sources: [], highlighted: [] };
 const MarkdownConfigHighlight = {

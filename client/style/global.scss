@@ -80,3 +80,6 @@ $easing: cubic-bezier(.55, 0, .1, 1);
   }
   @return $shadow;
 }
+
+// Font's used for inline code and code blocks
+$codefont: Consolas, "Liberation Mono", Menlo, Courier, monospace;
