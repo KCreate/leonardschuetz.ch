@@ -34,15 +34,15 @@ router.use('/logs/list', auth.requiresAuthentication, (req, res) => {
         if (err) {
             res.status(500).json({
                 ok: false,
-                reason: "Could not list log files"
+                reason: 'Could not list log files',
             });
         } else {
             res.status(200).json({
-                logs: items
+                logs: items,
             });
         }
-    })
-})
+    });
+});
 
 router.use('/logs', auth.requiresAuthentication, express.static(path.join(__dirname, './logs')));
 
