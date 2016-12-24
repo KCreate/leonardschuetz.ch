@@ -5,7 +5,11 @@ I've recently been working on my own programming language.
 
 I call it Charly.
 
-Charly is a interpreted, dynamically-typed and object-oriented programming language. It borrows some concepts from Ruby, such as operator overloading or treating the primitive types as objects. The syntax is inspired by JavaScript.
+Charly is a interpreted, dynamically-typed and object-oriented programming language.
+It borrows some concepts from Ruby, such as operator overloading or treating the primitive types as objects.
+The syntax is inspired by JavaScript.
+
+Check out the official language and syntax guide at [leonardschuetz.ch/charly](https://leonardschuetz.ch/charly/)
 
 # Hello World
 This is the simplest way to print "Hello World" in Charly.
@@ -46,7 +50,7 @@ myGreeter.greet() # Hello World
 You also have the ability to extend the primitive types
 
 ```javascript
-String.greet = ->{
+String.methods.greet = ->{
   print("Hello " + self)
 }
 
