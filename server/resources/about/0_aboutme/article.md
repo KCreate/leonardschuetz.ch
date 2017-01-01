@@ -1,9 +1,14 @@
 # About me
 
-Hello stranger, I'm Leonard Schuetz. I'm a 16y old guy, interested in technolgy and design. Here I write about stuff I've made and what's on my mind. Currently I'm an apprentice at Siemens in Zürich / Switzerland.
+Hello stranger, I'm Leonard Schuetz.
+I'm a 16 year old student interested in technology and design.
+Here I write mostly about my own projects.
+
+Right now I'm an apprentice at Siemens in the field of Healthcare.
 
 ![circular-small](%%PATH%%/selfie.jpg)
 
-I'm always intersted in meeting new people with the same interest, so please send me a [mail](mailto:leni.schuetz@me.com) if you have any questions or just want to say hello.
+I'm always interested in meeting new people with the same interests,
+so please send me a [mail](mailto:leni.schuetz@me.com) and say hello.
 
 Take care!
