@@ -22,7 +22,7 @@ $ npm run start
 # Preparing for production
 Run the setup script.
 
-Make sure your `NODE_ENV` environment variable is set to _`development`_.
+Make sure your `NODE_ENV` environment variable is set to _`production`_.
 
 You can now start the app using the following command:
 ```sh
