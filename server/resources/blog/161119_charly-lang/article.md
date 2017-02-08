@@ -99,4 +99,4 @@ const mymethod = __internal__method("mymethod")
 print(mymethod("Hello World")) # You said: Hello World
 ```
 
-You can check out the source code on the [GitHub repo](https://github.com/KCreate/charly-lang). Charly is also featured inside [awesome-crystal](http://awesome-crystal.com/#awesome-crystal-implementationscompilers) under the section `Implementations/Compilers`
+You can check out the source code on the [GitHub repo](https://github.com/charly-lang). Charly is also featured inside [awesome-crystal](http://awesome-crystal.com/#awesome-crystal-implementationscompilers) under the section `Implementations/Compilers`

@@ -29,8 +29,8 @@ module.exports = (context) => {
     app.use(auth.router);
 
     // Content routes
-    app.use('/charly', (req, res) => res.redirect('https://kcreate.github.io/charly-lang/'));
-    app.use('/charly-lang', (req, res) => res.redirect('https://kcreate.github.io/charly-lang/'));
+    app.use('/charly', (req, res) => res.redirect('https://github.com/charly-lang'));
+    app.use('/charly-lang', (req, res) => res.redirect('https://github.com/charly-lang'));
     app.use('/resources', require('./resources.js'));
     app.use('/d/:file', (req, res) => res.redirect('/resources/documents/' + req.params.file));
     app.use('/apps', require('./apps.js'));
