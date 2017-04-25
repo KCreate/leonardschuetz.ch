@@ -9,6 +9,15 @@ const MarkdownConfigHighlight = {
     imagesAreBlocks: true,
     highlight: (str, lang) => {
 
+        // Don't highlight the "" lang
+        // This happens when a code block is defined as
+        // ```
+        // // code
+        // ```
+        if (lang === '') {
+            return str;
+        }
+
         // Check if this string has already been highlighted once
         const cached = cachedMarkdown.sources.map((item, index) => ({
             string: item,
