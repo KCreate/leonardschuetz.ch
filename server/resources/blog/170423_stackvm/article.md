@@ -21,14 +21,12 @@ The general principle behind a virtual machine is pretty easy to grasp. What you
 of instructions, some registers of a given size and memory. Not all virtual machines have the same
 amount of registers and not all registers have the same meaning assigned to them.
 
-# Cycle
+One of the registers is the `ip` (Instruction Pointer) register. It points to the current
+instruction. At the beginning of each cycle, the machine reads an opcode from the address
+pointed to by the `ip` register. It then runs the assigned task of that instruction.
 
-The basic structure of a cpu cycle looks like this:
-
-1. Fetch the current instruction
-2. Load arguments (if any are specified)
-3. Run the assigned task of the instruction
-4. Jump to the next instruction
+The meaning of each opcode is completly up to the semantic design of the machine. One could assign
+any meaning to an opcode.
 
 # Encoding
 
