@@ -24,7 +24,6 @@ module.exports = {
         "no-new-object": "error",
         "object-shorthand": ["error", "always"],
         "no-array-constructor": "error",
-        "array-callback-return": "error",
         "quote-props": ["error", "as-needed"],
         quotes: ["error", "single"],
         "no-useless-escape": "error",
@@ -69,9 +68,6 @@ module.exports = {
         "comma-dangle": ["error", "always-multiline"],
         semi: ["error", "always"],
         radix: ["error", "always"],
-        camelcase: ["error", {
-            properties: "always"
-        }],
         "new-cap": "error",
         "no-underscore-dangle": "error"
     }
