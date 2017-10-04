@@ -34,11 +34,11 @@ class ChatroomSelector extends Component {
                 # Select chatroom
                 <form onSubmit={this.submitHandler}>
                     <input placeholder="Room name"></input>
-                        <LimitedInput
-                            placeholder="Username"
-                            maxlength={20}
-                            value={this.state.value}
-                            onChange={this.onchange}></LimitedInput>
+                    <LimitedInput
+                        placeholder="Username"
+                        maxlength={20}
+                        value={this.state.value}
+                        onChange={this.onchange}></LimitedInput>
                     <button type="submit">Send</button>
                 </form>
             </Card>

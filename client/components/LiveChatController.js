@@ -269,7 +269,7 @@ class LiveChatController extends ProtoController {
                     # Users
                     <List>
                         {this.state.users.map((user, index) => (
-                        user.username + '-' + user.identifier.slice(0, 10)
+                            user.username + '-' + user.identifier.slice(0, 10)
                         ))}
                     </List>
                 </Card>
