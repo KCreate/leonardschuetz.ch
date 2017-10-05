@@ -15,6 +15,8 @@ class Board {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
+
+        this.lastPlacedColor = 0;
     }
 }
 
@@ -64,16 +66,17 @@ router.get('/state/:name', (req, res) => {
     });
 });
 
-// Toggle the color of a tile
-router.get('/toggle_tile/:name/:row/:column', (req, res) => {
+// Set the color of a tile
+router.get('/set_color/:name/:row/:column/:color', (req, res) => {
     const name = req.params.name;
     let row = req.params.row;
     let column = req.params.column;
+    let color = req.params.color;
 
-    if (name === undefined || row === undefined || column === undefined) {
+    if (name === undefined || row === undefined || column === undefined || color === undefined) {
         return res.json({
             ok: false,
-            message: 'Could not toggle tile, missing parameters: name or row or column',
+            message: 'Could not set tile color, missing parameters',
         });
     }
 
@@ -86,11 +89,19 @@ router.get('/toggle_tile/:name/:row/:column', (req, res) => {
 
     row = parseInt(row, 10);
     column = parseInt(column, 10);
+    color = parseInt(color, 10);
 
-    if (isNaN(row) || isNaN(column)) {
+    if (isNaN(row) || isNaN(column) || isNaN(color)) {
         return res.json({
             ok: false,
-            message: 'Could not parse row and column field as an integer',
+            message: 'Could not parse parameter fields as an integer',
+        });
+    }
+
+    if (color === boards[name].lastPlacedColor) {
+        return res.json({
+            ok: false,
+            message: 'You already placed your tile this round',
         });
     }
 
@@ -101,11 +112,35 @@ router.get('/toggle_tile/:name/:row/:column', (req, res) => {
         });
     }
 
-    boards[name].board[row][column] = (boards[name].board[row][column] + 1) % (kTileColorMax + 1);
+    // Check if the field is already placed
+    if (boards[name].board[row][column] !== 0) {
+        return res.json({
+            ok: false,
+            message: 'Can\'t place here, tile already full',
+        });
+    }
+
+    // Check that there is a tile below
+    if (row !== 7 && boards[name].board[row + 1][column] === 0) {
+        return res.json({
+            ok: false,
+            message: 'Can\'t place here, no tile below',
+        });
+    }
+
+    if (color < 0 || color > kTileColorMax) {
+        return res.json({
+            ok: false,
+            message: 'Invalid color',
+        });
+    }
+
+    boards[name].board[row][column] = color;
+    boards[name].lastPlacedColor = color;
 
     res.json({
         ok: true,
-        message: 'Toggled tile color',
+        message: 'Updated tile color',
     });
 });
 
@@ -140,11 +175,11 @@ router.use((req, res) => {
         ok: false,
         message: 'Unknown route',
         help: {
-            routes: ['create_board', 'state', 'toggle_tile', 'delete_board'],
+            routes: ['create_board', 'state', 'set_color', 'delete_board'],
             params: {
                 create_board: ['name'],
                 state: ['name'],
-                toggle_tile: ['name', 'row', 'column'],
+                set_color: ['name', 'row', 'column'],
                 delete_board: ['name'],
             },
         },
