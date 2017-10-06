@@ -43,7 +43,7 @@ class Connect4 {
               color_selector.appendChild((() => {
                   const option = document.createElement('option');
                   option.value = 1;
-                  option.innerText = 'Blue';
+                  option.innerText = 'Red';
                   option.selected = true;
                   return option;
               })());
