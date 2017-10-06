@@ -1,4 +1,5 @@
 const container = document.querySelector('#app');
+const audio = new Audio('https://notificationsounds.com/soundfiles/5b69b9cb83065d403869739ae7f0995e/file-sounds-937-job-done.mp3');
 
 const kJoinScreen = 0;
 const kGameScreen = 1;
@@ -84,6 +85,11 @@ class Connect4 {
             this.requestServer('state', [this.boardname], (response) => {
 
                 if (response.data.lastPlacedColor !== this.color) {
+
+                  if (document.title === 'Connect 4') {
+                    audio.play();
+                  }
+
                     document.title = '**YOUR TURN**';
                 } else {
                     document.title = 'Connect 4';
