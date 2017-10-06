@@ -24,7 +24,7 @@ class Board {
         // Check each color
         for (let color = 1; color < kTileColorMax + 1; color++) {
 
-        // Check all vertical combinations
+            // Check all vertical combinations
             for (let vy = 0; vy < 5; vy++) {
                 for (let vx = 0; vx < 12; vx++) {
                     if (
@@ -155,12 +155,12 @@ router.get('/set_color/:name/:row/:column/:color', (req, res) => {
         });
     }
 
-    // if (color === boards[name].lastPlacedColor) {
-    // return res.json({
-    //ok: false,
-    // message: 'You already placed your tile this round',
-    // });
-    // }
+    if (color === boards[name].lastPlacedColor) {
+        return res.json({
+            ok: false,
+            message: 'You already placed your tile this round',
+        });
+    }
 
     // Check if someone has won the game already
     const boardWinCheck = boards[name].checkWin();

@@ -22,6 +22,14 @@ body {
   background-color: #3A539B;
 }
 
+#app.primary_color {
+  background-color: #E01931;
+}
+
+#app.secondary_color {
+  background-color: #22313F;
+}
+
 #inputfield_container {
   display: block;
   margin: 0 auto;
@@ -59,17 +67,28 @@ body {
   height: 100%;
   float: left;
   border: 1px solid #BDC3C7;
+  background-color: white;
+  position: relative;
 }
 
-.column.empty_tile {
+.tile {
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  border-radius: 50%;
+}
+
+.tile.empty_tile {
   background-color: white;
 }
 
-.column.primary_tile {
+.tile.primary_tile {
   background-color: #E01931;
 }
 
-.column.secondary_tile {
+.tile.secondary_tile {
   background-color: #22313F;
 }
 

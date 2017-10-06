@@ -23,6 +23,8 @@ class Connect4 {
     render() {
         switch (this.screen) {
         case kJoinScreen: {
+            container.className = '';
+
             this.clearScreen();
             const inputfield_container = document.createElement('form');
             const name_inputfield = document.createElement('input');
@@ -74,6 +76,9 @@ class Connect4 {
                 this.tilesprepared = true;
             }
 
+            if (this.color === 1) container.className = 'primary_color';
+            if (this.color === 2) container.className = 'secondary_color';
+
             const gamefield = document.querySelector('#gamefield');
 
             this.requestServer('state', [this.boardname], (response) => {
@@ -88,11 +93,11 @@ class Connect4 {
                     y = parseInt(y, 10);
                     row.map((column, x) => {
                         x = parseInt(x, 10);
-                        const tile = gamefield.children[y].children[x];
+                        const tile = gamefield.children[y].children[x].children[0];
 
-                        if (column === 0) tile.className = 'column empty_tile';
-                        if (column === 1) tile.className = 'column primary_tile';
-                        if (column === 2) tile.className = 'column secondary_tile';
+                        if (column === 0) tile.className = 'tile empty_tile';
+                        if (column === 1) tile.className = 'tile primary_tile';
+                        if (column === 2) tile.className = 'tile secondary_tile';
                     });
                 });
 
@@ -124,12 +129,15 @@ class Connect4 {
             for (let x = 0; x < 12; x++) {
 
                 const columndiv = document.createElement('div');
-                columndiv.className += 'column empty_tile';
+                const tilediv = document.createElement('div');
 
-                columndiv.dataset.x = x;
-                columndiv.dataset.y = y;
+                columndiv.className += 'column';
+                tilediv.className += 'tile';
 
-                columndiv.onclick = (event) => {
+                tilediv.dataset.x = x;
+                tilediv.dataset.y = y;
+
+                tilediv.onclick = (event) => {
                     event.preventDefault();
 
                     const x = parseInt(event.target.dataset.x, 10);
@@ -138,6 +146,7 @@ class Connect4 {
                     this.toggleTile(x, y);
                 };
 
+                columndiv.appendChild(tilediv);
                 rowdiv.appendChild(columndiv);
             }
 
