@@ -15,96 +15,96 @@ class Connect4 {
     setupStateCheckInterval() {
         this.stateCheckInterval = setInterval(() => {
             if (this.screen === kGameScreen) {
-                this.render()
+                this.render();
             }
-        }, 500)
+        }, 500);
     }
 
     render() {
         switch (this.screen) {
-          case kJoinScreen: {
-              this.clearScreen();
-              const inputfield_container = document.createElement('form');
-              const name_inputfield = document.createElement('input');
-              const name_submit = document.createElement('input');
-              const color_selector = document.createElement('select');
+        case kJoinScreen: {
+            this.clearScreen();
+            const inputfield_container = document.createElement('form');
+            const name_inputfield = document.createElement('input');
+            const name_submit = document.createElement('input');
+            const color_selector = document.createElement('select');
 
-              inputfield_container.id = 'inputfield_container';
-              name_inputfield.id = 'name_inputfield';
-              name_inputfield.type = 'text';
-              name_inputfield.className += 'loginscreen_inputs';
-              name_inputfield.placeholder = 'Board name';
-              name_submit.id = 'name_submit';
-              name_submit.type = 'submit';
-              name_submit.className += 'loginscreen_inputs';
-              color_selector.id = 'color_selector';
-              color_selector.className += 'loginscreen_inputs';
+            inputfield_container.id = 'inputfield_container';
+            name_inputfield.id = 'name_inputfield';
+            name_inputfield.type = 'text';
+            name_inputfield.className += 'loginscreen_inputs';
+            name_inputfield.placeholder = 'Board name';
+            name_submit.id = 'name_submit';
+            name_submit.type = 'submit';
+            name_submit.className += 'loginscreen_inputs';
+            color_selector.id = 'color_selector';
+            color_selector.className += 'loginscreen_inputs';
 
-              color_selector.appendChild((() => {
-                  const option = document.createElement('option');
-                  option.value = 1;
-                  option.innerText = 'Red';
-                  option.selected = true;
-                  return option;
-              })());
+            color_selector.appendChild((() => {
+                const option = document.createElement('option');
+                option.value = 1;
+                option.innerText = 'Red';
+                option.selected = true;
+                return option;
+            })());
 
-              color_selector.appendChild((() => {
-                  const option = document.createElement('option');
-                  option.value = 2;
-                  option.innerText = 'Black';
-                  return option;
-              })());
+            color_selector.appendChild((() => {
+                const option = document.createElement('option');
+                option.value = 2;
+                option.innerText = 'Black';
+                return option;
+            })());
 
-              inputfield_container.onsubmit = (event) => {
-                  event.preventDefault();
-                  this.joinGame(name_inputfield.value, color_selector.selectedIndex + 1);
-              };
+            inputfield_container.onsubmit = (event) => {
+                event.preventDefault();
+                this.joinGame(name_inputfield.value, color_selector.selectedIndex + 1);
+            };
 
-              inputfield_container.appendChild(name_inputfield);
-              inputfield_container.appendChild(color_selector);
-              inputfield_container.appendChild(name_submit);
-              container.appendChild(inputfield_container);
-              break;
-          }
+            inputfield_container.appendChild(name_inputfield);
+            inputfield_container.appendChild(color_selector);
+            inputfield_container.appendChild(name_submit);
+            container.appendChild(inputfield_container);
+            break;
+        }
 
-          case kGameScreen: {
-              if (!this.tilesprepared) {
-                  this.clearScreen();
-                  this.buildTiles();
-                  this.tilesprepared = true;
-              }
+        case kGameScreen: {
+            if (!this.tilesprepared) {
+                this.clearScreen();
+                this.buildTiles();
+                this.tilesprepared = true;
+            }
 
-              const gamefield = document.querySelector('#gamefield');
+            const gamefield = document.querySelector('#gamefield');
 
-              this.requestServer('state', [this.boardname], (response) => {
+            this.requestServer('state', [this.boardname], (response) => {
 
-                  if (response.data.lastPlacedColor !== this.color) {
-                      document.title = '**YOUR TURN**';
-                  } else {
-                      document.title = 'Connect 4';
-                  }
+                if (response.data.lastPlacedColor !== this.color) {
+                    document.title = '**YOUR TURN**';
+                } else {
+                    document.title = 'Connect 4';
+                }
 
-                  response.data.board.map((row, y) => {
-                      y = parseInt(y, 10);
-                      row.map((column, x) => {
-                          x = parseInt(x, 10);
-                          const tile = gamefield.children[y].children[x];
+                response.data.board.map((row, y) => {
+                    y = parseInt(y, 10);
+                    row.map((column, x) => {
+                        x = parseInt(x, 10);
+                        const tile = gamefield.children[y].children[x];
 
-                          if (column === 0) tile.className = 'column empty_tile';
-                          if (column === 1) tile.className = 'column primary_tile';
-                          if (column === 2) tile.className = 'column secondary_tile';
-                      });
-                  });
+                        if (column === 0) tile.className = 'column empty_tile';
+                        if (column === 1) tile.className = 'column primary_tile';
+                        if (column === 2) tile.className = 'column secondary_tile';
+                    });
+                });
 
-                  if (response.won != 0) {
-                      clearInterval(this.stateCheckInterval);
-                      this.stateCheckInterval = undefined;
-                      alert('Player number #' + response.won + ' has won the game!');
-                  }
-              });
+                if (response.won !== 0) {
+                    clearInterval(this.stateCheckInterval);
+                    this.stateCheckInterval = undefined;
+                    alert('Player number #' + response.won + ' has won the game!');
+                }
+            });
 
-              break;
-          }
+            break;
+        }
         }
     }
 

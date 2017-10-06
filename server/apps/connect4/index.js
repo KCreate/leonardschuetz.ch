@@ -21,58 +21,58 @@ class Board {
 
     checkWin() {
 
-      // Check each color
-      for (let color = 1; color < kTileColorMax + 1; color++) {
+        // Check each color
+        for (let color = 1; color < kTileColorMax + 1; color++) {
 
         // Check all vertical combinations
-        for (let vy = 0; vy < 5; vy++) {
-          for (let vx = 0; vx < 12; vx++) {
-            if (
-              this.board[vy + 0][vx] == color &&
-              this.board[vy + 1][vx] == color &&
-              this.board[vy + 2][vx] == color &&
-              this.board[vy + 3][vx] == color) {
-              return color;
+            for (let vy = 0; vy < 5; vy++) {
+                for (let vx = 0; vx < 12; vx++) {
+                    if (
+                        this.board[vy + 0][vx] === color &&
+                        this.board[vy + 1][vx] === color &&
+                        this.board[vy + 2][vx] === color &&
+                        this.board[vy + 3][vx] === color) {
+                        return color;
+                    }
+                }
             }
-          }
+
+            // Check horicontal combinations
+            for (let hy = 0; hy < 8; hy++) {
+                for (let hx = 0; hx < 9; hx++) {
+                    if (
+                        this.board[hy][hx + 0] === color &&
+                        this.board[hy][hx + 1] === color &&
+                        this.board[hy][hx + 2] === color &&
+                        this.board[hy][hx + 3] === color) {
+                        return color;
+                    }
+                }
+            }
+
+            // Check diagonal combinations
+            for (let dy = 0; dy < 5; dy++) {
+                for (let dx = 0; dx < 9; dx++) {
+                    if (
+                        this.board[dy + 0][dx + 3] === color &&
+                        this.board[dy + 1][dx + 2] === color &&
+                        this.board[dy + 2][dx + 1] === color &&
+                        this.board[dy + 3][dx + 0] === color) {
+                        return color;
+                    }
+
+                    if (
+                        this.board[dy + 0][dx + 0] === color &&
+                        this.board[dy + 1][dx + 1] === color &&
+                        this.board[dy + 2][dx + 2] === color &&
+                        this.board[dy + 3][dx + 3] === color) {
+                        return color;
+                    }
+                }
+            }
         }
 
-        // Check horicontal combinations
-        for (let hy = 0; hy < 8; hy++) {
-          for (let hx = 0; hx < 9; hx++) {
-            if (
-              this.board[hy][hx + 0] == color &&
-              this.board[hy][hx + 1] == color &&
-              this.board[hy][hx + 2] == color &&
-              this.board[hy][hx + 3] == color) {
-              return color;
-            }
-          }
-        }
-
-        // Check diagonal combinations
-        for (let dy = 0; dy < 5; dy++) {
-          for (let dx = 0; dx < 9; dx++) {
-            if (
-              this.board[dy + 0][dx + 3] == color &&
-              this.board[dy + 1][dx + 2] == color &&
-              this.board[dy + 2][dx + 1] == color &&
-              this.board[dy + 3][dx + 0] == color) {
-              return color;
-            }
-
-            if (
-              this.board[dy + 0][dx + 0] == color &&
-              this.board[dy + 1][dx + 1] == color &&
-              this.board[dy + 2][dx + 2] == color &&
-              this.board[dy + 3][dx + 3] == color) {
-              return color;
-            }
-          }
-        }
-      }
-
-      return 0;
+        return 0;
     }
 }
 
@@ -119,7 +119,7 @@ router.get('/state/:name', (req, res) => {
         ok: true,
         message: 'Board data',
         data: boards[name],
-        won: boards[name].checkWin()
+        won: boards[name].checkWin(),
     });
 });
 
@@ -156,10 +156,10 @@ router.get('/set_color/:name/:row/:column/:color', (req, res) => {
     }
 
     // if (color === boards[name].lastPlacedColor) {
-        // return res.json({
-            //ok: false,
-            // message: 'You already placed your tile this round',
-        // });
+    // return res.json({
+    //ok: false,
+    // message: 'You already placed your tile this round',
+    // });
     // }
 
     // Check if someone has won the game already
@@ -207,7 +207,7 @@ router.get('/set_color/:name/:row/:column/:color', (req, res) => {
     res.json({
         ok: true,
         message: 'Updated tile color',
-        won: boards[name].checkWin()
+        won: boards[name].checkWin(),
     });
 });
 
