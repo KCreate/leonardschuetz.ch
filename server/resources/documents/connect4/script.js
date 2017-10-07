@@ -86,9 +86,9 @@ class Connect4 {
 
                 if (response.data.lastPlacedColor !== this.color) {
 
-                  if (document.title === 'Connect 4') {
-                    audio.play();
-                  }
+                    if (document.title === 'Connect 4') {
+                        audio.play();
+                    }
 
                     document.title = '**YOUR TURN**';
                 } else {
