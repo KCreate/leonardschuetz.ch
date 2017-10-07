@@ -71,6 +71,10 @@ body {
   position: relative;
 }
 
+.column.lastPlacedColumn {
+  background-color: #ffeeee;
+}
+
 .tile {
   width: 90%;
   height: 90%;
@@ -81,7 +85,7 @@ body {
 }
 
 .tile.empty_tile {
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .tile.primary_tile {
@@ -91,19 +95,4 @@ body {
 .tile.secondary_tile {
   background-color: #22313F;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -104,6 +104,12 @@ class Connect4 {
                         if (column === 0) tile.className = 'tile empty_tile';
                         if (column === 1) tile.className = 'tile primary_tile';
                         if (column === 2) tile.className = 'tile secondary_tile';
+
+                        if (x === response.data.lastPlacedColumn) {
+                            gamefield.children[y].children[x].className = 'column lastPlacedColumn';
+                        } else {
+                            gamefield.children[y].children[x].className = 'column';
+                        }
                     });
                 });
 

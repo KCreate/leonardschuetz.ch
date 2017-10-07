@@ -2,6 +2,9 @@ const express = require('express');
 const router  = new express.Router();
 
 const kTileColorMax = 2;
+const kTileColorEmpty = 0;
+const kTileColorPrimary = 1;
+const kTileColorSecondary = 2;
 
 class Board {
     constructor() {
@@ -16,13 +19,14 @@ class Board {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
 
-        this.lastPlacedColor = 0;
+        this.lastPlacedColor = kTileColorSecondary;
+        this.lastPlacedColumn = -1;
     }
 
     checkWin() {
 
         // Check each color
-        for (let color = 1; color < kTileColorMax + 1; color++) {
+        for (let color = kTileColorPrimary; color < kTileColorSecondary + 1; color++) {
 
             // Check all vertical combinations
             for (let vy = 0; vy < 5; vy++) {
@@ -203,6 +207,7 @@ router.get('/set_color/:name/:row/:column/:color', (req, res) => {
 
     boards[name].board[row][column] = color;
     boards[name].lastPlacedColor = color;
+    boards[name].lastPlacedColumn = column;
 
     res.json({
         ok: true,
