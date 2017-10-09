@@ -48,6 +48,15 @@ body {
   text-align: center;
 }
 
+#buttonBar {
+  height: 50px;
+  margin-top: -50px;
+}
+
+#fieldTitle {
+  float: left;
+}
+
 #gamefield {
   border: inset 1px solid #BDC3C7;
   border-radius: 2px;

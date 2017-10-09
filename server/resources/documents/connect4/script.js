@@ -132,8 +132,18 @@ class Connect4 {
     }
 
     buildTiles() {
-        const gamefield = document.createElement("div");
-        gamefield.id = "gamefield";
+        const buttonBar = document.createElement('div');
+        buttonBar.id = 'buttonBar';
+
+        const fieldTitle = document.createElement('h1');
+        fieldTitle.appendChild(document.createTextNode('Board: ' + this.boardname));
+        fieldTitle.id = 'fieldTitle';
+        buttonBar.appendChild(fieldTitle);
+
+        container.appendChild(buttonBar);
+
+        const gamefield = document.createElement('div');
+        gamefield.id = 'gamefield';
         for (let y = 0; y < 8; y++) {
             const rowdiv = document.createElement("div");
             rowdiv.className += "row";
