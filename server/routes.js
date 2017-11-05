@@ -28,6 +28,16 @@ module.exports = (context) => {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(auth.router);
 
+    // Domain specific routes
+    app.use((req, res, next) => {
+      switch (req.headers.host) {
+        case "todos.leonardschuetz.ch": return res.redirect("/todos")
+        case "livechat.leonardschuetz.ch": return res.redirect("/livechat")
+        case "bagbags.ch": return res.redirect("https://instagram.com/bagbags.ch")
+        default: return next()
+      }
+    })
+
     // Content routes
     app.use('/charly', (req, res) => res.redirect('https://github.com/charly-lang'));
     app.use('/charly-lang', (req, res) => res.redirect('https://github.com/charly-lang'));
