@@ -31,8 +31,8 @@ module.exports = (context) => {
     // Domain specific routes
     app.use((req, res, next) => {
       switch (req.headers.host) {
-        case "todos.leonardschuetz.ch": return res.redirect("/todos")
-        case "livechat.leonardschuetz.ch": return res.redirect("/livechat")
+        case "todos.leonardschuetz.ch": return res.redirect("https://leonardschuetz.ch/todos")
+        case "livechat.leonardschuetz.ch": return res.redirect("https://leonardschuetz.ch/livechat")
         case "bagbags.ch": return res.redirect("https://instagram.com/bagbags.ch")
         default: return next()
       }
