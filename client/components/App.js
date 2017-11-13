@@ -1,7 +1,7 @@
 // Dependencies
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import './../style/App.scss';
+import "./../style/App.scss";
 class App extends Component {
     render() {
         return (

@@ -25,7 +25,7 @@ module.exports = {
         "object-shorthand": ["error", "always"],
         "no-array-constructor": "error",
         "quote-props": ["error", "as-needed"],
-        quotes: ["error", "single"],
+        quotes: ["error", "double"],
         "no-useless-escape": "error",
         "wrap-iife": ["error", "inside"],
         "no-loop-func": "error",

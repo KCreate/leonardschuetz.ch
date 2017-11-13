@@ -1,13 +1,13 @@
 // Dependencies
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class StatusView extends Component {
     render() {
 
         const className = ({
-            success: 'greenText',
-            error: 'redText',
-            progress: 'blueText',
+            success: "greenText",
+            error: "redText",
+            progress: "blueText",
         })[this.props.status.type];
 
         return (
@@ -18,8 +18,8 @@ class StatusView extends Component {
 
 StatusView.defaultProps = {
     status: {
-        text: '',
-        type: 'success',
+        text: "",
+        type: "success",
     },
 };
 

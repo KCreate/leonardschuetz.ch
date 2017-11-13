@@ -1,8 +1,8 @@
 // Dependencies
-import React, { Component } from 'react';
-import Markdown from 'react-remarkable';
-import highlight from 'highlight.js';
-import '../style/highlightjs/tomorrow-night-blue.css';
+import React, { Component } from "react";
+import Markdown from "react-remarkable";
+import highlight from "highlight.js";
+import "../style/highlightjs/tomorrow-night-blue.css";
 
 const cachedMarkdown = { sources: [], highlighted: [] };
 const MarkdownConfigHighlight = {
@@ -14,7 +14,7 @@ const MarkdownConfigHighlight = {
         // ```
         // // code
         // ```
-        if (lang === '') {
+        if (lang === "") {
             return str;
         }
 
@@ -41,7 +41,7 @@ const MarkdownConfigNoHighlight = {
     imagesAreBlocks: true,
 };
 
-import './../style/Card.scss';
+import "./../style/Card.scss";
 class Card extends Component {
 
     constructor(...args) {
@@ -56,10 +56,10 @@ class Card extends Component {
     preProcessMarkdown(markdown, source, filename) {
         return (
             markdown
-            .split('%%PATH%%')
-            .join('/resources/' + source + '/' + filename)
-            .split('%%FILE%%')
-            .join(source + '/' + filename)
+            .split("%%PATH%%")
+            .join("/resources/" + source + "/" + filename)
+            .split("%%FILE%%")
+            .join(source + "/" + filename)
         );
     }
 
@@ -103,7 +103,7 @@ class Card extends Component {
 
     render() {
         return (
-            <div className={'Card' + (this.props.className || '')}>
+            <div className={"Card" + (this.props.className || "")}>
                 {this.getMarkdown()}
             </div>
         );

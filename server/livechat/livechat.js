@@ -1,6 +1,6 @@
-const actions   = new (require('./actions.js'))();
-const fs        = require('fs');
-const path      = require('path');
+const actions   = new (require("./actions.js"))();
+const fs        = require("fs");
+const path      = require("path");
 
 // Livechat api
 const LiveChat = function() {
@@ -25,14 +25,14 @@ const LiveChat = function() {
 
         // Handle actions
         switch (type) {
-        case 'joinRequest': {
+        case "joinRequest": {
             const addUserSuccess = this.addUser(instruction.room, instruction);
             if (addUserSuccess) {
-                instruction.websocket.send(actions.createWebsocketInstruction('joinAccept', {
+                instruction.websocket.send(actions.createWebsocketInstruction("joinAccept", {
                     room: instruction.room,
                 }));
             } else {
-                instruction.websocket.send(actions.createWebsocketInstruction('cancelRequest'));
+                instruction.websocket.send(actions.createWebsocketInstruction("cancelRequest"));
             }
 
             if (addUserSuccess) {
@@ -41,11 +41,11 @@ const LiveChat = function() {
             }
             break;
         }
-        case 'removeUser': {
+        case "removeUser": {
             this.removeUser(instruction.websocketKey);
             break;
         }
-        case 'addMessage': {
+        case "addMessage": {
             this.addMessage(
                 this.userForIdentifier(instruction.websocketKey).room,
                 instruction.message,
@@ -54,7 +54,7 @@ const LiveChat = function() {
             );
             break;
         }
-        case 'addFile': {
+        case "addFile": {
             this.addFile(
                 this.userForIdentifier(instruction.websocketKey).room,
                 {
@@ -66,7 +66,7 @@ const LiveChat = function() {
             );
             break;
         }
-        case 'clearChat': {
+        case "clearChat": {
             if (this.ownsRoom(
                 savedUser.room,
                 savedUser.identifier
@@ -312,12 +312,12 @@ const LiveChat = function() {
         // If some of them are files, delete the according files from the file system
         removedMessages.forEach((message) => {
             if (message.file) {
-                const filepath = message.file.apiResponse.link.split('/')
+                const filepath = message.file.apiResponse.link.split("/")
                 .slice(2)
-                .join('/');
+                .join("/");
 
                 fs.unlink(path.resolve(__dirname, filepath), () => {
-                    console.log('Deleted file:', filepath);
+                    console.log("Deleted file:", filepath);
                 });
             }
         });
@@ -339,12 +339,12 @@ const LiveChat = function() {
 
         // Iterate over all clients
         const clients = this.expressWs.getWss(this.mountPath).clients.filter((client) => (
-            this.roomHasUser(roomName, client.upgradeReq.headers['sec-websocket-key'])
+            this.roomHasUser(roomName, client.upgradeReq.headers["sec-websocket-key"])
         ));
 
         // Send the current status to all clients
         clients.forEach((client) => {
-            client.send(actions.createWebsocketInstruction('status', {
+            client.send(actions.createWebsocketInstruction("status", {
                 users: this.usersInRoom(roomName),
                 room: roomName,
                 messages: this.messagesInRoom(roomName, this.messageLimit),

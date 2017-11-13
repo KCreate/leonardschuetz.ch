@@ -1,9 +1,9 @@
 // Dependencies
-const express   = require('express');
-const path      = require('path');
-const fs        = require('fs');
+const express   = require("express");
+const path      = require("path");
+const fs        = require("fs");
 const router    = new express.Router();
-const multer    = require('multer')({
+const multer    = require("multer")({
     inMemory: true,
     limits: {
         fileSize: 100000000,
@@ -12,11 +12,11 @@ const multer    = require('multer')({
     },
 });
 
-let config = require('./config.json');
+let config = require("./config.json");
 config = Object.assign(config, {
-    versionedPath: path.resolve(__dirname, './resources/versionedDocuments'),
-    publicPath: path.resolve(__dirname, './resources/documents/'),
-    distFolder: path.resolve(__dirname, '../dist/'),
+    versionedPath: path.resolve(__dirname, "./resources/versionedDocuments"),
+    publicPath: path.resolve(__dirname, "./resources/documents/"),
+    distFolder: path.resolve(__dirname, "../dist/"),
 });
 
 // Populate req.documents with a list of all files and their versions
@@ -26,22 +26,22 @@ router.use((req, res, next) => {
 
         // Filter out unwanted files
         files = files.filter((file) => (
-            file !== '.DS_Store' &&
-            file !== 'Icon?'
+            file !== ".DS_Store" &&
+            file !== "Icon?"
         ));
 
         files = files.map((file, index) => {
-            const parts = file.split('-');
-            const stats = fs.lstatSync(config.versionedPath + '/' + file);
+            const parts = file.split("-");
+            const stats = fs.lstatSync(config.versionedPath + "/" + file);
 
             // Reference: http://stackoverflow.com/questions/10645994/node-js-how-to-format-a-date-string-in-utc
             const humanReadableTime = new Date(Number(parts[0]))
             .toISOString()
-            .replace(/T/, ' ')
-            .replace(/\..+/, '');
+            .replace(/T/, " ")
+            .replace(/\..+/, "");
 
             return {
-                filename: parts.slice(1).join('-'),
+                filename: parts.slice(1).join("-"),
                 time: parts[0],
                 htime: humanReadableTime,
                 size: stats.size,
@@ -87,7 +87,7 @@ router.use((req, res, next) => {
 });
 
 // List all files and post new ones
-router.route('/')
+router.route("/")
 .all((req, res, next) => {
     req.body = undefined;
 
@@ -96,29 +96,29 @@ router.route('/')
 .get((req, res) => {
     res.json(req.documents);
 })
-.post(multer.single('file'), (req, res) => {
+.post(multer.single("file"), (req, res) => {
 
     // If no file was passed, return an error
     if (!req.file) {
         return res.json({
-            error: 'No file uploaded!',
+            error: "No file uploaded!",
         });
     }
 
     // Get the save path
     let savePath;
     if (!req.body.destination) {
-        savePath = config.versionedPath  + '/' + renameFile(req.file.originalname);
-    } else if (req.body.destination === 'public_documents') {
-        savePath = config.publicPath + '/' + renameFile(req.file.originalname, { notimestamp: true });
-    } else if (req.body.destination === 'dist_folder') {
-        savePath = config.distFolder + '/' + renameFile(req.file.originalname, { notimestamp: true });
+        savePath = config.versionedPath  + "/" + renameFile(req.file.originalname);
+    } else if (req.body.destination === "public_documents") {
+        savePath = config.publicPath + "/" + renameFile(req.file.originalname, { notimestamp: true });
+    } else if (req.body.destination === "dist_folder") {
+        savePath = config.distFolder + "/" + renameFile(req.file.originalname, { notimestamp: true });
 
         // Check if the file already exists
         try {
             fs.statSync(savePath);
             return res.json({
-                error: 'File already exists, aborted!',
+                error: "File already exists, aborted!",
             });
         } catch (e) {
             /*
@@ -128,24 +128,24 @@ router.route('/')
             console.log(e);
         }
     } else {
-        savePath = config.versionedPath  + '/' + renameFile(req.file.originalname);
+        savePath = config.versionedPath  + "/" + renameFile(req.file.originalname);
     }
 
     // Get the file buffer
     const fileBuffer = new Buffer(req.file.buffer);
     fs.writeFile(savePath, fileBuffer, (err) => {
         if (err) return res.json({
-            error: 'Could not save file!',
+            error: "Could not save file!",
         });
 
         res.json({
-            message: 'File saved!',
+            message: "File saved!",
         });
     });
 });
 
 // Download the newest version of a document
-router.route('/:filename')
+router.route("/:filename")
 .all((req, res, next) => {
     let foundIndex = -1;
     req.documents.forEach((file, index) => {
@@ -157,12 +157,12 @@ router.route('/:filename')
     if (foundIndex > -1) {
         // I use slice because reverse() modifies the array in place
         const newestTimestamp = req.documents[foundIndex].versions.slice(0).reverse()[0].time;
-        req.filepath = config.versionedPath + '/' + newestTimestamp + '-' + req.params.filename;
+        req.filepath = config.versionedPath + "/" + newestTimestamp + "-" + req.params.filename;
 
         next();
     } else {
         res.json({
-            error: 'File not found',
+            error: "File not found",
         });
     }
 })
@@ -172,18 +172,18 @@ router.route('/:filename')
 .delete((req, res, next) => {
     fs.unlink(req.filepath, (err) => {
         if (err) return res.json({
-            error: 'Could not delete file!',
+            error: "Could not delete file!",
         });
         res.sendStatus(200);
     });
 });
 
-router.route('/:filename/:version')
+router.route("/:filename/:version")
 .all((req, res, next) => {
-    const filepath = config.versionedPath + '/' + req.params.version + '-' + req.params.filename;
+    const filepath = config.versionedPath + "/" + req.params.version + "-" + req.params.filename;
     fs.lstat(filepath, (err, stats) => {
         if (err) return res.json({
-            error: 'File not found.',
+            error: "File not found.",
         });
 
         req.filepath = filepath;
@@ -196,7 +196,7 @@ router.route('/:filename/:version')
 .delete((req, res) => {
     fs.unlink(req.filepath, (err) => {
         if (err) return res.json({
-            error: 'Could not delete file!',
+            error: "Could not delete file!",
         });
         res.sendStatus(200);
     });
@@ -205,12 +205,12 @@ router.route('/:filename/:version')
 function renameFile(filename, options = {}) {
 
     // Basename
-    filename = filename.split('/').reduce((last, current) => current);
-    filename = filename.split('\\').reduce((last, current) => current);
+    filename = filename.split("/").reduce((last, current) => current);
+    filename = filename.split("\\").reduce((last, current) => current);
 
     // Timestmap
     if (!options.notimestamp) {
-        filename = Date.now() + '-' + filename;
+        filename = Date.now() + "-" + filename;
     }
 
     // Date and lowercase

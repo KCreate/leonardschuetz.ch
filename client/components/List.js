@@ -1,7 +1,7 @@
 // Dependencies
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import './../style/List.scss';
+import "./../style/List.scss";
 class List extends Component {
     render() {
         return (

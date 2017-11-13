@@ -1,9 +1,9 @@
 // Dependencies
-import React, { Component } from 'react';
-import Card from './Card';
+import React, { Component } from "react";
+import Card from "./Card";
 
-import './../style/TodoList.scss';
-import './../style/List.scss';
+import "./../style/TodoList.scss";
+import "./../style/List.scss";
 class TodoList extends Component {
 
     constructor(...args) {

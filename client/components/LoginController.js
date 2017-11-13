@@ -1,9 +1,9 @@
 // Dependencies
-import React, { Component } from 'react';
-import ProtoController from './ProtoController';
-import StatusView from './StatusView';
-import Card from './Card';
-import get from '../../utils/get';
+import React, { Component } from "react";
+import ProtoController from "./ProtoController";
+import StatusView from "./StatusView";
+import Card from "./Card";
+import get from "../../utils/get";
 
 class LoginController extends ProtoController {
 
@@ -13,9 +13,9 @@ class LoginController extends ProtoController {
         this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = Object.assign({}, this.state, {
-            title: 'Authentication',
+            title: "Authentication",
             navigation: [
-                ['auth', 'Authentication'],
+                ["auth", "Authentication"],
             ],
             status: {},
         });
@@ -26,7 +26,7 @@ class LoginController extends ProtoController {
     }
 
     login(payload) {
-        get('/auth/status', 'POST', {
+        get("/auth/status", "POST", {
             payload,
         }, (err, response) => {
             response = JSON.parse(response);
@@ -51,8 +51,8 @@ class LoginController extends ProtoController {
             status = (
                 <StatusView
                     status={{
-                        type: 'success',
-                        text: 'Authenticated!',
+                        type: "success",
+                        text: "Authenticated!",
                     }}
                 ></StatusView>
             );
@@ -60,8 +60,8 @@ class LoginController extends ProtoController {
             status = (
                 <StatusView
                     status={{
-                        type: 'error',
-                        text: 'Not authenticated!',
+                        type: "error",
+                        text: "Not authenticated!",
                     }}
                 ></StatusView>
             );

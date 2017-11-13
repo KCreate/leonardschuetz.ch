@@ -1,9 +1,9 @@
 // Dependencies
-import React, { Component, PropTypes } from 'react';
-import LimitedInput from './LimitedInput';
-import Card from './Card';
-import MessagesView from './MessagesView';
-import Dropzone from 'react-dropzone';
+import React, { Component, PropTypes } from "react";
+import LimitedInput from "./LimitedInput";
+import Card from "./Card";
+import MessagesView from "./MessagesView";
+import Dropzone from "react-dropzone";
 
 class Chat extends Component {
 
@@ -15,7 +15,7 @@ class Chat extends Component {
         this.onDrop = this.onDrop.bind(this);
 
         this.state = {
-            value: '',
+            value: "",
         };
     }
 
@@ -23,7 +23,7 @@ class Chat extends Component {
         event.preventDefault();
         this.props.newMessageHandler(this.state.value.trim());
         this.setState({
-            value: '',
+            value: "",
         });
     }
 

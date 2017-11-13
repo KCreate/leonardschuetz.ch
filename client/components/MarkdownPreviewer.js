@@ -1,7 +1,7 @@
 // Dependencies
-import React, { Component } from 'react';
-import Card from './Card';
-import get from '../../utils/get';
+import React, { Component } from "react";
+import Card from "./Card";
+import get from "../../utils/get";
 
 class MarkdownPreviewer extends Component {
 
@@ -11,8 +11,8 @@ class MarkdownPreviewer extends Component {
         this.debounce = undefined;
 
         this.state = {
-            source: '',
-            markdown: '',
+            source: "",
+            markdown: "",
         };
     }
 
@@ -37,7 +37,7 @@ class MarkdownPreviewer extends Component {
             }
 
             this.debounce = setTimeout(() => {
-                get(this.state.source, 'GET', {}, (err, response) => {
+                get(this.state.source, "GET", {}, (err, response) => {
                     if (err) return;
 
                     this.setState({

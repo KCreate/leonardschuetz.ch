@@ -16,12 +16,12 @@ module.exports = (context) => {
     const webpackHotMiddleware = context.webpackHotMiddleware;
 
     // Configuration
-    app.enable('strict routing');
-    app.disable('x-powered-by');
+    app.enable("strict routing");
+    app.disable("x-powered-by");
     app.use(compression());
 
     // Middlewares
-    app.use(morgan('combined', {
+    app.use(morgan("combined", {
         stream: loggingStream,
     }));
     app.use(bodyParser.json());
@@ -30,27 +30,27 @@ module.exports = (context) => {
 
     // Domain specific routes
     app.use((req, res, next) => {
-      switch (req.headers.host) {
-        case "todos.leonardschuetz.ch": return res.redirect("https://leonardschuetz.ch/todos")
-        case "livechat.leonardschuetz.ch": return res.redirect("https://leonardschuetz.ch/livechat")
-        case "bagbags.ch": return res.redirect("https://instagram.com/bagbags.ch")
-        default: return next()
-      }
-    })
+        switch (req.headers.host) {
+        case "todos.leonardschuetz.ch": return res.redirect("https://leonardschuetz.ch/todos");
+        case "livechat.leonardschuetz.ch": return res.redirect("https://leonardschuetz.ch/livechat");
+        case "bagbags.ch": return res.redirect("https://instagram.com/bagbags.ch");
+        default: return next();
+        }
+    });
 
     // Content routes
-    app.use('/charly', (req, res) => res.redirect('https://github.com/charly-lang'));
-    app.use('/charly-lang', (req, res) => res.redirect('https://github.com/charly-lang'));
-    app.use('/resources', require('./resources.js'));
-    app.use('/d/:file', (req, res) => res.redirect('/resources/documents/' + req.params.file));
-    app.use('/apps', require('./apps.js'));
-    app.use('/todosapi', auth.requiresAuthentication, require('./todos/index.js'));
-    app.use('/documents', auth.requiresAuthentication, require('./documents.js'));
-    app.use('/livechatapi', (req, res, next) => {
+    app.use("/charly", (req, res) => res.redirect("https://github.com/charly-lang"));
+    app.use("/charly-lang", (req, res) => res.redirect("https://github.com/charly-lang"));
+    app.use("/resources", require("./resources.js"));
+    app.use("/d/:file", (req, res) => res.redirect("/resources/documents/" + req.params.file));
+    app.use("/apps", require("./apps.js"));
+    app.use("/todosapi", auth.requiresAuthentication, require("./todos/index.js"));
+    app.use("/documents", auth.requiresAuthentication, require("./documents.js"));
+    app.use("/livechatapi", (req, res, next) => {
         req.expressWs = expressWs;
         next();
-    }, require('./livechat/route.js'));
-    app.use('/tbz-va-2016', express.static(path.resolve(__dirname, './resources/documents/tbz-va-2016/')));
+    }, require("./livechat/route.js"));
+    app.use("/tbz-va-2016", express.static(path.resolve(__dirname, "./resources/documents/tbz-va-2016/")));
 
     // If in development, include webpack middlewares
     if (!production) {
@@ -59,12 +59,12 @@ module.exports = (context) => {
     }
 
     // All other routes are being handled by react-router
-    app.use(express.static('./dist'));
-    app.use('/', (req, res) => {
+    app.use(express.static("./dist"));
+    app.use("/", (req, res) => {
         if (production) {
-            res.sendFile(path.resolve('./dist/index.html'));
+            res.sendFile(path.resolve("./dist/index.html"));
         } else {
-            res.sendFile(path.resolve('./client/app/index.html'));
+            res.sendFile(path.resolve("./client/app/index.html"));
         }
     });
 

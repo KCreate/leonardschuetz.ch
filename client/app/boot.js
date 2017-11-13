@@ -1,18 +1,18 @@
 // Dependencies
-import React from 'react';
-import { render } from 'react-dom';
+import React from "react";
+import { render } from "react-dom";
 
-import './index.html';
-import style from '../style/master.scss';
-import favicon from './favicon.ico';
+import "./index.html";
+import style from "../style/master.scss";
+import favicon from "./favicon.ico";
 
 // Internet Explorer ...
 // Source: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Polyfill
-if (typeof Object.assign != 'function') {
+if (typeof Object.assign != "function") {
     Object.prototype.assign = function (target, varArgs) { // .length of function is 2
-        'use strict';
+        "use strict";
         if (target == null) { // TypeError if undefined or null
-            throw new TypeError('Cannot convert undefined or null to object');
+            throw new TypeError("Cannot convert undefined or null to object");
         }
 
         const to = Object(target);
@@ -33,13 +33,13 @@ if (typeof Object.assign != 'function') {
     };
 }
 
-import App from '../components/App.js';
-import FrontPageController from '../components/FrontPageController';
-import TodosController from '../components/TodosController';
-import AdminController from '../components/AdminController';
-import NotFoundController from '../components/NotFoundController';
-import LiveChatController from '../components/LiveChatController';
-import LoginController from '../components/LoginController';
+import App from "../components/App.js";
+import FrontPageController from "../components/FrontPageController";
+import TodosController from "../components/TodosController";
+import AdminController from "../components/AdminController";
+import NotFoundController from "../components/NotFoundController";
+import LiveChatController from "../components/LiveChatController";
+import LoginController from "../components/LoginController";
 
 // Router
 import {
@@ -47,7 +47,7 @@ import {
     Route,
     IndexRedirect,
     browserHistory,
-} from 'react-router';
+} from "react-router";
 
 render((
     <Router history={browserHistory}>
@@ -64,10 +64,10 @@ render((
             <Route path="/*" component={NotFoundController}></Route>
         </Route>
     </Router>
-), document.getElementById('app'));
+), document.getElementById("app"));
 
 // Reset scroll position
-window.addEventListener('load', (event) => {
+window.addEventListener("load", (event) => {
     setTimeout(() => {
         window.scrollTo(0, 0);
     }, 10);

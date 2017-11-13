@@ -1,7 +1,7 @@
 // Dependencies
-import React, { Component } from 'react';
-import Card from './Card';
-import LimitedInput from './LimitedInput';
+import React, { Component } from "react";
+import Card from "./Card";
+import LimitedInput from "./LimitedInput";
 
 class ChatroomSelector extends Component {
 
@@ -11,7 +11,7 @@ class ChatroomSelector extends Component {
         this.submitHandler = this.submitHandler.bind(this);
 
         this.state = {
-            value: '',
+            value: "",
         };
     }
 
@@ -24,7 +24,7 @@ class ChatroomSelector extends Component {
     submitHandler(event) {
         this.props.submitHandler(event);
         this.setState({
-            value: '',
+            value: "",
         });
     }
 

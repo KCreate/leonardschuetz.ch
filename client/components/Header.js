@@ -1,13 +1,13 @@
 // Dependencies
-import React, { Component } from 'react';
-import classnames from 'classnames';
+import React, { Component } from "react";
+import classnames from "classnames";
 
 // Router
 import {
     Link,
-} from 'react-router';
+} from "react-router";
 
-import './../style/Header.scss';
+import "./../style/Header.scss";
 class Header extends Component {
 
     constructor(...args) {
@@ -23,7 +23,7 @@ class Header extends Component {
 
         // Paralax handling
         if (window) {
-            window.addEventListener('scroll', this.paralaxHandler);
+            window.addEventListener("scroll", this.paralaxHandler);
         }
 
         // Write animation
@@ -53,7 +53,7 @@ class Header extends Component {
 
     componentWillUnmount() {
         if (window) {
-            window.removeEventListener('scroll', this.paralaxHandler);
+            window.removeEventListener("scroll", this.paralaxHandler);
         }
     }
 
@@ -63,7 +63,7 @@ class Header extends Component {
 
         // Reference: https://developer.mozilla.org/de/docs/Web/API/Window/scrollY
         const supportPageOffset = (window.pageXOffset !== undefined && window.pageYOffset !== undefined);
-        const isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
+        const isCSS1Compat = ((document.compatMode || "") === "CSS1Compat");
         if (supportPageOffset) {
             x = window.pageXOffset;
             y = window.pageYOffset;
@@ -85,7 +85,7 @@ class Header extends Component {
         // Only translate if the Header is physically on the screen
         if (y <= 205 * (1 + modifier)) {
             if (this.refs.Header) {
-                this.refs.Header.style.transform = 'translateY(' + yModified + 'px)';
+                this.refs.Header.style.transform = "translateY(" + yModified + "px)";
             }
         }
     }
@@ -95,7 +95,7 @@ class Header extends Component {
         const navigationItems = this.props.navigation
         .map((item, index) => (
             <li key={index}>
-                <Link to={'/' + item[0]} activeClassName="current">{item[1]}</Link>
+                <Link to={"/" + item[0]} activeClassName="current">{item[1]}</Link>
             </li>
         ));
 

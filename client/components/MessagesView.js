@@ -1,9 +1,9 @@
 // Dependencies
-import React, { Component } from 'react';
-import classnames from 'classnames';
-import dateFormat from 'dateformat';
+import React, { Component } from "react";
+import classnames from "classnames";
+import dateFormat from "dateformat";
 
-import './../style/MessagesView.scss';
+import "./../style/MessagesView.scss";
 class MessagesView extends Component {
 
     constructor(...args) {
@@ -54,19 +54,19 @@ class MessagesView extends Component {
     }
 
     displayMessage(item, index) {
-        if (typeof item !== 'string') {
+        if (typeof item !== "string") {
 
             // Format the filename
             let filename = item.file.name;
             const maxlength = 40;
             if (filename.length > maxlength) {
-                filename = filename.slice(0, maxlength) + '...';
+                filename = filename.slice(0, maxlength) + "...";
             }
 
             switch (item.file.type) {
-            case ('image/jpeg'):
-            case ('image/png'):
-            case ('image/gif'): {
+            case ("image/jpeg"):
+            case ("image/png"):
+            case ("image/gif"): {
                 return (
                     <div key={index} className="embeded image">
                         <div>
@@ -125,7 +125,7 @@ class MessagesView extends Component {
 
             const formatedTime = dateFormat(
                 Number(message.time),
-                'dd.mm - HH:MM:ss'
+                "dd.mm - HH:MM:ss"
             );
 
             return (

@@ -1,5 +1,5 @@
 // Dependencies
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class PNGEncoder extends Component {
 
@@ -8,8 +8,8 @@ class PNGEncoder extends Component {
         this.handleChange = this.handleChange.bind(this);
 
         this.state = {
-            src: '',
-            inputText: 'helloworld',
+            src: "",
+            inputText: "helloworld",
         };
 
         // Debounce input change
@@ -41,7 +41,7 @@ class PNGEncoder extends Component {
         return (
             <div>
                 <img
-                    src={'/apps/txt-png?message=' + (this.state.src || 'helloworld')}
+                    src={"/apps/txt-png?message=" + (this.state.src || "helloworld")}
                     alt="no-smooth small">
                 </img>
                 <input

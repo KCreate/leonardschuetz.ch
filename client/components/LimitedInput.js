@@ -1,7 +1,7 @@
 // Dependencies
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import '../style/LimitedInput.scss';
+import "../style/LimitedInput.scss";
 class LimitedInput extends Component {
 
     constructor(...args) {

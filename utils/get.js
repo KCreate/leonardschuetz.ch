@@ -1,7 +1,7 @@
 module.exports = function get(url, method, options, _callback) {
 
     // Allow the options to be optional
-    if (typeof options == 'function') {
+    if (typeof options == "function") {
         _callback = options;
         options = {};
     }
@@ -16,13 +16,13 @@ module.exports = function get(url, method, options, _callback) {
     xhr.open(method, url, true);
 
     if (!options.noJSON) {
-        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.setRequestHeader("Content-type", "application/json");
     }
 
     // Curry the callback
-    xhr.addEventListener('load', callback.bind(xhr, undefined), false);
-    xhr.addEventListener('abort', callback.bind(xhr, xhr), false);
-    xhr.upload.addEventListener('progress', (
+    xhr.addEventListener("load", callback.bind(xhr, undefined), false);
+    xhr.addEventListener("abort", callback.bind(xhr, xhr), false);
+    xhr.upload.addEventListener("progress", (
         options.onprogress || (() => {})
     ), false);
 

@@ -1,11 +1,11 @@
 // Dependencies
-import React, { Component } from 'react';
-import DeferedContainerList from 'deferedcontainerlist';
-import Card from './Card.js';
+import React, { Component } from "react";
+import DeferedContainerList from "deferedcontainerlist";
+import Card from "./Card.js";
 import {
     categoryList,
     getFile,
-} from '../../utils/getArticle';
+} from "../../utils/getArticle";
 
 class StaticBlogArticles extends Component {
 
@@ -24,14 +24,14 @@ class StaticBlogArticles extends Component {
 
             // Request a list of all articles inside the category
             categoryList(source, (res) => {
-                if (!res) return console.error.call(console, 'error loading articles for category: ' + source);
+                if (!res) return console.error.call(console, "error loading articles for category: " + source);
 
                 res.forEach((article, index) => {
 
                     // Request the article.md and meta.json file
-                    getFile(source, article.filename, 'article.md', (markdown) => {
+                    getFile(source, article.filename, "article.md", (markdown) => {
                         if (!markdown) return;
-                        getFile(source, article.filename, 'meta.json', (meta) => {
+                        getFile(source, article.filename, "meta.json", (meta) => {
                             if (!meta) return;
 
                             meta = JSON.parse(meta);
@@ -77,7 +77,7 @@ class StaticBlogArticles extends Component {
         ));
 
         // Reverse the order of the cards if the source is blog
-        if (this.props.active === 'blog') {
+        if (this.props.active === "blog") {
             cards = cards.reverse();
         }
 

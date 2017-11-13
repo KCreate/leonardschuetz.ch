@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router  = new express.Router();
 
 const kTileColorMax = 2;
@@ -83,13 +83,13 @@ class Board {
 const boards = {};
 
 // Initialize a new board
-router.get('/create_board/:name', (req, res) => {
+router.get("/create_board/:name", (req, res) => {
     const name = req.params.name;
 
     if (name === undefined) {
         return res.json({
             ok: false,
-            message: 'Could not create new board, missing parameter: name',
+            message: "Could not create new board, missing parameter: name",
         });
     }
 
@@ -97,38 +97,38 @@ router.get('/create_board/:name', (req, res) => {
 
     res.json({
         ok: true,
-        message: 'Created board!',
+        message: "Created board!",
     });
 });
 
 // Returns the current state of a board
-router.get('/state/:name', (req, res) => {
+router.get("/state/:name", (req, res) => {
     const name = req.params.name;
 
     if (name === undefined) {
         return res.json({
             ok: false,
-            message: 'Could not retrieve board information, missing parameter: name',
+            message: "Could not retrieve board information, missing parameter: name",
         });
     }
 
     if (!boards.hasOwnProperty(name)) {
         return res.json({
             ok: false,
-            message: 'There is no board called ' + name,
+            message: "There is no board called " + name,
         });
     }
 
     res.json({
         ok: true,
-        message: 'Board data',
+        message: "Board data",
         data: boards[name],
         won: boards[name].checkWin(),
     });
 });
 
 // Set the color of a tile
-router.get('/set_color/:name/:row/:column/:color', (req, res) => {
+router.get("/set_color/:name/:row/:column/:color", (req, res) => {
     const name = req.params.name;
     let row = req.params.row;
     let column = req.params.column;
@@ -137,14 +137,14 @@ router.get('/set_color/:name/:row/:column/:color', (req, res) => {
     if (name === undefined || row === undefined || column === undefined || color === undefined) {
         return res.json({
             ok: false,
-            message: 'Could not set tile color, missing parameters',
+            message: "Could not set tile color, missing parameters",
         });
     }
 
     if (!boards.hasOwnProperty(name)) {
         return res.json({
             ok: false,
-            message: 'There is no board called ' + name,
+            message: "There is no board called " + name,
         });
     }
 
@@ -155,14 +155,14 @@ router.get('/set_color/:name/:row/:column/:color', (req, res) => {
     if (isNaN(row) || isNaN(column) || isNaN(color)) {
         return res.json({
             ok: false,
-            message: 'Could not parse parameter fields as an integer',
+            message: "Could not parse parameter fields as an integer",
         });
     }
 
     if (color === boards[name].lastPlacedColor) {
         return res.json({
             ok: false,
-            message: 'You already placed your tile this round',
+            message: "You already placed your tile this round",
         });
     }
 
@@ -171,14 +171,14 @@ router.get('/set_color/:name/:row/:column/:color', (req, res) => {
     if (boardWinCheck !== 0) {
         return res.json({
             ok: false,
-            message: 'Player number #' + boardWinCheck + ' has already won the game!',
+            message: "Player number #" + boardWinCheck + " has already won the game!",
         });
     }
 
     if (row >= 8 || column >= 12) {
         return res.json({
             ok: false,
-            message: 'Row and column are out of bounds',
+            message: "Row and column are out of bounds",
         });
     }
 
@@ -186,7 +186,7 @@ router.get('/set_color/:name/:row/:column/:color', (req, res) => {
     if (boards[name].board[row][column] !== 0) {
         return res.json({
             ok: false,
-            message: 'Can\'t place here, tile already full',
+            message: "Can't place here, tile already full",
         });
     }
 
@@ -194,14 +194,14 @@ router.get('/set_color/:name/:row/:column/:color', (req, res) => {
     if (row !== 7 && boards[name].board[row + 1][column] === 0) {
         return res.json({
             ok: false,
-            message: 'Can\'t place here, no tile below',
+            message: "Can't place here, no tile below",
         });
     }
 
     if (color < 0 || color > kTileColorMax) {
         return res.json({
             ok: false,
-            message: 'Invalid color',
+            message: "Invalid color",
         });
     }
 
@@ -211,26 +211,26 @@ router.get('/set_color/:name/:row/:column/:color', (req, res) => {
 
     res.json({
         ok: true,
-        message: 'Updated tile color',
+        message: "Updated tile color",
         won: boards[name].checkWin(),
     });
 });
 
 // Delete a board
-router.get('/delete_board/:name', (req, res) => {
+router.get("/delete_board/:name", (req, res) => {
     const name = req.params.name;
 
     if (name === undefined) {
         return res.json({
             ok: false,
-            message: 'Missing parameter: name',
+            message: "Missing parameter: name",
         });
     }
 
     if (!boards.hasOwnProperty(name)) {
         return res.json({
             ok: false,
-            message: 'There is no board called ' + name,
+            message: "There is no board called " + name,
         });
     }
 
@@ -238,21 +238,21 @@ router.get('/delete_board/:name', (req, res) => {
 
     res.json({
         ok: true,
-        message: 'Deleted board',
+        message: "Deleted board",
     });
 });
 
 router.use((req, res) => {
     res.json({
         ok: false,
-        message: 'Unknown route',
+        message: "Unknown route",
         help: {
-            routes: ['create_board', 'state', 'set_color', 'delete_board'],
+            routes: ["create_board", "state", "set_color", "delete_board"],
             params: {
-                create_board: ['name'],
-                state: ['name'],
-                set_color: ['name', 'row', 'column'],
-                delete_board: ['name'],
+                create_board: ["name"],
+                state: ["name"],
+                set_color: ["name", "row", "column"],
+                delete_board: ["name"],
             },
         },
     });

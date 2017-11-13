@@ -1,11 +1,11 @@
 // Dependencies
-import React, { Component } from 'react';
-import ProtoController from './ProtoController';
-import Card from './Card';
-import StatusView from './StatusView';
-import List from './List';
-import Chat from './Chat';
-import ChatroomSelector from './ChatroomSelector';
+import React, { Component } from "react";
+import ProtoController from "./ProtoController";
+import Card from "./Card";
+import StatusView from "./StatusView";
+import List from "./List";
+import Chat from "./Chat";
+import ChatroomSelector from "./ChatroomSelector";
 
 if (WebSocket) {
     WebSocket.prototype.sendJson = function(object) {
@@ -13,7 +13,7 @@ if (WebSocket) {
         try {
             json = JSON.stringify(object);
         } catch (e) {
-            throw new Error('Could not parse JSON');
+            throw new Error("Could not parse JSON");
             return;
         }
 
@@ -35,19 +35,19 @@ class LiveChatController extends ProtoController {
         this.clearChatRoom = this.clearChatRoom.bind(this);
 
         this.state = Object.assign({}, this.state, {
-            title: 'Livechat',
+            title: "Livechat",
             navigation: [
-                ['livechat', 'Livechat'],
+                ["livechat", "Livechat"],
             ],
             livechat: {
-                roomname: '',
-                username: '',
+                roomname: "",
+                username: "",
                 joined: false,
-                ownerOfRoom: '',
+                ownerOfRoom: "",
             },
             status: {
-                text: 'Not connected!',
-                type: 'error',
+                text: "Not connected!",
+                type: "error",
             },
             messages: [],
             users: [],
@@ -64,8 +64,8 @@ class LiveChatController extends ProtoController {
         if (roomName.length || roomName) {
             this.setState({
                 status: {
-                    text: 'Joining room',
-                    type: 'success',
+                    text: "Joining room",
+                    type: "success",
                 },
                 livechat: Object.assign({}, this.state.livechat, {
                     roomname: roomName,
@@ -77,8 +77,8 @@ class LiveChatController extends ProtoController {
         } else {
             this.setState({
                 status: {
-                    text: 'Invalid roomname',
-                    type: 'error',
+                    text: "Invalid roomname",
+                    type: "error",
                 },
             });
         }
@@ -93,17 +93,17 @@ class LiveChatController extends ProtoController {
 
             // Check what protocol should be used
             let protocol = window.location.protocol;
-            if (protocol === 'http:') {
-                protocol = 'ws://';
+            if (protocol === "http:") {
+                protocol = "ws://";
             } else {
-                protocol = 'wss://';
+                protocol = "wss://";
             }
 
             // Connect to the endpoint
             this.websocket = new WebSocket(
                 protocol +
                 window.location.host +
-                '/livechatapi'
+                "/livechatapi"
             );
 
             // Add event handlers
@@ -116,14 +116,14 @@ class LiveChatController extends ProtoController {
         this.websocket.onmessage = this.websocketOnMessage;
         this.setState({
             status: {
-                text: 'Connected!',
-                type: 'success',
+                text: "Connected!",
+                type: "success",
             },
         });
 
         // Request to connect to a specific room
         this.websocket.sendJson({
-            type: 'joinRequest',
+            type: "joinRequest",
             room: this.state.livechat.roomname.trim(),
             username: this.state.livechat.username.trim(),
         });
@@ -134,12 +134,12 @@ class LiveChatController extends ProtoController {
         data = JSON.parse(data);
 
         switch (data.type) {
-        case 'joinAccept': {
+        case "joinAccept": {
             this.setState({
                 title: data.room,
                 status: {
-                    text: 'Connected to "' + data.room + '" as ' + this.state.livechat.username,
-                    type: 'success',
+                    text: "Connected to \"" + data.room + "\" as " + this.state.livechat.username,
+                    type: "success",
                 },
                 livechat: Object.assign({}, this.state.livechat, {
                     roomname: data.room,
@@ -149,11 +149,11 @@ class LiveChatController extends ProtoController {
             });
             break;
         }
-        case 'cancelRequest': {
+        case "cancelRequest": {
             this.closeWebsocketConnection();
             break;
         }
-        case 'status': {
+        case "status": {
             this.setState({
                 users: data.users,
                 messages: data.messages,
@@ -172,16 +172,16 @@ class LiveChatController extends ProtoController {
             this.websocket = undefined;
 
             this.setState({
-                title: 'Livechat',
+                title: "Livechat",
                 livechat: {
-                    room: '',
-                    username: '',
+                    room: "",
+                    username: "",
                     joined: false,
                     ownerOfRoom: false,
                 },
                 status: {
-                    text: 'Not connected!',
-                    type: 'error',
+                    text: "Not connected!",
+                    type: "error",
                 },
                 users: [],
                 messages: [],
@@ -192,7 +192,7 @@ class LiveChatController extends ProtoController {
     messageSendHandler(message) {
         if (this.websocket) {
             this.websocket.sendJson({
-                type: 'addMessage',
+                type: "addMessage",
                 message: message.trim(),
             });
         }
@@ -205,11 +205,11 @@ class LiveChatController extends ProtoController {
 
             // Create a FormData object to send the file
             const data = new FormData();
-            data.append('file', file, file.name);
+            data.append("file", file, file.name);
 
             // Upload the file to the temporary file storage
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/livechatapi', true);
+            xhr.open("POST", "/livechatapi", true);
             xhr.onload = () => {
                 if (xhr.status === 200) {
 
@@ -218,13 +218,13 @@ class LiveChatController extends ProtoController {
 
                     // Check if there was an error
                     if (!response.ok) {
-                        return alert('Error: ' + response.message);
+                        return alert("Error: " + response.message);
                     }
 
                     // Send the link to the socket
                     if (this.websocket) {
                         this.websocket.sendJson({
-                            type: 'addFile',
+                            type: "addFile",
                             apiResponse: response,
                             file: {
                                 lastModified: file.lastModified,
@@ -244,7 +244,7 @@ class LiveChatController extends ProtoController {
         event.preventDefault();
         if (this.websocket) {
             this.websocket.sendJson({
-                type: 'clearChat',
+                type: "clearChat",
             });
         }
     }
@@ -269,7 +269,7 @@ class LiveChatController extends ProtoController {
                     # Users
                     <List>
                         {this.state.users.map((user, index) => (
-                            user.username + '-' + user.identifier.slice(0, 10)
+                            user.username + "-" + user.identifier.slice(0, 10)
                         ))}
                     </List>
                 </Card>

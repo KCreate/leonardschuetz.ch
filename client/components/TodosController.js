@@ -1,10 +1,10 @@
 // Dependencies
-import React, { Component } from 'react';
-import ProtoController from './ProtoController';
-import Card from './Card';
-import TodoList from './TodoList';
-import LimitedInput from './LimitedInput';
-import get from '../../utils/get';
+import React, { Component } from "react";
+import ProtoController from "./ProtoController";
+import Card from "./Card";
+import TodoList from "./TodoList";
+import LimitedInput from "./LimitedInput";
+import get from "../../utils/get";
 
 class TodosController extends ProtoController {
 
@@ -17,19 +17,19 @@ class TodosController extends ProtoController {
         this.handleInputChange = this.handleInputChange.bind(this);
 
         this.state = Object.assign({}, this.state, {
-            title: 'Todos',
+            title: "Todos",
             navigation: [
-                ['todos', 'Todos'],
+                ["todos", "Todos"],
             ],
             todos: [],
-            password: '',
+            password: "",
             needsAuthentication: true,
-            addTodoValue: '',
+            addTodoValue: "",
         });
     }
 
     listTodos() {
-        get('/todosapi', 'GET', {}, (err, res) => {
+        get("/todosapi", "GET", {}, (err, res) => {
             this.setState({
                 todos: JSON.parse(res).todos,
                 authorized: !JSON.parse(res).reason,
@@ -38,7 +38,7 @@ class TodosController extends ProtoController {
     }
 
     handleDelete(index) {
-        get('/todosapi/' + index, 'DELETE', {}, (err, res) => {
+        get("/todosapi/" + index, "DELETE", {}, (err, res) => {
             this.listTodos();
         });
     }
@@ -47,7 +47,7 @@ class TodosController extends ProtoController {
         event.preventDefault();
         event.persist();
 
-        get('/todosapi', 'PUT', {
+        get("/todosapi", "PUT", {
             payload: {
                 text: event.target[0].value,
                 isLink: event.target[1].checked,
@@ -55,7 +55,7 @@ class TodosController extends ProtoController {
         }, (err, res) => {
             event.target.reset();
             this.setState({
-                addTodoValue: '',
+                addTodoValue: "",
             });
             this.listTodos();
         });

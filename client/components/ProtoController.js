@@ -1,10 +1,10 @@
 // Dependencies
-import React, { Component } from 'react';
-import Card from './Card';
-import Header from './Header';
-import Content from './Content';
-import Login from './Login';
-import get from '../../utils/get';
+import React, { Component } from "react";
+import Card from "./Card";
+import Header from "./Header";
+import Content from "./Content";
+import Login from "./Login";
+import get from "../../utils/get";
 
 class ProtoController extends Component {
 
@@ -16,7 +16,7 @@ class ProtoController extends Component {
         this.appGotAuthenticated = this.appGotAuthenticated.bind(this);
 
         this.state = {
-            title: 'Leonard Schuetz',
+            title: "Leonard Schuetz",
             navigation: [],
             expanded: true,
             needsAuthentication: false,
@@ -64,7 +64,7 @@ class ProtoController extends Component {
         }
 
         // Get the authorization status
-        get('/auth/status', 'POST', {}, (err, response) => {
+        get("/auth/status", "POST", {}, (err, response) => {
             if (!err) {
                 response = JSON.parse(response);
                 if (!this.state.authenticated) {
@@ -116,7 +116,7 @@ class ProtoController extends Component {
             );
         }
 
-        const expandedStyle = 'body{height:100vh;overflow:hidden}';
+        const expandedStyle = "body{height:100vh;overflow:hidden}";
         return (
             <div className="Controller">
                 {(this.state.expanded ? (

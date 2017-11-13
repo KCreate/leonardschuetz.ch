@@ -1,8 +1,8 @@
 // Dependencies
-import React, { Component } from 'react';
-import Card from './Card';
-import StatusView from './StatusView';
-import get from '../../utils/get';
+import React, { Component } from "react";
+import Card from "./Card";
+import StatusView from "./StatusView";
+import get from "../../utils/get";
 
 class Login extends Component {
 
@@ -22,7 +22,7 @@ class Login extends Component {
     }
 
     login(payload) {
-        get('/auth/status', 'POST', {
+        get("/auth/status", "POST", {
             payload,
         }, (err, response) => {
             response = JSON.parse(response);
@@ -32,8 +32,8 @@ class Login extends Component {
             } else {
                 this.setState({
                     status: {
-                        type: 'error',
-                        text: 'Not authenticated!',
+                        type: "error",
+                        text: "Not authenticated!",
                     },
                 });
             }

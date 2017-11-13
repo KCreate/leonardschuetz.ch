@@ -1,13 +1,13 @@
 // Dependencies
-const express   = require('express');
-const path      = require('path');
-const fs        = require('fs');
-const config    = require('./../config.json');
+const express   = require("express");
+const path      = require("path");
+const fs        = require("fs");
+const config    = require("./../config.json");
 const router    = new express.Router();
 
 // List all todos
-router.get('/', (req, res) => {
-    fs.readFile(__dirname + '/data.json', 'utf8', (err, data) => {
+router.get("/", (req, res) => {
+    fs.readFile(__dirname + "/data.json", "utf8", (err, data) => {
         if (err) return console.log(err);
 
         try {
@@ -28,8 +28,8 @@ router.get('/', (req, res) => {
     }
 
 */
-router.put('/', (req, res) => {
-    fs.readFile(__dirname + '/data.json', 'utf8', (err, data) => {
+router.put("/", (req, res) => {
+    fs.readFile(__dirname + "/data.json", "utf8", (err, data) => {
         if (err) return console.log(err);
 
         try {
@@ -40,7 +40,7 @@ router.put('/', (req, res) => {
             });
         }
 
-        if (!req.body.text || req.body.text === '') {
+        if (!req.body.text || req.body.text === "") {
             return res.json({
                 ok: false,
             });
@@ -62,15 +62,15 @@ router.put('/', (req, res) => {
         });
 
         fs.writeFile(
-            __dirname + '/data.json',
+            __dirname + "/data.json",
             JSON.stringify(data, null, 4),
-            'utf8'
+            "utf8"
         );
     });
 });
 
-router.delete('/:id', (req, res) => {
-    fs.readFile(__dirname + '/data.json', 'utf8', (err, data) => {
+router.delete("/:id", (req, res) => {
+    fs.readFile(__dirname + "/data.json", "utf8", (err, data) => {
         if (err) return console.log(err);
 
         try {
@@ -102,9 +102,9 @@ router.delete('/:id', (req, res) => {
         });
 
         fs.writeFile(
-            __dirname + '/data.json',
+            __dirname + "/data.json",
             JSON.stringify(data, null, 4),
-            'utf8'
+            "utf8"
         );
     });
 });

@@ -1,16 +1,16 @@
 // Dependencies
-import React, { Component } from 'react';
-import ProtoController from './ProtoController';
-import Card from './Card';
+import React, { Component } from "react";
+import ProtoController from "./ProtoController";
+import Card from "./Card";
 
 class NotFoundController extends ProtoController {
 
     constructor(...args) {
         super(...args);
         this.state = Object.assign({}, this.state, {
-            title: '404',
+            title: "404",
             navigation: [
-                ['blog', 'Bring me back!'],
+                ["blog", "Bring me back!"],
             ],
         });
     }

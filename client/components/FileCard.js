@@ -1,16 +1,16 @@
 // Dependencies
-import React, { Component } from 'react';
-import Card from './Card';
+import React, { Component } from "react";
+import Card from "./Card";
 
 class FileCard extends Component {
     render() {
         return (
             <Card>
-                {'# ' + this.props.file.filename}
+                {"# " + this.props.file.filename}
                 Available versions of this file:
                 <ul>
                     {this.props.file.versions.map((version, index) => {
-                        const link = '/documents/' + this.props.file.filename + '/' + version.time;
+                        const link = "/documents/" + this.props.file.filename + "/" + version.time;
 
                         return (
                             <li key={index}>
@@ -24,7 +24,7 @@ class FileCard extends Component {
                         );
                     })}
                 </ul>
-                <a href={'/documents/' + this.props.file.filename} download>Download newest version</a>
+                <a href={"/documents/" + this.props.file.filename} download>Download newest version</a>
             </Card>
         );
     }
@@ -32,7 +32,7 @@ class FileCard extends Component {
 
 FileCard.defaultProps = {
     file: {
-        filename: 'Loading',
+        filename: "Loading",
         versions: [],
         time: 0,
     },

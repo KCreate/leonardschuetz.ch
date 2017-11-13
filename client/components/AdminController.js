@@ -1,12 +1,12 @@
 // Dependencies
-import React, { Component } from 'react';
-import ProtoController from './ProtoController';
-import Card from './Card';
-import FileCard from './FileCard';
-import StatusView from './StatusView';
-import PNGEncoder from './PNGEncoder';
-import MarkdownPreviewer from './MarkdownPreviewer';
-import get from '../../utils/get';
+import React, { Component } from "react";
+import ProtoController from "./ProtoController";
+import Card from "./Card";
+import FileCard from "./FileCard";
+import StatusView from "./StatusView";
+import PNGEncoder from "./PNGEncoder";
+import MarkdownPreviewer from "./MarkdownPreviewer";
+import get from "../../utils/get";
 
 class AdminController extends ProtoController {
 
@@ -17,11 +17,11 @@ class AdminController extends ProtoController {
         this.handleDeleteVersion = this.handleDeleteVersion.bind(this);
 
         this.state = Object.assign({}, this.state, {
-            title: 'Admin',
+            title: "Admin",
             navigation: [
-                ['admin', 'Admin'],
-                ['pngencoder', 'PNGEncoder'],
-                ['markdown', 'Markdown'],
+                ["admin", "Admin"],
+                ["pngencoder", "PNGEncoder"],
+                ["markdown", "Markdown"],
             ],
             files: [],
             status: false,
@@ -34,7 +34,7 @@ class AdminController extends ProtoController {
     }
 
     listFiles() {
-        get('/documents', 'GET', {}, (err, response) => {
+        get("/documents", "GET", {}, (err, response) => {
             response = JSON.parse(response);
             if (!response.error) {
                 this.setState({
@@ -54,18 +54,18 @@ class AdminController extends ProtoController {
 
         // Construct the payload
         const payload = new FormData();
-        payload.append('file', event.target[0].files[0]); // file
-        payload.append('destination', event.target[1].value); // location selector
+        payload.append("file", event.target[0].files[0]); // file
+        payload.append("destination", event.target[1].value); // location selector
 
         // Upload the file
-        get('/documents', 'POST', {
+        get("/documents", "POST", {
             payload,
             noJSON: true,
             onprogress: (event) => {
                 this.setState({
                     status: {
-                        text: parseInt((100 / event.total) * event.loaded, 10) + '% uploaded...',
-                        type: 'progress',
+                        text: parseInt((100 / event.total) * event.loaded, 10) + "% uploaded...",
+                        type: "progress",
                     },
                 });
             },
@@ -79,7 +79,7 @@ class AdminController extends ProtoController {
                 return this.setState({
                     status: {
                         text: response.error,
-                        type: 'error',
+                        type: "error",
                     },
                 });
             }
@@ -88,8 +88,8 @@ class AdminController extends ProtoController {
             this.refs.uploadForm.reset();
             this.setState({
                 status: {
-                    text: 'Successfully uploaded file!',
-                    type: 'success',
+                    text: "Successfully uploaded file!",
+                    type: "success",
                 },
             });
             this.listFiles();
@@ -100,14 +100,14 @@ class AdminController extends ProtoController {
         event.preventDefault();
 
         const timestamp = file.versions[version].time;
-        get('/documents/' + file.filename + '/' + timestamp, 'DELETE', {}, (err, response) => {
+        get("/documents/" + file.filename + "/" + timestamp, "DELETE", {}, (err, response) => {
             this.listFiles();
         });
     }
 
     content(navItems, routerParams, routerPath) {
         switch (routerPath.path.slice(1)) {
-        case 'admin': {
+        case "admin": {
             return (
                 <div>
                     <Card>
@@ -133,7 +133,7 @@ class AdminController extends ProtoController {
                 </div>
             );
         }
-        case 'pngencoder': {
+        case "pngencoder": {
             return (
                 <div>
                     <Card>
@@ -143,7 +143,7 @@ class AdminController extends ProtoController {
                 </div>
             );
         }
-        case 'markdown': {
+        case "markdown": {
             return (
                 <div>
                     <MarkdownPreviewer></MarkdownPreviewer>

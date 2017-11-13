@@ -1,23 +1,23 @@
 // Production Switch
-const production = process.env.NODE_ENV === 'app_production';
+const production = process.env.NODE_ENV === "app_production";
 
 // Dependencies
-const webpack         = require('webpack');
-const path            = require('path');
-const autoprefixer    = require('autoprefixer');
-const cssnano         = require('cssnano');
-const postcssfocus    = require('postcss-focus');
+const webpack         = require("webpack");
+const path            = require("path");
+const autoprefixer    = require("autoprefixer");
+const cssnano         = require("cssnano");
+const postcssfocus    = require("postcss-focus");
 
 // Entry points
 const entry = ((production) => {
     if (production) {
         return [
-            './client/app/boot.js',
+            "./client/app/boot.js",
         ];
     } else {
         return [
-            'webpack-hot-middleware/client',
-            './client/app/boot.js',
+            "webpack-hot-middleware/client",
+            "./client/app/boot.js",
         ];
     }
 })(production);
@@ -30,8 +30,8 @@ const plugins = ((production) => {
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify(production ? 'production' : 'development'),
+            "process.env": {
+                NODE_ENV: JSON.stringify(production ? "production" : "development"),
             },
         }),
     ];
@@ -58,14 +58,14 @@ const plugins = ((production) => {
 // Babel presets
 const babelPresets = ((production) => {
     if (production) {
-        return ['react', 'es2015'];
+        return ["react", "es2015"];
     } else {
-        return ['react', 'es2015', 'react-hmre'];
+        return ["react", "es2015", "react-hmre"];
     }
 })(production);
 
 // Devtool
-const devtool = (production ? undefined : 'cheap-module-source-map');
+const devtool = (production ? undefined : "cheap-module-source-map");
 
 // Webpack config
 module.exports = {
@@ -73,16 +73,16 @@ module.exports = {
     entry,
     plugins,
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
-        publicPath: '/',
+        path: path.resolve(__dirname, "dist"),
+        filename: "bundle.js",
+        publicPath: "/",
     },
     devtool,
     module: {
         loaders: [
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
+                loader: "babel-loader",
                 exclude: /node_modules/,
                 query: {
                     presets: babelPresets,
@@ -90,17 +90,17 @@ module.exports = {
             },
             {
                 test: /\.s?css$/,
-                loader: 'style!css?-url!postcss!sass',
+                loader: "style!css?-url!postcss!sass",
             },
             {
                 test: /\.(html|txt|md)/,
-                loader: 'file?name=[name].[ext]',
+                loader: "file?name=[name].[ext]",
             },
             {
                 test: /.*\.(gif|png|jpe?g|svg|ico)$/i,
                 loaders: [
-                    'file?name=[name].[ext]',
-                    'image-webpack',
+                    "file?name=[name].[ext]",
+                    "image-webpack",
                 ],
             },
         ],
@@ -110,7 +110,7 @@ module.exports = {
         optimizationLevel: 7,
         interlaced: false,
         pngquant: {
-            quality: '65-90',
+            quality: "65-90",
             speed: 4,
         },
     },

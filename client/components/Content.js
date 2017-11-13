@@ -1,8 +1,8 @@
 // Dependencies
-import React, { Component } from 'react';
-import classnames from 'classnames';
+import React, { Component } from "react";
+import classnames from "classnames";
 
-import './../style/Content.scss';
+import "./../style/Content.scss";
 class Content extends Component {
     render() {
         return (
