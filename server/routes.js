@@ -33,7 +33,13 @@ module.exports = (context) => {
         switch (req.headers.host) {
         case "todos.leonardschuetz.ch": return res.redirect("https://leonardschuetz.ch/todos");
         case "livechat.leonardschuetz.ch": return res.redirect("https://leonardschuetz.ch/livechat");
-        case "bagbags.ch": return res.redirect("https://instagram.com/bagbags.ch");
+        case "bagbags.ch": {
+          if (req.path == "/website") {
+            return express.static("./resources/documents/bagbags")(req, res, next);
+          }
+
+          return res.redirect("https://instagram.com/bagbags.ch");
+        }
         default: return next();
         }
     });
@@ -51,6 +57,10 @@ module.exports = (context) => {
         next();
     }, require("./livechat/route.js"));
     app.use("/tbz-va-2016", express.static(path.resolve(__dirname, "./resources/documents/tbz-va-2016/")));
+    app.use("/bagbags", express.static(path.resolve(__dirname, "./resources/documents/bagbags/")), (req, res) => {
+        res.status(404);
+        res.send("Error 404: Could not find " + req.path);
+    })
 
     // If in development, include webpack middlewares
     if (!production) {
