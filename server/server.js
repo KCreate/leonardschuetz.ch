@@ -7,6 +7,7 @@ const compression   = require("compression");
 const morgan        = require("morgan");
 const auth          = require("./auth.js");
 const websocket     = require("express-ws");
+const vhost         = require("vhost");
 const app           = express();
 
 /*
@@ -46,6 +47,7 @@ require("./routes.js")({
     bodyParser,
     app,
     loggingStream: fs.createWriteStream(path.resolve(__dirname, "logs/", Date.now() + ".txt")),
+    vhost,
     expressWs: websocket(app),
     production: webpackConfig.production,
     webpackDevMiddleware: webpackDevMiddleware(compiler, {

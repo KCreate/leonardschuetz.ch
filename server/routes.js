@@ -11,6 +11,7 @@ module.exports = (context) => {
     const bodyParser    = context.bodyParser;
     const app           = context.app;
     const loggingStream = context.loggingStream;
+    const vhost         = context.vhost;
     const expressWs     = context.expressWs;
     const webpackDevMiddleware = context.webpackDevMiddleware;
     const webpackHotMiddleware = context.webpackHotMiddleware;
@@ -29,20 +30,25 @@ module.exports = (context) => {
     app.use(auth.router);
 
     // Domain specific routes
-    app.use((req, res, next) => {
-        switch (req.headers.host) {
-        case "todos.leonardschuetz.ch": return res.redirect("https://leonardschuetz.ch/todos");
-        case "livechat.leonardschuetz.ch": return res.redirect("https://leonardschuetz.ch/livechat");
-        case "bagbags.ch": {
-          if (req.path == "/website") {
-            return express.static("./resources/documents/bagbags")(req, res, next);
-          }
+    app.use(vhost("todos.leonardschuetz.ch", (req, res, next) => res.redirect("https://leonardschuetz.ch/todos")))
+    app.use(vhost("livechat.leonardschuetz.ch", (req, res, next) => res.redirect("https://leonardschuetz.ch/todos")))
+    app.use(vhost("bagbags.ch", (req, res, next) => {
+        const router = express.Router();
+        router.use("/website", (req, res, next) => {
 
-          return res.redirect("https://instagram.com/bagbags.ch");
-        }
-        default: return next();
-        }
-    });
+          const router = express.Router()
+          router.use(express.static(path.resolve(__dirname, "./resources/documents/bagbags/")))
+          router.use((req, res) => {
+              res.status(404)
+              res.send("Error 404: Could not find " + req.path)
+          })
+
+          router(req, res, next)
+        })
+        router.use((req, res) => res.redirect("https://instagram.com/bagbags.ch"))
+
+        router(req, res, next)
+    }))
 
     // Content routes
     app.use("/charly", (req, res) => res.redirect("https://github.com/charly-lang"));
@@ -57,10 +63,7 @@ module.exports = (context) => {
         next();
     }, require("./livechat/route.js"));
     app.use("/tbz-va-2016", express.static(path.resolve(__dirname, "./resources/documents/tbz-va-2016/")));
-    app.use("/bagbags", express.static(path.resolve(__dirname, "./resources/documents/bagbags/")), (req, res) => {
-        res.status(404);
-        res.send("Error 404: Could not find " + req.path);
-    })
+    app.use("/bagbags", express.static(path.resolve(__dirname, "./resources/documents/bagbags/")));
 
     // If in development, include webpack middlewares
     if (!production) {
