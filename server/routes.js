@@ -33,19 +33,14 @@ module.exports = (context) => {
     app.use(vhost("todos.leonardschuetz.ch", (req, res, next) => res.redirect("https://leonardschuetz.ch/todos")))
     app.use(vhost("livechat.leonardschuetz.ch", (req, res, next) => res.redirect("https://leonardschuetz.ch/todos")))
     app.use(vhost("bagbags.ch", (req, res, next) => {
-        const router = express.Router();
-        router.use("/website", (req, res, next) => {
-
-          const router = express.Router()
-          router.use(express.static(path.resolve(__dirname, "./resources/documents/bagbags/")))
-          router.use((req, res) => {
-              res.status(404)
-              res.send("Error 404: Could not find " + req.path)
-          })
-
-          router(req, res, next)
+        const router = express.Router()
+        router.use("/instagram", (req, res) => res.redirect("https://instagram.com/bagbags.ch"))
+        router.use("/facebook", (req, res) => res.redirect("https://www.facebook.com/BAGbags.ch"))
+        router.use(express.static(path.resolve(__dirname, "./resources/documents/bagbags/")))
+        router.use((req, res) => {
+            res.status(404)
+            res.send("Error 404: Could not find " + req.path)
         })
-        router.use((req, res) => res.redirect("https://instagram.com/bagbags.ch"))
 
         router(req, res, next)
     }))
