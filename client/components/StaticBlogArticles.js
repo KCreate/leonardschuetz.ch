@@ -59,6 +59,29 @@ class StaticBlogArticles extends Component {
 
     render() {
 
+        // Check if we only want to display a single blog article
+        if (this.props.articlename) {
+            const blog_sources = this.state.sources["blog"];
+            if (!blog_sources) return (<div><Card># Could not find article.</Card></div>);
+            let article
+
+            blog_sources.map((item, index) => {
+                if (item.meta.filename == this.props.articlename) article = item;
+            })
+
+            if (!article) return (<div><Card># Could not find article.</Card></div>);
+
+            article = <Card key={0} meta={article.meta}>{article.markdown}</Card>
+
+            return (
+                <DeferedContainerList
+                    delay={400}
+                    appliedClassName="deferedApplied">
+                    {article}
+                </DeferedContainerList>
+            );
+        }
+
         // If the right sources don't exist yet
         if (!this.state.sources[this.props.active]) {
             return (

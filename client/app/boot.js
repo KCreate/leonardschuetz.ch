@@ -54,6 +54,7 @@ render((
         <Route path="/" component={App}>
             <IndexRedirect to="/blog"></IndexRedirect>
             <Route path="/blog" component={FrontPageController}></Route>
+            <Route path="/blog/:articlename" component={FrontPageController}></Route>
             <Route path="/about" component={FrontPageController}></Route>
             <Route path="/todos" component={TodosController}></Route>
             <Route path="/admin" component={AdminController}></Route>

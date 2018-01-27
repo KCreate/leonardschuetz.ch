@@ -22,6 +22,7 @@ class FrontPageController extends ProtoController {
                 navigation={this.state.navigation}
                 active={routerPath.path.slice(1)}
                 actions={this.props.actions}
+                articlename={this.props.params.articlename}
             ></StaticBlogArticles>
         );
     }

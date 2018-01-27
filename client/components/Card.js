@@ -102,9 +102,16 @@ class Card extends Component {
     }
 
     render() {
+        let article_address
+
+        if (this.props.meta) {
+            article_address = "/blog/" + this.props.meta.filename
+        }
+
         return (
             <div className={"Card" + (this.props.className || "")}>
                 {this.getMarkdown()}
+                {article_address ? <a href={article_address}>Share article</a> : undefined}
             </div>
         );
     }

@@ -213,7 +213,8 @@
             background-color: $colorDark3;
             color: $colorLight1;
             padding: 16px 18px;
-            overflow-x: scroll;
+            overflow-x: auto;
+            border-radius: 0;
 
             font-size: 75%;
             font-family: $codefont;
