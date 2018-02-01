@@ -31,7 +31,7 @@ module.exports = (context) => {
 
     // Domain specific routes
     app.use(vhost("todos.leonardschuetz.ch", (req, res, next) => res.redirect("https://leonardschuetz.ch/todos")))
-    app.use(vhost("livechat.leonardschuetz.ch", (req, res, next) => res.redirect("https://leonardschuetz.ch/todos")))
+    app.use(vhost("livechat.leonardschuetz.ch", (req, res, next) => res.redirect("https://leonardschuetz.ch/livechat")))
     app.use(vhost("www.bagbags.ch", (req, res) => res.redirect("https://bagbags.ch")))
     app.use(vhost("bagbags.ch", (req, res, next) => {
         const router = express.Router()
