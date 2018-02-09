@@ -46,6 +46,10 @@ router.use("/logs/list", auth.requiresAuthentication, (req, res) => {
 
 router.use("/logs", auth.requiresAuthentication, express.static(path.join(__dirname, "./logs")));
 
+router.use("**/.git", (req, res) => {
+  res.redirect("http://i.imgur.com/5RVXV66.jpg")
+})
+
 router.use(express.static(path.join(__dirname, "resources")));
 
 // Return an error message if the file was not found
@@ -68,7 +72,8 @@ router.use("/", (req, res) => {
 
             // Response
             const response = items.filter((item) => (
-                item !== ".DS_Store"
+                item !== ".DS_Store" &&
+                item !== ".git"
             )).map((item) => {
 
                 // Path to the file or directory
