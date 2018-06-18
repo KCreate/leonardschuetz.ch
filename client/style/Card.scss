@@ -146,7 +146,7 @@
                 }
             }
 
-            &[alt*="framed"], &[alt*="circular"], &[alt*="circular-small"] {
+            &[alt*="framed"], &[alt*="circular"], &[alt*="circular-small"], &[alt*="rounded"] {
                 width: 100%;
                 box-shadow: $shadow2;
                 transition: box-shadow $durMedium $easing;
@@ -162,6 +162,10 @@
 
             &[alt*="circular"] {
                 border-radius: 50%;
+            }
+
+            &[alt*="rounded"] {
+                border-radius: 2%;
             }
 
             // Reference: http://stackoverflow.com/questions/14068103/disable-antialising-when-scaling-images
@@ -239,6 +243,10 @@
             border-radius: 2px;
             overflow: hidden;
 
+            tr {
+                border: 2px solid $colorTableBorder;
+            }
+
             th, td {
                 padding: 4px 6px;
             }
@@ -248,7 +256,8 @@
             }
 
             td {
-                height: 36px
+                height: 36px;
+                border: 2px solid $colorTableBorder;
             }
 
             strong {

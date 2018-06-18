@@ -43,6 +43,8 @@ $colorGreen4:  darken($colorGreen3, $colorChangePercentage);
 $colorLinks: $colorBlue2;
 $colorLinksLight: mix($colorLinks, $colorLight1, 100%);
 
+$colorTableBorder: rgb(216, 216, 218);
+
 // Shadows
 $shadow1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 $shadow2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
