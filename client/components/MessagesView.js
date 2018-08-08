@@ -68,7 +68,7 @@ class MessagesView extends Component {
             case ("image/png"):
             case ("image/gif"): {
                 return (
-                    <div key={index} className="embeded image">
+                    <div key={index} className="embedded image">
                         <div>
                             <img src={item.apiResponse.link}/>
                         </div>
@@ -87,7 +87,7 @@ class MessagesView extends Component {
             }
             default: {
                 return (
-                    <div key={index} className="embeded document">
+                    <div key={index} className="embedded document">
                         <div>
                             <img src="/resources/livechat/document.png"/>
                         </div>
