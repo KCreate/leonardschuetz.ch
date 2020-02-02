@@ -17,7 +17,7 @@ Below are the projects I'm most proud of.
 | [gravity-simulator](https://github.com/KCreate/gravity-simulator)    | Physics simulation of a solar system using newtonian gravity          | JavaScript              |
 | [leonardschuetz.ch](https://github.com/KCreate/leonardschuetz.ch)    | This website                                                          | Express, React, Webpack |
 
-Right now I'm an apprentice at Siemens in the field of Healthcare.
+Right now I'm a student at the Berufsmaturitätsschule in Zürich [BMS Zuerich](https://www.bms-zuerich.ch/), on course to graduate in summer 2020.
 
 I'm always interested in meeting new people with the same interests,
 so please send me a [mail](mailto:leni.schuetz@me.com) and say hello.
