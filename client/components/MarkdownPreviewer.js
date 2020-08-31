@@ -9,11 +9,22 @@ class MarkdownPreviewer extends Component {
         super(...args);
         this.onchange = this.onchange.bind(this);
         this.debounce = undefined;
+        this.reload_timer = undefined;
 
         this.state = {
             source: "",
             markdown: "",
         };
+    }
+
+    componentDidMount() {
+        this.reload_timer = setInterval(() => {
+            this.onchange()
+        }, 2000);
+    }
+
+    componentWillUnmount() {
+      clearInterval(this.reload_timer);
     }
 
     onchange(event) {

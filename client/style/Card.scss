@@ -125,6 +125,10 @@
             font-family: $codefont;
         }
 
+        strong {
+          font-weight: bold;
+        }
+
         /* blockquotes */
         blockquote > p {
             background-color: $colorLight1;

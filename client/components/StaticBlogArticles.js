@@ -93,6 +93,7 @@ class StaticBlogArticles extends Component {
 
         // Get the list of cards
         let cards = this.state.sources[this.props.active]
+        .filter((item) => !item.meta.hidden)
         .map((item, index) => (
             <Card key={index} meta={item.meta}>
                 {item.markdown}
