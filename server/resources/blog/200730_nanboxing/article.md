@@ -183,82 +183,569 @@ Here is where NaN-boxing comes in. NaN-boxing allows you to cram extra informati
 NaN-value that exists within the floating-point spectrum of numbers.
 Lets first take a look at how a double-precision floating-point number is stored in memory.
 
-An IEEE 754 double-precision float is a regular 64-bit value, with its bits laid out as follows:
-
 ```
 +- 1 Sign bit
 |+- 11 Exponent bits
-||            +- 52 Mantissa bits
-||            |
-vv            v
-S[Exponent---][Mantissa--------------------------------]
+||         +- 52 Mantissa bits
+||         |
+vv         v
+S[Exponent-][Mantissa------------------------------------------]
 ```
 
-> Note: I've trimmed the ascii graphic a little bit,
-> as it wouldn't fit onto the page without scrolling otherwise.
-
+An IEEE 754 double-precision float is a 8 byte value.
+The first bit is called the sign-bit.
+The next 11 bits represents the Exponent
+The remaining 52 bits are called the Mantissa.
 The exact way these bits are interpreted is not important.
 What's important however, is how a NaN value is represented.
 A NaN value is any float value that has all its exponent bits set to 1.
+
+```
+S[Exponent-]Q---------------------------------------------------
+            ^
+            |
+            +- Signalling / Quiet bit
+```
+
 The standard also distinguishes between "quiet" and "signalling" NaN values.
-
-```
-              +- This bit signals a quiet NaN
-              v
--[NaN        ]1-----------------------------------------
-```
-
-"Quiet" NaNs simply flow through any arithmetic operations, while the "signalling" type
+"Quiet" NaNs fall through any arithmetic operations, while the "signalling" type
 will throw an exception once detected.
 For our intents and purposes, we always use the quiet type.
 
 With the exponent- and quiet bits set, we are now left with 52 bits.
-This is just enough space to store a full pointer in there.
-Modern 64-bit systems actually only use the lower 48 bits of a pointer, meaning we've got no
-trimming issues here.
-If the sign-bit is set to 1, the NaN value stores a pointer.
-If the sign-bit is set to 0, we can use an additional 3 bits inside the Mantissa to describe
-8 different short types to be encoded.
+This is more than enough to store a full pointer.
+Pointers actually only use the lower 48 bits of their allotted 8 bytes, meaning we can
+easily fit it into the leftover 52 bits of the float value.
+
+Remember the sign-bit at the beginning of the float value?
+We can use this bit to distinguish between encoded pointers and other short types.
+Short encoded types use the 3 bits next to the quiet bits to signal their types.
 
 ```
-+- If set, denotes an encoded pointer
-|              + Stores the type id of the encoded short value
-|              |
-v              v
-S[NaN        ]1TTT--------------------------------------
-
-The type bits map to the following values
-000: NaN
-001: false
-010: true
-011: null
-100: integers
-101: symbols:
-110: string (packed)
-111: string (first payload byte stores the length)
++- If set, the remaining payload bits contain a pointer
+v
+1[Exponent ]1TTT------------------------------------------------
+             ^
+             |
+             +- Three type bits, to encode more short types
 ```
 
-> The above type ids are extracted from my own toy programming language, Charly.
-> You can choose any types you want, as long as they fit into the remaining 48 bits of the NaN value.
+## Implementation
 
-You might have spotted the string types. We can actually store small strings of up to 6 bytes inside
-our NaN-boxed value representation.
-We distinguish between packed (exactly 6 bytes long) and non-packed strings (0 - 5 bytes).
-The non-packed string uses the first byte to store the length field, denoting how many of the remaining
-bytes contain actual data.
+In the following section of this article I will be implementing a nan-boxing system in C.
+If you don't care about the step by step tutorial, you can just download the complete file
+[here](boguslink).
+The code in this article and the code in the complete download file may differ slightly, because of reasons.
 
-And here we have it, we can now store integers, floats, booleans and several other small types
-inside a single 8 byte value.
-This is great, because now the compiler can simply pass these values
-around inside registers and we save ourselves a pointer dereference every time we want to do
-an operation on these small types.
+First, lets define some type IDs for the short encoded types.
 
-To use this system in the most painless way possible, one would implement several helper methods
-that would do the tricky bitmasking to extract the payload from the NaN values.
-My toy language Charly has all these methods implemented [here](https://github.com/KCreate/charly-vm/blob/main/include/value.h#L394-L1610).
+```
+000 -> NaN
+001 -> False
+010 -> True
+011 -> Null
+100 -> Integer
+```
+
+Lets write some functions to encode and decode integers.
+I'm going to artifically limit our system to 32-bit integers only, but you could
+absolutely extend this range to 48-bits.
+The reason I'm doing this is to keep this example code simpler.
+
+```C
+#include <stdio.h>
+#include <stdint.h>
+
+// Our short value type
+typedef uint64_t VALUE;
+typedef char bool;
+
+// Masks for important segments of a float value
+const uint64_t MASK_SIGN        = 0x8000000000000000;
+const uint64_t MASK_EXPONENT    = 0x7ff0000000000000;
+const uint64_t MASK_QUIET       = 0x0008000000000000;
+const uint64_t MASK_TYPE        = 0x0007000000000000;
+const uint64_t MASK_SIGNATURE   = 0xffff000000000000;
+const uint64_t MASK_PAYLOAD_INT = 0x00000000ffffffff;
+
+// Type IDs for short encoded types
+const uint64_t MASK_TYPE_NAN     = 0x0000000000000000;
+const uint64_t MASK_TYPE_FALSE   = 0x0001000000000000;
+const uint64_t MASK_TYPE_TRUE    = 0x0002000000000000;
+const uint64_t MASK_TYPE_NULL    = 0x0003000000000000;
+const uint64_t MASK_TYPE_INTEGER = 0x0004000000000000;
+
+// Constant short encoded values
+const uint64_t kNaN   = MASK_EXPONENT | MASK_QUIET;
+const uint64_t kFalse = kNaN | MASK_TYPE_FALSE;
+const uint64_t kTrue  = kNaN | MASK_TYPE_TRUE;
+const uint64_t kNull  = kNaN | MASK_TYPE_NULL;
+
+VALUE encode_integer(uint32_t value) {
+  return kNaN | MASK_TYPE_INTEGER | value;
+}
+
+int32_t decode_integer(VALUE value) {
+  return value & MASK_PAYLOAD_INT;
+}
+
+bool is_integer(VALUE value) {
+  uint64_t signature = value & MASK_SIGNATURE;
+  return signature == (kNaN | MASK_TYPE_INTEGER);
+}
+
+int main() {
+  int32_t input = -200;
+  VALUE a = encode_integer(input);
+
+  if (is_integer(a)) {
+    int32_t value = decode_integer(a);
+
+    if (value == input) {
+      printf("Success!\n");
+    } else {
+      printf("Failure! Wrong value\n");
+    }
+  } else {
+    printf("Failure! Not an encoded integer\n");
+  }
+
+  return 0;
+}
+```
+
+Alright, that's quite a big wall of code.
+Lets walk through it step by step and explain each piece of code along the way.
+
+```C
+// Our short value type
+typedef uint64_t VALUE;
+typedef char bool;
+```
+
+Just some simple typedefs.
+`VALUE` is our nan boxed type.
+We use this type definition to signal wether the value is an encoded value or just a raw 64-bit number.
+`bool` because standard C doesn't have this type by default.
+
+```C
+// Masks for important segments of a float value
+const uint64_t MASK_SIGN        = 0x8000000000000000;
+const uint64_t MASK_EXPONENT    = 0x7ff0000000000000;
+const uint64_t MASK_QUIET       = 0x0008000000000000;
+const uint64_t MASK_TYPE        = 0x0007000000000000;
+const uint64_t MASK_SIGNATURE   = 0xffff000000000000;
+const uint64_t MASK_PAYLOAD_INT = 0x00000000ffffffff;
+
+// Type IDs for short encoded types
+const uint64_t MASK_TYPE_NAN     = 0x0000000000000000;
+const uint64_t MASK_TYPE_FALSE   = 0x0001000000000000;
+const uint64_t MASK_TYPE_TRUE    = 0x0002000000000000;
+const uint64_t MASK_TYPE_NULL    = 0x0003000000000000;
+const uint64_t MASK_TYPE_INTEGER = 0x0004000000000000;
+
+// Constant short encoded values
+const uint64_t kNaN   = MASK_EXPONENT | MASK_QUIET;
+const uint64_t kFalse = kNaN | MASK_TYPE_FALSE;
+const uint64_t kTrue  = kNaN | MASK_TYPE_TRUE;
+const uint64_t kNull  = kNaN | MASK_TYPE_NULL;
+```
+
+Here we declare important masks for the individual segments of the float value.
+We also add the type IDs that we came up with earlier.
+At the end we declare some constants for simple short encoded types.
+
+```C
+VALUE encode_integer(uint32_t value) {
+  return kNaN | MASK_TYPE_INTEGER | value;
+}
+```
+
+Encoding an integer happens by simply overlaying it onto the NaN value and its type id.
+
+```C
+int32_t decode_integer(VALUE value) {
+  return value & MASK_PAYLOAD_INT;
+}
+```
+
+To decode an integer, simply mask it out.
+
+```C
+bool is_integer(VALUE value) {
+  uint64_t signature = value & MASK_SIGNATURE;
+  return signature == (kNaN | MASK_TYPE_INTEGER);
+}
+```
+
+In order to check wether any encoded value is an integer, we can check its signature.
+The signature consists of the first 2 bytes of the encoded value and can be used to quickly
+determine the type of the encoded value.
+
+```C
+int main() {
+  int32_t input = -200;
+  VALUE a = encode_integer(input);
+
+  if (is_integer(a)) {
+    int32_t value = decode_integer(a);
+
+    if (value == input) {
+      printf("Success!\n");
+    } else {
+      printf("Failure! Wrong value\n");
+    }
+  } else {
+    printf("Failure! Not an encoded integer\n");
+  }
+
+  return 0;
+}
+```
+
+Finally, we encode an integer, check the resulting type and decode it again.
+That wasn't too complicated now was it?
+
+### Arbitrary pointers
+
+Lets extend the code to support arbitrary heap pointers.
+As previously discussed, this can be achieved by setting the sign-bit to 1.
+Lets implement it!
+
+```C
+const uint64_t MASK_PAYLOAD_PTR = 0x0000ffffffffffff;
+
+VALUE encode_pointer(void* ptr) {
+  return kNaN | MASK_SIGN | (uint64_t)ptr;
+}
+
+void* decode_pointer(VALUE value) {
+  return (void*)(value & MASK_PAYLOAD_PTR);
+}
+
+bool is_pointer(VALUE value) {
+  uint64_t signature = value & MASK_SIGNATURE;
+  return signature == (kNaN | MASK_SIGN);
+}
+
+int main() {
+  int32_t input = 512;
+  int32_t* data_ptr = &input;
+
+  VALUE encoded_ptr = encode_pointer(data_ptr);
+
+  if (is_pointer(encoded_ptr)) {
+    int32_t* decoded_ptr = decode_pointer(encoded_ptr);
+
+    if (decoded_ptr == data_ptr && *decoded_ptr == input) {
+      printf("Success!\n");
+    } else {
+      printf("Failure! Wrong pointer\n");
+    }
+  } else {
+    printf("Failure! Not an encoded pointer\n");
+  }
+
+  return 0;
+}
+```
+
+Again, lets walk through the code step by step.
+
+```C
+const uint64_t MASK_PAYLOAD_PTR = 0x0000ffffffffffff;
+
+VALUE encode_pointer(void* ptr) {
+  return kNaN | MASK_SIGN | (uint64_t)ptr;
+}
+
+void* decode_pointer(VALUE value) {
+  return (void*)(value & MASK_PAYLOAD_PTR);
+}
+
+bool is_pointer(VALUE value) {
+  uint64_t signature = value & MASK_SIGNATURE;
+  return signature == (kNaN | MASK_SIGN);
+}
+```
+
+I've added a new mask, `MASK_PAYLOAD_PTR`.
+It masks off the lower 48 bits of our VALUE type.
+Remember how modern 64-bit operating systems only use the lower 48-bits for pointers?
+That's the reason why we can safely do this without breaking anything.
+
+The pointer encoding and decoding functions are pretty similar to the integer ones.
+Just stick everything together to encode and mask things out to decode.
+
+```C
+int main() {
+  int32_t input = 512;
+  int32_t* data_ptr = &input;
+
+  VALUE encoded_ptr = encode_pointer(data_ptr);
+
+  if (is_pointer(encoded_ptr)) {
+    int32_t* decoded_ptr = decode_pointer(encoded_ptr);
+
+    if (decoded_ptr == data_ptr && *decoded_ptr == input) {
+      printf("Success!\n");
+    } else {
+      printf("Failure! Wrong pointer\n");
+    }
+  } else {
+    printf("Failure! Not an encoded pointer\n");
+  }
+
+  return 0;
+}
+```
+
+Lets adapt our little testing code to test encoded pointers.
+If we run this we will find that it does indeed encode and decode the pointer correctly.
+
+You can use this ability to encode arbitrary pointers to point to some bigger
+container on the heap. This container could then contain another type id to differentiate
+between heap types such as arrays, maps or pretty much any other thing you can think of.
+
+### Packed strings
+
+So far we've only used up five of our 8 available type IDs.
+Lets add a short encoded string type.
+We can store small strings of up to 6 characters (bytes, not unicode codepoints)
+inside our VALUE type.
+We differentiate between packed strings and non-packed strings.
+The packed string is a special type which signals that the stored string is
+exactly 6 bytes long.
+The non-packed string uses a single byte to store the length of the encoded string.
+
+I will implement the packed string in this article and leave the implementation of the
+non-packed string as an exercise to the reader :)
+
+```C
+#include <string.h> // for strncmp
+
+// New type id for the packed string
+const uint64_t MASK_TYPE_PSTRING = 0x0005000000000000;
+
+// Checks the endianness of this system at runtime
+bool IS_BIG_ENDIAN() {
+  // Byte order in actual memory:
+  //
+  // Little-endian: 0x44 0x33 0x22 0x11
+  // Big-endian:    0x11 0x22 0x33 0x44
+  uint32_t check_number = 0x11223344;
+  char first_byte = *(char*)(&check_number);
+  return first_byte == 0x11;
+}
+
+// Assumes the input string to be at least 6 bytes in length
+VALUE encode_packed_string(char* input) {
+  VALUE value = kNaN | MASK_TYPE_PSTRING;
+  char* buffer = (char*)&value;
+
+  if (IS_BIG_ENDIAN()) {
+    buffer[2] = input[0];
+    buffer[3] = input[1];
+    buffer[4] = input[2];
+    buffer[5] = input[3];
+    buffer[6] = input[4];
+    buffer[7] = input[5];
+  } else {
+    buffer[0] = input[0];
+    buffer[1] = input[1];
+    buffer[2] = input[2];
+    buffer[3] = input[3];
+    buffer[4] = input[4];
+    buffer[5] = input[5];
+  }
+
+  return value;
+}
+
+// Takes in a VALUE pointer to force it into memory
+// The lifetime of the returned char* is bound to
+// the lifetime of the inserted VALUE pointer
+char* decode_packed_string(VALUE* value) {
+  if (IS_BIG_ENDIAN()) {
+
+    // On big-endian systems, the character buffer is
+    // stored at an offset of 2 bytes
+    return ((char*)value) + 2;
+  } else {
+
+    // On little-endian systems, the character buffer
+    // is already conveniently laid out at the beginning
+    return (char*)(value);
+  }
+}
+
+bool is_packed_string(VALUE value) {
+  uint64_t signature = value & MASK_SIGNATURE;
+  return signature == (kNaN | MASK_TYPE_PSTRING);
+}
+
+int main() {
+  char* input = "hello!";
+  VALUE encoded_string = encode_packed_string(input);
+
+  if (is_packed_string(encoded_string)) {
+    char* string = decode_packed_string(&encoded_string);
+
+    if (!strncmp(input, string, 6)) {
+      printf("Success! string = %.6s\n", string);
+    } else {
+      printf("Failure! Wrong string\n");
+    }
+  } else {
+    printf("Failure! Not a packed string\n");
+  }
+
+  return 0;
+}
+```
+
+Now that's quite a load of code!
+Lets break it down again and explain what's going on.
+
+```C
+#include <string.h> // for strncmp
+
+// New type id for the packed string
+const uint64_t MASK_TYPE_PSTRING = 0x0005000000000000;
+
+// Checks the endianness of this system at runtime
+bool IS_BIG_ENDIAN() {
+  // Byte order in actual memory:
+  //
+  // Little-endian: 0x44 0x33 0x22 0x11
+  // Big-endian:    0x11 0x22 0x33 0x44
+  uint32_t check_number = 0x11223344;
+  char first_byte = *(char*)(&check_number);
+  return first_byte == 0x11;
+}
+```
+
+First I've included the `string.h` library for the `strncmp` function.
+We'll need it later when we're comparing the results.
+Then I've added the new type id for the packed string.
+Finally a function is added which checks at runtime wether we're on a little or big endian system.
+You could do this at compile-time, but I was lazy and just whipped up the first thing that came to mind.
+
+```C
+// Assumes the input string to be at least 6 bytes in length
+VALUE encode_packed_string(char* input) {
+  VALUE value = kNaN | MASK_TYPE_PSTRING;
+  char* buffer = (char*)&value;
+
+  if (IS_BIG_ENDIAN()) {
+    buffer[2] = input[0];
+    buffer[3] = input[1];
+    buffer[4] = input[2];
+    buffer[5] = input[3];
+    buffer[6] = input[4];
+    buffer[7] = input[5];
+  } else {
+    buffer[0] = input[0];
+    buffer[1] = input[1];
+    buffer[2] = input[2];
+    buffer[3] = input[3];
+    buffer[4] = input[4];
+    buffer[5] = input[5];
+  }
+
+  return value;
+}
+```
+
+The `encode_packed_string` function takes in a char pointer to a buffer containing at least
+6 bytes of data.
+We do no bounds-checking, so the caller needs to make sure their buffer has the correct size.
+Because the byte order changes between little and big endian systems, we have to specialize
+the copying of the buffer for each system.
+
+```C
+// Takes in a VALUE pointer to force it into memory
+// The lifetime of the returned char* is bound to
+// the lifetime of the inserted VALUE pointer
+char* decode_packed_string(VALUE* value) {
+  if (IS_BIG_ENDIAN()) {
+
+    // On big-endian systems, the character buffer is
+    // stored at an offset of 2 bytes
+    return ((char*)value) + 2;
+  } else {
+
+    // On little-endian systems, the character buffer
+    // is already conveniently laid out at the beginning
+    return (char*)(value);
+  }
+}
+```
+
+Because the actual string data is stored in the VALUE type, we have to get this value
+into memory somehow.
+We do this by forcing the caller to pass us a pointer to it.
+We then figure out where the buffer is located within the VALUE and return a pointer to the
+first character.
+We don't do any copying or allocation of new memory, so the lifetime of the returned
+pointer cannot exceed the lifetime of the memory where the initial VALUE was stored.
+
+```C
+bool is_packed_string(VALUE value) {
+  uint64_t signature = value & MASK_SIGNATURE;
+  return signature == (kNaN | MASK_TYPE_PSTRING);
+}
+```
+
+Checking for a packed string follows the same procedure as the other types.
+Simply mask out the signature and compare it against the known packed-string signature.
+
+```C
+int main() {
+  char* input = "hello!";
+  VALUE encoded_string = encode_packed_string(input);
+
+  if (is_packed_string(encoded_string)) {
+    char* string = decode_packed_string(&encoded_string);
+
+    if (!strncmp(input, string, 6)) {
+      printf("Success! string = %.6s\n", string);
+    } else {
+      printf("Failure! Wrong string\n");
+    }
+  } else {
+    printf("Failure! Not a packed string\n");
+  }
+
+  return 0;
+}
+```
+
+Running the little test shows us that this indeed does work.
+
+And there we have it, a fully functioning implementation of NaN boxing.
+You can now represent small values directly inside the VALUE type, without any memory
+loads at all.
+This greatly reduces the overall memory load, as we now don't have to allocate any memory
+for integers, floats, booleans and any other small types that fit into the VALUE anymore.
+Great!
 
 ## Alternatives
 
-There exists an alternative to NaN-boxing, which is called Pointer-tagging.
-If you want to learn more about Pointer-tagging, go check out my friend
-[Max's blog article on Pointer tagging](https://bernsteinbear.com/)
+An alternative to NaN-boxing would be Pointer-tagging.
+To find out what Pointer-tagging is and how it works, I will kindly redirect you to my
+friend Max's blog.
+The article I'm referencing is the second part of his series where he writes a Lisp-to-x86 compiler
+from scratch, in C.
+It contains a section about pointer-tagging which is quite interesting.
+
+Max's article: [Compiling a Lisp: Integers](https://bernsteinbear.com/blog/compiling-a-lisp-2/)
+
+## Conclusion
+
+I hope you found this article interesting and that it provided you a good introduction
+to NaN-boxing, how it works and how it is used inside language runtimes to improve the overall
+memory efficiency.
+
+If you want to see an actual implementation of NaN-boxing inside a language-runtime,
+please check out my toy programming language [Charly](https://github.com/KCreate/charly-vm).
