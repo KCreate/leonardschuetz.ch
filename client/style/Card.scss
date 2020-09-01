@@ -216,6 +216,10 @@
             }
         }
 
+        pre {
+          word-break: break-all;
+        }
+
         /* Code */
         pre > code {
             background-color: $colorDark3;
