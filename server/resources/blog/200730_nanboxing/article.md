@@ -3,10 +3,9 @@
 ## The far far future
 
 Many modern programming languages have a feature called dynamic typing.
-Dynamic typing allows you to change and look up the type of a variable at runtime.
-This allows you, the programmer, to remove type hints from your code.
-While this reduces the learning-curve for any given language, it also means you now have to
-trust yourself and other people to always use the correct types.
+Dynamic typing means that the type of a variable can change at runtime.
+While this reduces the learning-curve for new programmers, it also means that
+you now have to trust yourself and other people to always use the correct types.
 
 ```javascript
 // Initialize the variable a with type string
@@ -19,14 +18,25 @@ a = 25
 a = ["bears", "beets", "battlestar galactica"]
 ```
 
-In this article I will describe some approaches to how one might implement dynamic typing.
-I will begin with simple, inefficient implementation and then slowly work my way up, explaining
-the shortcomings along the way.
-In the end I will introduce the value-representation technique called NaN-boxing.
+This article isn't about wether dynamic typing is a good thing or not,
+its rather about how language runtime authors would go about implementing it in their own
+projects.
 
-By the end of this article I hope that you will have gained at least a basic understanding of
-how NaN-boxing works and what it tries to accomplish. If you want to see NaN-boxing in action, you may
-check out my toy programming language at [KCreate/charly-vm](https://github.com/KCreate/charly-vm)
+First I will discuss a simple and naive approach to dynamic typing,
+show some code examples and also discuss its shortcomings.
+After that I will introduce you to the concept of NaN-boxing and explain how it solves a lot of
+the issues that are present in the first design.
+
+By the end of this article I hope that you have at least a basic understanding of what NaN-boxing
+is and how it is implemented.
+
+## Background knowledge
+
+In order to really appreciate this article, I recommend you have at least some familiarity
+with the C programming language and how memory works.
+There will be lots of bitmasking, so if that scares you you might want to close this article now.
+
+## Naive approach to dynamic typing
 
 ## The naive approach
 
@@ -43,7 +53,7 @@ The implementation of our toy language may choose to represent each Value with a
 the type and the actual value of it.
 Notice how each primitive type has its own member field.
 
-```C++
+```cpp
 enum ValueType : uint8_t {
   TYPE_FLOAT,
   TYPE_INT,
@@ -79,7 +89,7 @@ Lets try and figure out how big the Value struct is going to be and how much was
 > You might be surprised when finding out the actual result later.
 > I'm testing this on a 64-bit x86 machine, so keep that in mind.
 
-```C++
+```cpp
 struct Value {
   ValueType type;                 //  1 byte
 
@@ -97,7 +107,7 @@ This brings us to a result of **122 bytes**.
 
 Lets now see what the actual size of our struct is, using the C builtin `sizeof` method.
 
-```C++
+```cpp
 cout << "sizeof(Value) = " << sizeof(Value);
 // sizeof(Value) = 136
 ```
@@ -121,7 +131,7 @@ member values to their correct boundaries.
 
 After those "gaps" have been added to our Value struct, it would look like this:
 
-```C++
+```cpp
 struct Value {
   ValueType type;
   char                __gap1[7];  // <- inserted gap
@@ -147,7 +157,7 @@ C has a feature called unions. It allows us to overlap all those member values.
 This is called a **Tagged Union**.
 Lets modify our struct and check its size again.
 
-```C++
+```cpp
 struct Value {
   ValueType type;
 
@@ -233,9 +243,6 @@ v
 ## Implementation
 
 In the following section of this article I will be implementing a nan-boxing system in C.
-If you don't care about the step by step tutorial, you can just download the complete file
-[here](boguslink).
-The code in this article and the code in the complete download file may differ slightly, because of reasons.
 
 First, lets define some type IDs for the short encoded types.
 
@@ -252,7 +259,7 @@ I'm going to artifically limit our system to 32-bit integers only, but you could
 absolutely extend this range to 48-bits.
 The reason I'm doing this is to keep this example code simpler.
 
-```C
+```c
 #include <stdio.h>
 #include <stdint.h>
 
@@ -317,7 +324,7 @@ int main() {
 Alright, that's quite a big wall of code.
 Lets walk through it step by step and explain each piece of code along the way.
 
-```C
+```c
 // Our short value type
 typedef uint64_t VALUE;
 typedef char bool;
@@ -328,7 +335,7 @@ Just some simple typedefs.
 We use this type definition to signal wether the value is an encoded value or just a raw 64-bit number.
 `bool` because standard C doesn't have this type by default.
 
-```C
+```c
 // Masks for important segments of a float value
 const uint64_t MASK_SIGN        = 0x8000000000000000;
 const uint64_t MASK_EXPONENT    = 0x7ff0000000000000;
@@ -355,7 +362,7 @@ Here we declare important masks for the individual segments of the float value.
 We also add the type IDs that we came up with earlier.
 At the end we declare some constants for simple short encoded types.
 
-```C
+```c
 VALUE encode_integer(uint32_t value) {
   return kNaN | MASK_TYPE_INTEGER | value;
 }
@@ -363,7 +370,7 @@ VALUE encode_integer(uint32_t value) {
 
 Encoding an integer happens by simply overlaying it onto the NaN value and its type id.
 
-```C
+```c
 int32_t decode_integer(VALUE value) {
   return value & MASK_PAYLOAD_INT;
 }
@@ -371,7 +378,7 @@ int32_t decode_integer(VALUE value) {
 
 To decode an integer, simply mask it out.
 
-```C
+```c
 bool is_integer(VALUE value) {
   uint64_t signature = value & MASK_SIGNATURE;
   return signature == (kNaN | MASK_TYPE_INTEGER);
@@ -382,7 +389,7 @@ In order to check wether any encoded value is an integer, we can check its signa
 The signature consists of the first 2 bytes of the encoded value and can be used to quickly
 determine the type of the encoded value.
 
-```C
+```c
 int main() {
   int32_t input = -200;
   VALUE a = encode_integer(input);
@@ -412,7 +419,7 @@ Lets extend the code to support arbitrary heap pointers.
 As previously discussed, this can be achieved by setting the sign-bit to 1.
 Lets implement it!
 
-```C
+```c
 const uint64_t MASK_PAYLOAD_PTR = 0x0000ffffffffffff;
 
 VALUE encode_pointer(void* ptr) {
@@ -452,7 +459,7 @@ int main() {
 
 Again, lets walk through the code step by step.
 
-```C
+```c
 const uint64_t MASK_PAYLOAD_PTR = 0x0000ffffffffffff;
 
 VALUE encode_pointer(void* ptr) {
@@ -477,7 +484,7 @@ That's the reason why we can safely do this without breaking anything.
 The pointer encoding and decoding functions are pretty similar to the integer ones.
 Just stick everything together to encode and mask things out to decode.
 
-```C
+```c
 int main() {
   int32_t input = 512;
   int32_t* data_ptr = &input;
@@ -521,7 +528,7 @@ The non-packed string uses a single byte to store the length of the encoded stri
 I will implement the packed string in this article and leave the implementation of the
 non-packed string as an exercise to the reader :)
 
-```C
+```c
 #include <string.h> // for strncmp
 
 // New type id for the packed string
@@ -607,7 +614,7 @@ int main() {
 Now that's quite a load of code!
 Lets break it down again and explain what's going on.
 
-```C
+```c
 #include <string.h> // for strncmp
 
 // New type id for the packed string
@@ -631,7 +638,7 @@ Then I've added the new type id for the packed string.
 Finally a function is added which checks at runtime wether we're on a little or big endian system.
 You could do this at compile-time, but I was lazy and just whipped up the first thing that came to mind.
 
-```C
+```c
 // Assumes the input string to be at least 6 bytes in length
 VALUE encode_packed_string(char* input) {
   VALUE value = kNaN | MASK_TYPE_PSTRING;
@@ -663,7 +670,7 @@ We do no bounds-checking, so the caller needs to make sure their buffer has the 
 Because the byte order changes between little and big endian systems, we have to specialize
 the copying of the buffer for each system.
 
-```C
+```c
 // Takes in a VALUE pointer to force it into memory
 // The lifetime of the returned char* is bound to
 // the lifetime of the inserted VALUE pointer
@@ -690,7 +697,7 @@ first character.
 We don't do any copying or allocation of new memory, so the lifetime of the returned
 pointer cannot exceed the lifetime of the memory where the initial VALUE was stored.
 
-```C
+```c
 bool is_packed_string(VALUE value) {
   uint64_t signature = value & MASK_SIGNATURE;
   return signature == (kNaN | MASK_TYPE_PSTRING);
@@ -700,7 +707,7 @@ bool is_packed_string(VALUE value) {
 Checking for a packed string follows the same procedure as the other types.
 Simply mask out the signature and compare it against the known packed-string signature.
 
-```C
+```c
 int main() {
   char* input = "hello!";
   VALUE encoded_string = encode_packed_string(input);
@@ -749,3 +756,22 @@ memory efficiency.
 
 If you want to see an actual implementation of NaN-boxing inside a language-runtime,
 please check out my toy programming language [Charly](https://github.com/KCreate/charly-vm).
+
+
+
+
+
+
+
+Todos:
+- Header graphic (NaN boxing by Chada)
+- Byte graphics for float numbers
+  - Graphic to explain sign, exponent mantissa
+  - Graphic that includes all NaN-boxing relevant information
+  - Graphic which shows how packed strings are encoded (little and big endian)
+- Rewrite weird sections
+- Maybe remove the first stupid example
+  - Only use the tagged union since the first example is really really stupid
+  - Remove struct size calculation, not really relevant to article
+- Extend section about using arbitrary pointers to store any kind of types on the heap
+  - Implement heap array type
