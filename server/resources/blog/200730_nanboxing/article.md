@@ -4,7 +4,7 @@
 
 Many modern programming languages have a feature called dynamic typing.
 Dynamic typing means that the type of a variable can change at runtime.
-While this reduces the learning-curve for new programmers, it also means that
+While this reduces the learning curve for new programmers, it also means that
 you now have to trust yourself and other people to always use the correct types.
 
 ```javascript
@@ -113,11 +113,11 @@ cout << "sizeof(Value) = " << sizeof(Value);
 ```
 
 Weird, where do these extra 14 bytes come from?
-Did we find a compiler-bug?
+Did we find a compiler bug?
 No, these extra bytes are being inserted by the compiler to correctly align the values in memory.
 
 Each primitive type in the C language has its own preferred memory alignment.
-The compiler will actually insert some "gaps" into your struct, to align all
+The compiler will actually insert some "gaps" into your struct to align all
 member values to their correct boundaries.
 
 | Type     | Size (bytes) | Alignment |
@@ -146,7 +146,7 @@ struct Value {
 };
 ```
 
-This explain where the additional 14 bytes come from.
+This explains where the additional 14 bytes come from.
 However, we're now allocating 136 bytes just to store a 1 byte boolean value.
 This is kinda ridiculous.
 
@@ -177,7 +177,7 @@ cout << "sizeof(Value) = " << sizeof(Value);
 
 We reduced our Value struct size from 136 to 56 with this one simple trick.
 The biggest member field would be the `map<string, Value*>` at 48 bytes.
-Since the type field takes up only a single byte, and the remaining fields inside the union
+Since the type field takes up only a single byte and the remaining fields inside the union
 need to be mostly aligned to 8 bytes, the compiler will still insert a 7 byte gap between the type
 and the union.
 
@@ -190,7 +190,7 @@ Yes we can!
 ## NaN-boxing
 
 Here is where NaN-boxing comes in. NaN-boxing allows you to cram extra information into the
-NaN-value that exists within the floating-point spectrum of numbers.
+NaN value that exists within the floating-point spectrum of numbers.
 Lets first take a look at how a double-precision floating-point number is stored in memory.
 
 ```
@@ -203,7 +203,7 @@ S[Exponent-][Mantissa------------------------------------------]
 ```
 
 An IEEE 754 double-precision float is a 8 byte value.
-The first bit is called the sign-bit.
+The first bit is called the sign bit.
 The next 11 bits represents the Exponent
 The remaining 52 bits are called the Mantissa.
 The exact way these bits are interpreted is not important.
@@ -222,12 +222,12 @@ The standard also distinguishes between "quiet" and "signalling" NaN values.
 will throw an exception once detected.
 For our intents and purposes, we always use the quiet type.
 
-With the exponent- and quiet bits set, we are now left with 52 bits.
+With the exponent and quiet bits set we are now left with 52 bits.
 This is more than enough to store a full pointer.
 Pointers actually only use the lower 48 bits of their allotted 8 bytes, meaning we can
 easily fit it into the leftover 52 bits of the float value.
 
-Remember the sign-bit at the beginning of the float value?
+Remember the sign bit at the beginning of the float value?
 We can use this bit to distinguish between encoded pointers and other short types.
 Short encoded types use the 3 bits next to the quiet bits to signal their types.
 
@@ -242,7 +242,7 @@ v
 
 ## Implementation
 
-In the following section of this article I will be implementing a nan-boxing system in C.
+In the following section of this article I will be implementing a NaN-boxing system in C.
 
 First, lets define some type IDs for the short encoded types.
 
@@ -331,7 +331,7 @@ typedef char bool;
 ```
 
 Just some simple typedefs.
-`VALUE` is our nan boxed type.
+`VALUE` is our NaN boxed type.
 We use this type definition to signal wether the value is an encoded value or just a raw 64-bit number.
 `bool` because standard C doesn't have this type by default.
 
@@ -368,7 +368,7 @@ VALUE encode_integer(uint32_t value) {
 }
 ```
 
-Encoding an integer happens by simply overlaying it onto the NaN value and its type id.
+Encoding an integer happens by simply overlaying it onto the NaN value and its type ID.
 
 ```c
 int32_t decode_integer(VALUE value) {
@@ -411,12 +411,12 @@ int main() {
 ```
 
 Finally, we encode an integer, check the resulting type and decode it again.
-That wasn't too complicated now was it?
+That wasn't too complicated now, was it?
 
 ### Arbitrary pointers
 
 Lets extend the code to support arbitrary heap pointers.
-As previously discussed, this can be achieved by setting the sign-bit to 1.
+As previously discussed, this can be achieved by setting the sign bit to 1.
 Lets implement it!
 
 ```c
@@ -508,10 +508,10 @@ int main() {
 ```
 
 Lets adapt our little testing code to test encoded pointers.
-If we run this we will find that it does indeed encode and decode the pointer correctly.
+If we run this, we will find that it does indeed encode and decode the pointer correctly.
 
 You can use this ability to encode arbitrary pointers to point to some bigger
-container on the heap. This container could then contain another type id to differentiate
+container on the heap. This container could then contain another type ID to differentiate
 between heap types such as arrays, maps or pretty much any other thing you can think of.
 
 ### Packed strings
@@ -531,7 +531,7 @@ non-packed string as an exercise to the reader :)
 ```c
 #include <string.h> // for strncmp
 
-// New type id for the packed string
+// New type ID for the packed string
 const uint64_t MASK_TYPE_PSTRING = 0x0005000000000000;
 
 // Checks the endianness of this system at runtime
@@ -617,7 +617,7 @@ Lets break it down again and explain what's going on.
 ```c
 #include <string.h> // for strncmp
 
-// New type id for the packed string
+// New type ID for the packed string
 const uint64_t MASK_TYPE_PSTRING = 0x0005000000000000;
 
 // Checks the endianness of this system at runtime
@@ -634,7 +634,7 @@ bool IS_BIG_ENDIAN() {
 
 First I've included the `string.h` library for the `strncmp` function.
 We'll need it later when we're comparing the results.
-Then I've added the new type id for the packed string.
+Then I've added the new type ID for the packed string.
 Finally a function is added which checks at runtime wether we're on a little or big endian system.
 You could do this at compile-time, but I was lazy and just whipped up the first thing that came to mind.
 
