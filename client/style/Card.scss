@@ -114,19 +114,20 @@
         }
 
         /* Strong, treated as highlight */
-        strong, code {
+        code {
             background-color: $colorLight1;
             display: inline-block;
             padding: 2px 4px;
             margin: 2px 0;
             border-radius: 2px;
 
-            font-size: 75%;
+            font-size: 85%;
             font-family: $codefont;
         }
 
         strong {
           font-weight: bold;
+          font-size: 95%;
         }
 
         /* blockquotes */
@@ -134,6 +135,11 @@
             background-color: $colorLight1;
             padding: 10px 8px;
             border-left: 4px solid $colorLight3;
+        }
+
+        /* Code samples inside blockquotes  */
+        blockquote > p > code {
+          background-color: $colorLight3;
         }
 
         /* Images */
