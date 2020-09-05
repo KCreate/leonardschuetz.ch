@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 // The type of the stored value
-typedef enum : uint8_t {
+typedef enum {
   TYPE_INTEGER,
   TYPE_FLOAT,
   TYPE_BOOL,

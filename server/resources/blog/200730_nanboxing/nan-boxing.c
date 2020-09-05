@@ -8,7 +8,7 @@
 typedef uint64_t VALUE;
 
 // The type of the stored value
-typedef enum : uint8_t {
+typedef enum {
   TYPE_INTEGER,
   TYPE_FLOAT,
   TYPE_BOOL,
@@ -34,30 +34,39 @@ typedef struct {
 } HeapValue;
 
 // Masks for important segments of a float value
-const uint64_t MASK_SIGN        = 0x8000000000000000;
-const uint64_t MASK_EXPONENT    = 0x7ff0000000000000;
-const uint64_t MASK_QUIET       = 0x0008000000000000;
-const uint64_t MASK_TYPE        = 0x0007000000000000;
-const uint64_t MASK_SIGNATURE   = 0xffff000000000000;
-const uint64_t MASK_PAYLOAD_PTR = 0x0000ffffffffffff;
-const uint64_t MASK_PAYLOAD_INT = 0x00000000ffffffff;
+#define MASK_SIGN        0x8000000000000000
+#define MASK_EXPONENT    0x7ff0000000000000
+#define MASK_QUIET       0x0008000000000000
+#define MASK_TYPE        0x0007000000000000
+#define MASK_SIGNATURE   0xffff000000000000
+#define MASK_PAYLOAD_PTR 0x0000ffffffffffff
+#define MASK_PAYLOAD_INT 0x00000000ffffffff
 
 // Type IDs for short encoded types
-const uint64_t MASK_TYPE_NAN     = 0x0000000000000000;
-const uint64_t MASK_TYPE_FALSE   = 0x0001000000000000;
-const uint64_t MASK_TYPE_TRUE    = 0x0002000000000000;
-const uint64_t MASK_TYPE_NULL    = 0x0003000000000000;
-const uint64_t MASK_TYPE_INTEGER = 0x0004000000000000;
-const uint64_t MASK_TYPE_PSTRING = 0x0005000000000000;
+#define MASK_TYPE_NAN     0x0000000000000000
+#define MASK_TYPE_FALSE   0x0001000000000000
+#define MASK_TYPE_TRUE    0x0002000000000000
+#define MASK_TYPE_NULL    0x0003000000000000
+#define MASK_TYPE_INTEGER 0x0004000000000000
+#define MASK_TYPE_PSTRING 0x0005000000000000
 
 // Constant short encoded values
-const uint64_t kNaN   = MASK_EXPONENT | MASK_QUIET;
-const uint64_t kFalse = kNaN | MASK_TYPE_FALSE;
-const uint64_t kTrue  = kNaN | MASK_TYPE_TRUE;
-const uint64_t kNull  = kNaN | MASK_TYPE_NULL;
+#define kNaN   (MASK_EXPONENT | MASK_QUIET)
+#define kFalse (kNaN | MASK_TYPE_FALSE)
+#define kTrue  (kNaN | MASK_TYPE_TRUE)
+#define kNull  (kNaN | MASK_TYPE_NULL)
 
-VALUE create_integer(uint32_t value) {
-  return kNaN | MASK_TYPE_INTEGER | value;
+// Signatures of encoded types
+#define SIGNATURE_NAN     kNaN
+#define SIGNATURE_FALSE   kFalse
+#define SIGNATURE_TRUE    kTrue
+#define SIGNATURE_NULL    kNull
+#define SIGNATURE_INTEGER (kNaN | MASK_TYPE_INTEGER)
+#define SIGNATURE_PSTRING (kNaN | MASK_TYPE_PSTRING)
+#define SIGNATURE_POINTER (kNaN | MASK_SIGN)
+
+VALUE create_integer(int32_t value) {
+  return SIGNATURE_INTEGER | (uint32_t)value;
 }
 
 int32_t decode_integer(VALUE value) {
@@ -73,7 +82,7 @@ double decode_float(VALUE value) {
 }
 
 VALUE create_pointer(HeapValue* ptr) {
-  return kNaN | MASK_SIGN | (uint64_t)ptr;
+  return SIGNATURE_POINTER | (uint64_t)ptr;
 }
 
 HeapValue* decode_pointer(VALUE value) {
@@ -93,7 +102,7 @@ bool IS_BIG_ENDIAN() {
 // This method assumes that the input buffer has at least 6 bytes
 // We do no bounds-checking at all, so be cautious!
 VALUE create_packed_string(char* input) {
-  VALUE value = kNaN | MASK_TYPE_PSTRING;
+  VALUE value = SIGNATURE_PSTRING;
   char* buffer = (char*)&value;
 
   if (IS_BIG_ENDIAN()) {
@@ -159,19 +168,19 @@ ValueType get_type(VALUE value) {
   if ((~value & MASK_EXPONENT) != 0) return TYPE_FLOAT;
 
   // Check for encoded pointer
-  if (signature == (kNaN | MASK_SIGN)) {
+  if (signature == SIGNATURE_POINTER) {
     HeapValue* ptr = decode_pointer(value);
     return ptr->type;
   }
 
   // Short encoded types
   switch (signature) {
-    case kNaN | MASK_TYPE_NAN:     return TYPE_FLOAT;
-    case kNaN | MASK_TYPE_FALSE:
-    case kNaN | MASK_TYPE_TRUE:    return TYPE_BOOL;
-    case kNaN | MASK_TYPE_NULL:    return TYPE_NULL;
-    case kNaN | MASK_TYPE_INTEGER: return TYPE_INTEGER;
-    case kNaN | MASK_TYPE_PSTRING: return TYPE_PSTRING;
+    case SIGNATURE_NAN:     return TYPE_FLOAT;
+    case SIGNATURE_FALSE:
+    case SIGNATURE_TRUE:    return TYPE_BOOL;
+    case SIGNATURE_NULL:    return TYPE_NULL;
+    case SIGNATURE_INTEGER: return TYPE_INTEGER;
+    case SIGNATURE_PSTRING: return TYPE_PSTRING;
   }
 
   return TYPE_NULL;
@@ -224,7 +233,7 @@ void print_value(VALUE value) {
 }
 
 int main() {
-  VALUE v_int     = create_integer(25);
+  VALUE v_int     = create_integer(-25);
   VALUE v_float   = create_float(-512.1234);
   VALUE v_bool    = kTrue;
   VALUE v_null    = kNull;

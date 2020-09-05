@@ -1,29 +1,31 @@
 ### Draft
 # Dynamic Typing and NaN Boxing
-## The not so far future
+## The very near future
 
 ![NaN Boxing by @mechantecerises](%%PATH%%/nan-boxing.png)
-> Graphic by [@mechantecerises](https://instagram.com/mechantecerises)
 
 Many modern programming languages have a feature called dynamic typing.
-Dynamic typing means that the type of a variable can change at runtime.
+The key distinction between a dynamically typed and a statically typed language
+is that most type checks are performed at run-time as opposed to at compile-time.
+Types are no longer associated with a variable, but with the underlying value stored
+inside.
+Because a variable can hold any type it wants, the author has to make
+sure that the expectations match the actual code.
 
 ```javascript
-// Variable is initialized with type String
+// Variable 'a' gets initialized with a value of type String
 let a = "hello world"
 
-// Type is changed to Integer
-a = 25
-
-// Type is changed to Array
+// Binding is changed to a value of type Array
+// The array itself can also contain any mix of types
 a = [false, "bears", "beets", "battlestar galactica", 3.21]
+
+// The type of the value that ends up being stored inside
+// the variable 'result' depends on the result of the coin flip
+const result = coinflip() ? "test" : 512
 ```
 
-While this reduces the learning curve for new programmers, it also means that
-you now have to trust yourself and other people to always use the correct types.
-Not cool.
-
-This article isn't about wether dynamic typing is a good thing or not.
+This article isn't about whether dynamic typing is a good thing or not.
 My goal for this article is to show you two ways how dynamic typing might be
 implemented in a language runtime and how they differ from each other.
 
@@ -34,129 +36,27 @@ into the 8 bytes of a double-precision floating-point value.
 
 In order to really understand what's going on here, I recommend you have at least some
 familiarity with the C programming language.
-Understanding how memory works under the hood will also be of advantage.
-If you're scared of bitmasks and pointers, don't read this article!
-(or do, I'm a blog article not a cop).
+If bitmasks and pointers are something you're scared of, I recommend you
+brush up your skills by reading the following resources first:
+
+- [Mask (wikipedia.com)](https://en.wikipedia.org/wiki/Mask_(computing))
+- [Pointers in C Programming with examples](https://beginnersbook.com/2014/01/c-pointers/)
+
+If you feel like you're comfortable with these topics, then let's go ahead!
 
 ## Tagged Unions
 
-Lets begin with the concept called "Tagged Unions".
 A tagged union is a struct which contains a union of many different other types
 and a tag (or type) field which signals which type is actually stored.
+We'll be implementing a tagged union supporting integers, floats, booleans and "null".
+Later we'll extend the code to also support an array type.
 
-I'll start off this section with a complete implementation of a tagged-union
-value representation.
-For the beginning we'll support only integers, floats, booleans and null.
-We'll later extend the code to also support an Array type.
-
-> Note: I won't do any real memory management (we're not calling `free` on anything) and I'm also
-> going to ignore any kinds of security concerns.
-
-```c
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
-// The type of the stored value
-typedef enum : uint8_t {
-  TYPE_INTEGER,
-  TYPE_FLOAT,
-  TYPE_BOOL,
-  TYPE_NULL
-} ValueType;
-
-// Container type for values
-typedef struct {
-  ValueType type;
-
-  union {
-    int64_t as_integer;
-    double  as_float;
-    bool    as_bool;
-  };
-} Value;
-
-void print_value(Value* value) {
-  switch (value->type) {
-    case TYPE_INTEGER: {
-      printf("%li", value->as_integer);
-      break;
-    }
-
-    case TYPE_FLOAT: {
-      printf("%f", value->as_float);
-      break;
-    }
-
-    case TYPE_BOOL: {
-      printf("%s", value->as_bool ? "true" : "false");
-      break;
-    }
-
-    case TYPE_NULL: {
-      printf("null");
-      break;
-    }
-
-    default: {
-      printf("Unknown value type!");
-    }
-  }
-}
-
-Value* alloc_value(ValueType type) {
-  Value* ptr = (Value*)malloc(sizeof(Value));
-  ptr->type = type;
-  return ptr;
-}
-
-Value* create_integer(int64_t value) {
-  Value* ptr = alloc_value(TYPE_INTEGER);
-  ptr->as_integer = value;
-  return ptr;
-}
-
-Value* create_float(double value) {
-  Value* ptr = alloc_value(TYPE_FLOAT);
-  ptr->as_float = value;
-  return ptr;
-}
-
-Value* create_bool(bool value) {
-  Value* ptr = alloc_value(TYPE_BOOL);
-  ptr->as_bool = value;
-  return ptr;
-}
-
-Value* create_null() {
-  return alloc_value(TYPE_NULL);
-}
-
-int main() {
-  print_value(create_integer(25));
-  printf("\n");
-
-  print_value(create_float(-512.1234));
-  printf("\n");
-
-  print_value(create_bool(true));
-  printf("\n");
-
-  print_value(create_null());
-  printf("\n");
-
-  return 0;
-}
-```
-
-Lets walk through this step by step.
-I'll skip over the header includes as they are pretty much boilerplate.
+> Note: I'm not going to bother with any real memory management (we're not calling `free` on anything)
+> and I'm also going to ignore any kinds of security concerns.
 
 ```c
 // The type of the stored value
-typedef enum : uint8_t {
+typedef enum {
   TYPE_INTEGER,
   TYPE_FLOAT,
   TYPE_BOOL,
@@ -175,11 +75,11 @@ typedef struct {
 } Value;
 ```
 
-Here we're defining the Value struct which stores the type and the union which merges
-all the different supported types.
+Via the enum `ValueType`, we're defining type IDs for all currently supported types.
+This enum serves as the "tag" part of our tagged union.
 In case you're unfamiliar with what the `union` keyword does, it basically overlays
 all its members over the same memory.
-The fields `as_integer` and `as_float` physically occupy the same memory.
+The fields `as_integer` and `as_float` physically occupy the same space.
 If we omitted the `union`, all members would be laid out consecutively.
 We would waste the memory of the types that we don't use.
 By using a `union` we reduce the minimum size of the `Value` struct from the sum of all
@@ -215,8 +115,8 @@ void print_value(Value* value) {
 }
 ```
 
-The `print_value` prints any values passed to it.
-Easy.
+Next we're defining a function which prints any value passed to it to the console.
+We'll later be extending this method to accommodate more types.
 
 ```c
 Value* alloc_value(ValueType type) {
@@ -224,32 +124,24 @@ Value* alloc_value(ValueType type) {
   ptr->type = type;
   return ptr;
 }
+```
 
+The function `alloc_value` allocates our Value object and assigns it a given type.
+We're defining this method so we don't have to rewrite this code all the time.
+
+```c
 Value* create_integer(int64_t value) {
   Value* ptr = alloc_value(TYPE_INTEGER);
   ptr->as_integer = value;
   return ptr;
 }
-
-Value* create_float(double value) {
-  Value* ptr = alloc_value(TYPE_FLOAT);
-  ptr->as_float = value;
-  return ptr;
-}
-
-Value* create_bool(bool value) {
-  Value* ptr = alloc_value(TYPE_BOOL);
-  ptr->as_bool = value;
-  return ptr;
-}
-
-Value* create_null() {
-  return alloc_value(TYPE_NULL);
-}
 ```
 
-The `create_*` collection of functions allocates and fills out the relevant sections of the
-respective type members.
+The function `create_integer` simply allocates a new Value object using the previously defined
+`alloc_value` function and then writes the integer argument into the correct field.
+Other methods such as `create_float` and `create_bool` follow the same principle, which is
+why I've omitted them.
+You can find the complete source code to everything we're doing here at the end of this article.
 
 ```c
 int main() {
@@ -281,99 +173,11 @@ null
 
 That wasn't too hard now, was it?
 Any other code can now build on top of these methods.
-Lets add the more complex Array type now.
+Let's add the more complex Array type now.
 
 ```c
 // The type of the stored value
-typedef enum : uint8_t {
-  ...
-  TYPE_ARRAY
-} ValueType;
-
-// Container for arrays
-struct Value;
-typedef struct {
-  struct Value** data;
-  uint32_t length;
-  uint32_t capacity;
-} Array;
-
-// Container type for values
-typedef struct {
-  ValueType type;
-
-  union {
-    ...
-    Array as_array;
-  };
-} Value;
-
-void print_value(Value* value) {
-  switch (value->type) {
-    ...
-
-    case TYPE_ARRAY: {
-      Value** value_list = (Value**)(value->as_array.data);
-
-      printf("[");
-      for (uint32_t i = 0; i < value->as_array.length; i++) {
-        Value* item = value_list[i];
-        print_value(item);
-        if (i != value->as_array.length - 1) printf(", ");
-      }
-      printf("]");
-
-      break;
-    }
-
-    default: {
-      printf("Unknown value type!");
-    }
-  }
-}
-
-Value* create_array(Value** data, uint32_t count) {
-  Value* ptr = alloc_value(TYPE_ARRAY);
-
-  // Calculate initial capacity
-  uint32_t initial_capacity = 4;
-  while (initial_capacity < count) {
-    initial_capacity *= 2;
-  }
-
-  // Allocate value buffer and copy over elements
-  size_t value_buffer_size = sizeof(Value*) * initial_capacity;
-  Value** value_buffer = (Value**)malloc(value_buffer_size);
-  memcpy(value_buffer, data, sizeof(Value*) * count);
-
-  ptr->as_array.data = (void*)value_buffer;
-  ptr->as_array.length = count;
-  ptr->as_array.capacity = initial_capacity;
-
-  return ptr;
-}
-
-int main() {
-  Value* values[4];
-
-  values[0] = create_integer(25);
-  values[1] = create_float(-512.1234);
-  values[2] = create_bool(true);
-  values[3] = create_null();
-
-  Value* array = create_array((Values**)values, 4);
-
-  print_value(array);
-
-  return 0;
-}
-```
-
-Again, lets go over the changes step by step.
-
-```c
-// The type of the stored value
-typedef enum : uint8_t {
+typedef enum {
   ...
   TYPE_ARRAY
 } ValueType;
@@ -397,18 +201,15 @@ typedef struct {
 } Value;
 ```
 
-I've added a new enum type id, the new `Array` struct and a corresponding entry in the Value struct.
-The `Array` struct stores a pointer to a list of pointers to `Value` structs.
-We're using a forward declaration for `Value`, since its not defined at that point in the program.
-The `length` fields stores the current amount of values which are stored in the array and
-the `capacity` field stores the total amount of values that would fit.
-The runtime would need additional logic to expand that buffer once it is full.
+I've added a new type ID for the array type to our `ValueType` enum.
+Next I've embedded the newly created `Array` struct into our tagged union.
+Inside that struct we store a pointer to a list of `Value*` entries.
+We also store the current amount of items in the array (`length`) and the maximum
+capacity.
 
 ```c
 void print_value(Value* value) {
   switch (value->type) {
-    ...
-
     case TYPE_ARRAY: {
       Value** value_list = (Value**)(value->as_array.data);
 
@@ -422,15 +223,11 @@ void print_value(Value* value) {
 
       break;
     }
-
-    default: {
-      printf("Unknown value type!");
-    }
   }
 }
 ```
 
-I've extended the `print_value` with a handler for the `TYPE_ARRAY` type.
+The `print_value` function gets another handler for the newly added `TYPE_ARRAY` type.
 It iterates over all the values inside the array and calls the `print_value` function recursively for
 each one.
 We also print some nice brackets and commas for better readability.
@@ -458,9 +255,10 @@ Value* create_array(Value** data, uint32_t count) {
 }
 ```
 
-The default initial capacity is doubled until we have enough space to accomodate the initial
-amount of items to be copied into the array.
-After we've got our buffer, we copy the items into it and store all the metadata in the Value struct.
+The `create_array` function starts off by calculating the initial capacity.
+We do this by doubling the default capacity (4) until we have enough space to fit in
+`count` items.
+Afterwards we allocate the buffer and copy all the items into it.
 
 ```c
 int main() {
@@ -482,16 +280,17 @@ int main() {
 This time we store our created values inside a stack allocated buffer.
 We then pass this buffer to our `create_array` function, which copies the pointers and returns
 a new array.
-We then print it out, resulting in the following console output:
+Running this code results in the following console output:
 
 ```
 [25, -512.123400, true, null]
 ```
 
 Great!
-We now have a fully functioning value representation using tagged-unions.
-You could for example add a new `String` type, which stores a `char*` and an associated length field.
-The possiblities really are endless.
+We now have a fully functioning value representation using tagged unions.
+Based on these principles you can add any other types you want.
+A `String` type could be implemented by storing a `char*` and associated length field.
+The possibilities really are endless.
 
 ## Shortcomings of using Tagged Unions
 
@@ -507,8 +306,8 @@ Another concern is the duplication of identical values.
 The runtime would have to allocate a new `Value` struct for every single new number it encounters.
 This means that we potentially have hundreds or thousands of copies of the exact same number,
 just in different value containers.
-We could try and come up with a scheme to reuse pointers to identical values,
-this however (at least to me) gives off a very code-smelly vibe.
+We could try to fix this by coming up with some scheme to reuse pointers of identical values,
+however this feels more like fighting the symptoms of a bad design rather than solving the core issue.
 
 Can we do better than this?
 
@@ -517,10 +316,10 @@ Can we do better than this?
 This is where NaN boxing comes in.
 NaN boxing allows you to cram extra information into the NaN value that exists
 within the floating-point spectrum of numbers.
-Lets take a look at how a `double` is stored in memory.
+Let's take a look at how a `double` is stored in memory.
 
 ```
-+- 1 Sign bit
++- Sign bit
 |+- 11 Exponent bits
 ||          +- 52 Mantissa bits
 vv          v
@@ -531,9 +330,8 @@ An IEEE 754 `double` is a 8 byte value.
 The first bit is called the sign bit.
 The next 11 bits represents the Exponent
 The remaining 52 bits are called the Mantissa.
-The exact way these bits are interpreted and decoded into numbers is not important right now.
+The exact way these bits are interpreted and decoded into float numbers is not important right now.
 The only thing we care about is the way a NaN value is encoded.
-A NaN value is any float value that has all its exponent bits set to 1.
 
 ```
 -11111111111Q---------------------------------------------------
@@ -541,6 +339,9 @@ A NaN value is any float value that has all its exponent bits set to 1.
             +- Signalling / Quiet bit
 ```
 
+A NaN value is any float value that has all its exponent bits set to 1.
+The hardware doesn't actually care whats inside all the other bits, as long as
+all the exponent bits are set to 1, its a NaN.
 The standard also distinguishes between "quiet" and "signalling" NaN values.
 "Quiet" NaNs fall through any arithmetic operations, while the "signalling" type
 will throw an exception once detected.
@@ -551,7 +352,11 @@ This is more than enough to store a full pointer.
 Pointers actually only use the lower 48 bits out of their total 64, meaning we can
 easily fit it into the leftover 52 bits of the NaN value.
 
-Lets see how a pointer would be encoded into the NaN value and how we can distinguish
+> Note: This is an assumption about current hardware and architectures.
+> It's not guaranteed to always be the case so keep that in mind if you're
+> writing code that's supposed to last for a very long time (decades+).
+
+Let's see how a pointer would be encoded into the NaN value and how we can distinguish
 a regular NaN value (these should still be available in our language) from an encoded pointer.
 We can set the sign bit at the beginning of the NaN value to signal that the value is actually
 an encoded pointer.
@@ -564,14 +369,14 @@ v
                 +- Encoded pointer value (lower 48 bits)
 ```
 
-With the sign-bit set and the pointer value added into the NaN value, we're left
+With the sign bit set and the pointer value added into the NaN value, we're left
 with 3 bits that are still unused.
 We could for example use these bits to encode a type, which would save us an
 additional memory load if all we want to know is the type of whatever we're pointing to.
 
-If the sign-bit isn't set, we would use these 3 bits to encode the type of the short encoded
+If the sign bit isn't set, we would use these 3 bits to encode the type of the short encoded
 value.
-Lets define some type IDs for these short types.
+Let's define some type IDs.
 
 ```
 000 -> NaN
@@ -588,8 +393,6 @@ Here it is very important that we assign the type ID `000` to NaN.
 This makes it so that the normal NaN value basically encodes itself, according to our scheme.
 The two boolean values and the null type are also just static constants, which means
 they don't need any decoding and we can just use a single comparison to check for them.
-Integers are encoded the same way as pointers, with just the sign-bit set to 0 and the type ID
-set to whatever ID was assigned to Integers.
 
 ```
 +- Sign bit set to 0
@@ -604,148 +407,52 @@ vv          vv
                 +- 48 bits left to store an integer.
 ```
 
+Encoding integers is very similar to encoding pointers, with the exception of setting the sign bit to 0
+and putting in the type ID for an integer.
+This leaves us with enough space to store a 48 bit integer.
+
 ## Implementation
 
 We'll start by implementing the machinery needed to encode the simple short encoded types
 `NaN`, `false`, `true` and `null`.
-It will provide us with the basic functionality needed to later implement integers and pointers.
-Due to the nature of using little unused crevices of floating-point values to shove our
+It will provide us with the basic functionality required to later implement integers and pointers.
+Due to the nature of using little unused crevices of float values to shove our
 values into, floats themselves are now basically free of charge to us.
-Finally, I'm going to show you how to encode strings of up to 6 bytes in length as well.
-
-```c
-#include <stdio.h>    // for printf
-#include <stdint.h>   // for uint32_t, int64_t, etc...
-#include <stdlib.h>   // for malloc
-#include <stdbool.h>  // for the bool typedef
-
-// Our short value type
-typedef uint64_t VALUE;
-
-// The type of the stored value
-typedef enum : uint8_t {
-  TYPE_FLOAT,
-  TYPE_BOOL,
-  TYPE_NULL
-} ValueType;
-
-// Masks for important segments of a float value
-const uint64_t MASK_SIGN        = 0x8000000000000000;
-const uint64_t MASK_EXPONENT    = 0x7ff0000000000000;
-const uint64_t MASK_QUIET       = 0x0008000000000000;
-const uint64_t MASK_TYPE        = 0x0007000000000000;
-const uint64_t MASK_SIGNATURE   = 0xffff000000000000;
-
-// Type IDs for short encoded types
-const uint64_t MASK_TYPE_NAN     = 0x0000000000000000;
-const uint64_t MASK_TYPE_FALSE   = 0x0001000000000000;
-const uint64_t MASK_TYPE_TRUE    = 0x0002000000000000;
-const uint64_t MASK_TYPE_NULL    = 0x0003000000000000;
-
-// Constant short encoded values
-const uint64_t kNaN   = MASK_EXPONENT | MASK_QUIET;
-const uint64_t kFalse = kNaN | MASK_TYPE_FALSE;
-const uint64_t kTrue  = kNaN | MASK_TYPE_TRUE;
-const uint64_t kNull  = kNaN | MASK_TYPE_NULL;
-
-VALUE create_float(double value) {
-  return *(VALUE*)(&value);
-}
-
-double decode_float(VALUE value) {
-  return *(double*)(&value);
-}
-
-ValueType get_type(VALUE value) {
-  uint64_t signature = value & MASK_SIGNATURE;
-  if ((~value & MASK_EXPONENT) != 0) return TYPE_FLOAT;
-
-  // Short encoded types
-  switch (signature) {
-    case kNaN | MASK_TYPE_NAN:     return TYPE_FLOAT;
-    case kNaN | MASK_TYPE_FALSE:
-    case kNaN | MASK_TYPE_TRUE:    return TYPE_BOOL;
-    case kNaN | MASK_TYPE_NULL:    return TYPE_NULL;
-    case kNaN | MASK_TYPE_INTEGER: return TYPE_INTEGER;
-  }
-
-  return TYPE_NULL;
-}
-
-void print_value(VALUE value) {
-  switch (get_type(value)) {
-    case TYPE_FLOAT: {
-      printf("%f", decode_float(value));
-      break;
-    }
-
-    case TYPE_BOOL: {
-      printf("%s", value == kTrue ? "true" : "false");
-      break;
-    }
-
-    case TYPE_NULL: {
-      printf("null");
-      break;
-    }
-
-    default: {
-      printf("Unknown type!");
-    }
-  }
-}
-
-int main() {
-  VALUE v_float   = create_float(-512.1234);
-  VALUE v_bool    = kTrue;
-  VALUE v_null    = kNull;
-
-  print_value(v_float);
-  printf("\n");
-
-  print_value(v_bool);
-  printf("\n");
-
-  print_value(v_null);
-  printf("\n");
-
-  return 0;
-}
-```
-
-As before, we'll go over each part of the program, explaining it along the way.
 
 ```c
 // Our short value type
 typedef uint64_t VALUE;
 
 // The type of the stored value
-typedef enum : uint8_t {
+typedef enum {
   TYPE_FLOAT,
   TYPE_BOOL,
   TYPE_NULL
 } ValueType;
 
 // Masks for important segments of a float value
-const uint64_t MASK_SIGN        = 0x8000000000000000;
-const uint64_t MASK_EXPONENT    = 0x7ff0000000000000;
-const uint64_t MASK_QUIET       = 0x0008000000000000;
-const uint64_t MASK_TYPE        = 0x0007000000000000;
-const uint64_t MASK_SIGNATURE   = 0xffff000000000000;
+#define MASK_SIGN      0x8000000000000000
+#define MASK_EXPONENT  0x7ff0000000000000
+#define MASK_QUIET     0x0008000000000000
+#define MASK_TYPE      0x0007000000000000
+#define MASK_SIGNATURE 0xffff000000000000
 
 // Type IDs for short encoded types
-const uint64_t MASK_TYPE_NAN     = 0x0000000000000000;
-const uint64_t MASK_TYPE_FALSE   = 0x0001000000000000;
-const uint64_t MASK_TYPE_TRUE    = 0x0002000000000000;
-const uint64_t MASK_TYPE_NULL    = 0x0003000000000000;
+#define MASK_TYPE_NAN   0x0000000000000000
+#define MASK_TYPE_FALSE 0x0001000000000000
+#define MASK_TYPE_TRUE  0x0002000000000000
+#define MASK_TYPE_NULL  0x0003000000000000
+
+// Signatures of encoded types
+#define SIGNATURE_NAN     kNaN
+#define SIGNATURE_FALSE   kFalse
+#define SIGNATURE_TRUE    kTrue
+#define SIGNATURE_NULL    kNull
 ```
 
-The 8-byte `VALUE` will become the replacement to the `Value*` from our tagged union implementation.
-The enum `ValueType` also remains from our previous implementation.
-The first set of hex-numbers are bitmasks which we use to access different segments of floating-point numbers.
-The `MASK_SIGNATURE` mask allows us to quickly determine the type of a value, by simply comparing
-the first 2 bytes (the Signature) to some constant value.
-The `MASK_TYPE_*` values are the type IDs that fit into the 3 bits next to the quiet-bit.
+We declare a `VALUE` type so we can differentiate between encoded NaNs and actual `uint64_t`s.
+Next we declare some constants related to the different segments of a float number.
+The `SIGNATURE_*` values allow us to quickly lookup the type of an encoded value.
 
 ```c
 VALUE create_float(double value) {
@@ -757,7 +464,13 @@ double decode_float(VALUE value) {
 }
 ```
 
-I told you encoding and decoding a float number was easy!
+As mentioned before, float values are basically free of charge.
+Its important to note here that we're doing the conversion between `double` and `VALUE` with
+a pointer dereference.
+This is so that the compiler doesn't generate any actual type conversion code.
+We want the underlying bytes of the value to stay the same, while changing the
+abstract type assigned to them.
+If you're familiar with C++, this would be a `reinterpret_cast`.
 
 ```c
 ValueType get_type(VALUE value) {
@@ -766,50 +479,19 @@ ValueType get_type(VALUE value) {
 
   // Short encoded types
   switch (signature) {
-    case kNaN | MASK_TYPE_NAN:     return TYPE_FLOAT;
-    case kNaN | MASK_TYPE_FALSE:
-    case kNaN | MASK_TYPE_TRUE:    return TYPE_BOOL;
-    case kNaN | MASK_TYPE_NULL:    return TYPE_NULL;
-    case kNaN | MASK_TYPE_INTEGER: return TYPE_INTEGER;
+    case SIGNATURE_NAN:   return TYPE_FLOAT;
+    case SIGNATURE_FALSE:
+    case SIGNATURE_TRUE:  return TYPE_BOOL;
+    case SIGNATURE_NULL:  return TYPE_NULL;
   }
 
   return TYPE_NULL;
 }
 ```
 
-The function `get_type` returns the `ValueType` of the passed value.
-
-First we check if our value is a regular NaN value, in which case it would belong to the Float type.
-Next we check if any of the exponent bits are set to 0, which tells us wether this value
-is a NaN or a real float value.
-The switch uses the different constant signatures to select which type to return.
-
-```c
-void print_value(VALUE value) {
-  switch (get_type(value)) {
-    case TYPE_FLOAT: {
-      printf("%f", decode_float(value));
-      break;
-    }
-
-    case TYPE_BOOL: {
-      printf("%s", value == kTrue ? "true" : "false");
-      break;
-    }
-
-    case TYPE_NULL: {
-      printf("null");
-      break;
-    }
-
-    default: {
-      printf("Unknown type!");
-    }
-  }
-}
-```
-
-We can use the `get_type` function to select specific printing code.
+The `get_type` function first checks for regular float values.
+We can detect these by checking if any of the exponent bits are set to 0.
+Next we switch over the signature of the encoded type and return the relevant type.
 
 ```c
 
@@ -831,7 +513,8 @@ int main() {
 }
 ```
 
-Finally we create some values and print them, resulting in the following console output:
+And we're done!
+Let's try to print some values.
 
 ```
 -512.123400
@@ -839,48 +522,63 @@ true
 null
 ```
 
+Nice!
+
 ## Integer encoding
 
-Lets implement integer encoding!
+Encoding integers is the next step in our implementation.
+It requires us to add a new type ID, payload mask and signature.
 
 ```c
-typedef enum : uint8_t {
+// The type of the stored value
+typedef enum {
+  TYPE_INTEGER,
   ...
-  TYPE_INTEGER
 } ValueType;
 
-const uint64_t MASK_PAYLOAD_INT = 0x00000000ffffffff;
-const uint64_t MASK_TYPE_INTEGER = 0x0004000000000000;
+#define MASK_PAYLOAD_INT  0x00000000ffffffff
+#define MASK_TYPE_INTEGER 0x0004000000000000
+#define SIGNATURE_INTEGER (kNaN | MASK_TYPE_INTEGER)
+```
 
-VALUE create_integer(uint32_t value) {
-  return kNaN | MASK_TYPE_INTEGER | value;
+In order to keep the following code simpler, I've opted to only use 32 bit integers.
+Because there is no actual native 48 bit integer type, you'd have to perform some
+bound checks to make sure the value you're trying to store wouldn't get truncated.
+We're not going to bother with that as it's not really important to get the core concept across.
+
+```c
+VALUE create_integer(int32_t value) {
+  return SIGNATURE_INTEGER | (uint32_t)value;
 }
 
 int32_t decode_integer(VALUE value) {
   return value & MASK_PAYLOAD_INT;
 }
+```
 
-ValueType get_type(VALUE value) {
-  ...
-  switch (signature) {
-    ...
-    case kNaN | MASK_TYPE_INTEGER: return TYPE_INTEGER;
-  }
-}
+Note how inside of the `create_integer` function we're casting the `int32_t` argument to
+a `uint32_t`.
+The reason we do this is to prevent negative integers from polluting the rest of the value.
 
-void print_value(VALUE value) {
-  switch (get_type(value)) {
-    ...
+```c
+0x0000000000000000 |  (int32_t)( 1) // 0x0000000000000001
+0x0000000000000000 |  (int32_t)(-1) // 0xffffffffffffffff
+0x0000000000000000 | (uint32_t)(-1) // 0x000000000000ffff
+```
 
-    case TYPE_INTEGER: {
-      printf("%i", decode_integer(value));
-      break;
-    }
-  }
-}
+The reason this happens is because of an operation called "sign extension".
+When casting from a smaller to a bigger type (in our case an implicit cast from `int32_t` to `uint64_t`)
+the value will be sign extended to preserve its sign (positive / negative).
+For example, if eight bits are used to store the number "`0101 1110`" (decimal 94) and we extend this
+number to 16 bits, the resulting value would be stored as "`0000 0000 0101 1110`".
+If eight bits are used to store the number "`1110 1010`" (decimal -22) and we extend this number
+to 16 bits, the resulting value would be stored as "`1111 1111 1110 1010`".
+We do not want this to happen so we cast the signed integer value to its unsigned counterpart, removing
+the sign extension operation completely.
 
+```c
 int main() {
-  VALUE v_int     = create_integer(25);
+  VALUE v_int = create_integer(-25);
   print_value(v_int);
   printf("\n");
 
@@ -890,15 +588,11 @@ int main() {
 }
 ```
 
-Encoding an integers means simply masking all the different components together.
-Decoding becomes equally simple, just mask out the integer and you got it.
-I've done the relevant changes to the functions `get_type` and `print_value`
-that allow us to print encoded integer values.
-
-Running the new extended program results in the following output:
+I've also changed the methods `get_type` and `print_value` to support our newly added integer encoding.
+Let's add it to our testing code and see what we get:
 
 ```c
-25
+-25
 -512.123400
 true
 null
@@ -907,24 +601,34 @@ null
 Great!
 We now have the ability to encode integers, floats, booleans and "null".
 
-It is important to note however, that using NaN boxing reduces our numeric range to a theoretical
-maximum of 48-bits.
-Practically speaking this means you're going to use 32-bit numbers, or do a bunch of custom decoding
-logic to use the full 48-bits.
-I'm not going to bother with that, so lets move on.
-
 ## Heap containers - Arrays
 
-We can largely reuse the code from our tagged union implementation, with some minor changes.
+Let's implement pointer encoding and the heap allocated array type.
+For that we're going to add the new type ID, payload mask and signature.
 
 ```c
-#include <string.h>   // for memcpy
-
-typedef enum : uint8_t {
+// The type of the stored value
+typedef enum {
   ...
   TYPE_ARRAY
 } ValueType;
 
+#define MASK_PAYLOAD_PTR 0x0000ffffffffffff
+#define SIGNATURE_POINTER (kNaN | MASK_SIGN)
+```
+
+To actually store our array in memory we can now reintroduce tagged unions.
+
+> Hold on, I thought we were moving away from tagged unions?
+
+We indeed are!
+In a way...
+NaN boxing the small types has allowed us to remove them from our
+tagged union struct.
+Now, the only types that are still lift inside it are types which are relatively big, as compared
+to small types like integers or booleans.
+
+```c
 // Container for arrays
 typedef struct {
   VALUE* data;
@@ -940,114 +644,46 @@ typedef struct {
     Array as_array;
   };
 } HeapValue;
-
-const uint64_t MASK_PAYLOAD_PTR = 0x0000ffffffffffff;
-
-VALUE create_pointer(HeapValue* ptr) {
-  return kNaN | MASK_SIGN | (uint64_t)ptr;
-}
-
-HeapValue* decode_pointer(VALUE value) {
-  return (HeapValue*)(value & MASK_PAYLOAD_PTR);
-}
-
-VALUE create_array(VALUE* data, uint32_t count) {
-  HeapValue* ptr = (HeapValue*)malloc(sizeof(HeapValue));
-  ptr->type = TYPE_ARRAY;
-
-  // Calculate initial capacity
-  uint32_t initial_capacity = 4;
-  while (initial_capacity < count) {
-    initial_capacity *= 2;
-  }
-
-  // Allocate value buffer and copy over elements
-  size_t value_buffer_size = sizeof(VALUE) * initial_capacity;
-  VALUE* value_buffer = (VALUE*)malloc(value_buffer_size);
-  memcpy(value_buffer, data, sizeof(VALUE) * count);
-
-  ptr->as_array.data = value_buffer;
-  ptr->as_array.length = count;
-  ptr->as_array.capacity = initial_capacity;
-
-  return create_pointer(ptr);
-}
-
-ValueType get_type(VALUE value) {
-  ...
-    if (signature == (kNaN | MASK_SIGN)) {
-      HeapValue* ptr = decode_pointer(value);
-      return ptr->type;
-    }
-  ...
-}
-
-void print_value(VALUE value) {
-  switch (get_type(value)) {
-    ...
-    case TYPE_ARRAY: {
-      HeapValue* val = decode_pointer(value);
-
-      printf("[");
-      for (uint32_t i = 0; i < val->as_array.length; i++) {
-        print_value(val->as_array.data[i]);
-        if (i != val->as_array.length - 1) printf(", ");
-      }
-      printf("]");
-
-      break;
-    }
-  }
-}
-
-int main() {
-  VALUE v_int     = create_integer(25);
-  VALUE v_float   = create_float(-512.1234);
-  VALUE v_bool    = kTrue;
-  VALUE v_null    = kNull;
-
-  VALUE values[4] = { v_int, v_float, v_bool, v_null};
-  VALUE v_array   = create_array(values, 4);
-
-  print_value(v_array);
-
-  return 0;
-}
 ```
 
-We're going to reuse some components from the tagged-union implementation again.
-The `Value` struct got renamed to `HeapValue` to avoid confusing it with our new `VALUE` type.
-The `Array` struct is also brought back with minor changes.
-The function `create_array` remains unchanged, only updating some changed type names.
+We're re-adding the Array and Value structs from our tagged union example.
+`Value` got renamed to `HeapValue` to prevent confusing it with our new `VALUE` type.
 
 ```c
 VALUE create_pointer(HeapValue* ptr) {
-  return kNaN | MASK_SIGN | (uint64_t)ptr;
+  return SIGNATURE_POINTER | (uint64_t)ptr;
 }
 
 HeapValue* decode_pointer(VALUE value) {
   return (HeapValue*)(value & MASK_PAYLOAD_PTR);
 }
+```
 
+Encoding and decoding pointers, easy!
+
+```c
+VALUE create_array(VALUE* data, uint32_t count);
+```
+
+The `create_array` function can also be largely reused, only some types need to be changed in order
+for it to work.
+Again, the full source code is linked at the end of this article.
+
+```c
 ValueType get_type(VALUE value) {
+  uint64_t signature = value & MASK_SIGNATURE;
   ...
-    if (signature == (kNaN | MASK_SIGN)) {
-      HeapValue* ptr = decode_pointer(value);
-      return ptr->type;
-    }
+  if (signature == SIGNATURE_POINTER) {
+    HeapValue* ptr = decode_pointer(value);
+    return ptr->type;
+  }
   ...
+  return TYPE_NULL;
 }
 ```
 
-The functions `create_pointer` and `decode_pointer` are almost identical to the
-integer-encoding equivalents.
-
-The `get_type` method needs to do some more work to figure out the type of a pointer.
-This scheme only works if you're 100% sure that each pointer-`VALUE` can only point to
-our custom `HeapValue` struct, meaning we know the exact layout of the memory where the
-pointer points to.
-We check for the pointer-specific signature and then just return the type field of the
-`HeapValue` struct.
+In order to figure out what type a pointer points to, we have to decode it and look up the
+`type` field in the `HeapValue` object.
 
 ```c
 void print_value(VALUE value) {
@@ -1069,13 +705,14 @@ void print_value(VALUE value) {
 }
 ```
 
-In order to print our newly added `Array` type, we iterate over each item
-stored in it.
-We also print some brackets and commas in order to improve readability.
+Adding the print handling code for the array type turns the `print_value` function into a
+recursive function.
+We iterate over each item stored inside the array and call `print_value` on it.
+After every item, except the last one, we emit a comma in order to improve readability at a first glance.
 
 ```c
 int main() {
-  VALUE v_int     = create_integer(25);
+  VALUE v_int     = create_integer(-25);
   VALUE v_float   = create_float(-512.1234);
   VALUE v_bool    = kTrue;
   VALUE v_null    = kNull;
@@ -1089,18 +726,16 @@ int main() {
 }
 ```
 
-I've updated the main method to now wrap all other types into an array, then print it.
-This results in the following output:
+Let's wrap all available types into a single array and print it and see what it gives us:
 
 ```
-[25, -512.123400, true, null]
+[-25, -512.123400, true, null]
 ```
 
 Cool!
-We've now implemented arrays.
-Adding new heap types is also pretty straightforward, just follow the same process
-as we did when adding the `Array` type.
-You can pretty easily implement maps (hashtables), strings and many other data structures like this.
+It works!
+
+Via the same procedure you can now add even more types such as strings or hashmaps.
 
 ## Encoding strings of N <= 6
 
@@ -1115,12 +750,16 @@ I hereby distinguish packed (N = 6) from non-packed (N < 6) strings.
 0[Exponent-]1101[Char 6][Char 5][Char 4][Char 3][Char 2][Char 1]
 ```
 
-Lets first talk about the packed string, as its the simpler concept.
+Let's first talk about the packed string, as its the simpler concept.
 The packed string is simply a special short encoded string type which refers
 to strings that are exactly 6 bytes in length.
 
-The reason the bytes are stored in reverse, with the first byte being stored in the
-least significant byte, is because of the endianness of the target machine.
+You know those 48 bits that we use to store pointers or integers?
+There is nothing preventing us from splitting these into six one-byte chunks and store
+a single character in each one of them.
+
+But why does it look like the bytes are stored in reverse?
+This has to do with the endianness, or byte-order of the architecture.
 The gist is, because little-endian machines store their bytes in reverse order
 (least-significant byte first, most-significant byte last) we have to also store
 our string in reverse order.
@@ -1138,9 +777,6 @@ it as a regular character buffer.
 The non-packed string allows us to store strings ranging from 0 up to 5 bytes in length.
 We replace the sixth byte with the length property, storing how many of the other bytes
 are actual data.
-You might get the idea of setting the unused bytes to 0, effectively storing the string
-as a null-terminated sequence of bytes.
-I've choosen not to do that, because I want to be able to pass around null bytes as actual data.
 
 I'll leave the implementation of these two types as an exercise to the reader.
 If you don't want to figure this out yourself, you can go check out the source code
@@ -1148,10 +784,10 @@ for my own programming language Charly, the github link is at the end of this ar
 
 ## Alternatives
 
-Another viable alternative to using tagged-unions is a technique called pointer tagging.
+Another viable alternative to using tagged unions is a technique called pointer tagging.
 Pointer tagging relies on the fact that all regularly allocated pointers are aligned to
 8 bytes.
-To find out how exactly pointer-tagging works, I will kindly redirect you to my friend Max's blog.
+To find out how exactly pointer tagging works, I will kindly redirect you to my friend Max's blog.
 He has a great series going on where he implements a Lisp to x86 compiler, from scratch, in C.
 The following two articles contain his implementation of pointer tagging.
 
@@ -1162,7 +798,7 @@ The following two articles contain his implementation of pointer tagging.
 
 I hope you found this article interesting and that it provided you with a basic understanding
 of how NaN boxing works.
-If you want to see an actual implementation of NaN boxing inside a language-runtime,
+If you want to see an actual implementation of NaN boxing inside a language runtime,
 please check out my toy programming language [Charly](https://github.com/KCreate/charly-vm).
 
 ## Links
