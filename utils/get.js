@@ -19,6 +19,10 @@ module.exports = function get(url, method, options, _callback) {
         xhr.setRequestHeader("Content-type", "application/json");
     }
 
+    if (options.noCache) {
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+    }
+
     // Curry the callback
     xhr.addEventListener("load", callback.bind(xhr, undefined), false);
     xhr.addEventListener("abort", callback.bind(xhr, xhr), false);

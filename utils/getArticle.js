@@ -8,7 +8,7 @@ import get from "./get";
  * @param  {function} callback - callback function receiving the results
  */
 function categoryList(category, callback) {
-    get("/resources/" + category + "/", "GET", {}, (err, res) => {
+    get("/resources/" + category + "/", "GET", { noCache: true }, (err, res) => {
         if (err) throw err;
 
         let directory;
@@ -35,7 +35,7 @@ module.exports.categoryList = categoryList;
  * @param  {function} callback - callback function receiving the results
  */
 function articlesList(category, name, callback) {
-    get("/resources/" + category + "/" + name + "/", "GET", {}, (err, res) => {
+    get("/resources/" + category + "/" + name + "/", "GET", { noCache: true }, (err, res) => {
         if (err) throw err;
 
         let directory;
@@ -63,7 +63,7 @@ module.exports.articlesList = articlesList;
  * @param  {function} callback - callback function receiving the results
  */
 function getFile(category, name, file, callback) {
-    get("/resources/" + category + "/" + name + "/" + file, "GET", {}, (err, res, xhr) => {
+    get("/resources/" + category + "/" + name + "/" + file, "GET", { noCache: true }, (err, res, xhr) => {
         if (err) throw err;
 
         if (xhr.status === 404) {
