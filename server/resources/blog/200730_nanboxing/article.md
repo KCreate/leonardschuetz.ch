@@ -256,8 +256,7 @@ Value* create_array(Value** data, uint32_t count) {
 ```
 
 The `create_array` function starts off by calculating the initial capacity.
-We do this by doubling the default capacity (4) until we have enough space to fit in
-`count` items.
+This is done by finding the nearest power of 2 that is big enough to fit `count` items.
 Afterwards we allocate the buffer and copy all the items into it.
 
 ```c
@@ -317,6 +316,9 @@ This is where NaN boxing comes in.
 NaN boxing allows you to cram extra information into the NaN value that exists
 within the floating-point spectrum of numbers.
 Let's take a look at how a `double` is stored in memory.
+
+> Note: All the bit diagrams in this article have the high bit at the left side and the low bit
+> on the right.
 
 ```
 +- Sign bit
@@ -563,7 +565,7 @@ The reason we do this is to prevent negative integers from polluting the rest of
 ```c
 0x0000000000000000 |  (int32_t)( 1) // 0x0000000000000001
 0x0000000000000000 |  (int32_t)(-1) // 0xffffffffffffffff
-0x0000000000000000 | (uint32_t)(-1) // 0x000000000000ffff
+0x0000000000000000 | (uint32_t)(-1) // 0x00000000ffffffff
 ```
 
 The reason this happens is because of an operation called "sign extension".
@@ -625,7 +627,7 @@ We indeed are!
 In a way...
 NaN boxing the small types has allowed us to remove them from our
 tagged union struct.
-Now, the only types that are still lift inside it are types which are relatively big, as compared
+Now, the only types that are still left inside it are types which are relatively big, as compared
 to small types like integers or booleans.
 
 ```c
@@ -782,9 +784,16 @@ I'll leave the implementation of these two types as an exercise to the reader.
 If you don't want to figure this out yourself, you can go check out the source code
 for my own programming language Charly, the github link is at the end of this article.
 
+## Conclusion
+
+I hope you found this article interesting and that it provided you with a basic understanding
+of how NaN boxing works.
+If you want to see an actual implementation of NaN boxing inside a language runtime,
+please check out my toy programming language [Charly](https://github.com/KCreate/charly-vm).
+
 ## Alternatives
 
-Another viable alternative to using tagged unions is a technique called pointer tagging.
+An alternative to NaN-boxing that worth mentioning is a technique called pointer tagging.
 Pointer tagging relies on the fact that all regularly allocated pointers are aligned to
 8 bytes.
 To find out how exactly pointer tagging works, I will kindly redirect you to my friend Max's blog.
@@ -793,13 +802,6 @@ The following two articles contain his implementation of pointer tagging.
 
 - [Compiling a Lisp: Integers](https://bernsteinbear.com/blog/compiling-a-lisp-2/)
 - [Compiling a Lisp: Booleans, characters, nil](https://bernsteinbear.com/blog/compiling-a-lisp-3/)
-
-## Conclusion
-
-I hope you found this article interesting and that it provided you with a basic understanding
-of how NaN boxing works.
-If you want to see an actual implementation of NaN boxing inside a language runtime,
-please check out my toy programming language [Charly](https://github.com/KCreate/charly-vm).
 
 ## Links
 
@@ -810,4 +812,4 @@ Source code:
 Other stuff:
 - [@mechantecerises IG (Header Graphic)](https://www.instagram.com/mechantecerises)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
-- [Max Bernsteins Blog](https://bernsteinbear.com)
+- [Max Bernstein's Blog](https://bernsteinbear.com)

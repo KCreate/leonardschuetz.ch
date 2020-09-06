@@ -48,7 +48,7 @@ class MarkdownPreviewer extends Component {
             }
 
             this.debounce = setTimeout(() => {
-                get(this.state.source, "GET", {}, (err, response) => {
+                get(this.state.source, "GET", { noCache: true }, (err, response) => {
                     if (err) return;
 
                     this.setState({
