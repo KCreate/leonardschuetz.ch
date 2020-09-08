@@ -19,7 +19,6 @@ class StaticBlogArticles extends Component {
 
     componentDidMount() {
         this.props.navigation.forEach((item, index) => {
-
             const source = item[0];
 
             // Request a list of all articles inside the category
@@ -62,14 +61,22 @@ class StaticBlogArticles extends Component {
         // Check if we only want to display a single blog article
         if (this.props.articlename) {
             const blog_sources = this.state.sources["blog"];
-            if (!blog_sources) return (<div><Card># Could not find article.</Card></div>);
+            if (!blog_sources) return (<div><Card># Loading...</Card></div>);
             let article
 
             blog_sources.map((item, index) => {
                 if (item.meta.filename == this.props.articlename) article = item;
             })
 
-            if (!article) return (<div><Card># Could not find article.</Card></div>);
+            if (!article) return (
+                <div>
+                    <Card>
+                        # Could not find article.
+                        <p>
+                          {"If you're sure you typed everything right, please try reloading the page."}
+                        </p>
+                    </Card>
+                </div>);
 
             article = <Card key={0} meta={article.meta}>{article.markdown}</Card>
 
