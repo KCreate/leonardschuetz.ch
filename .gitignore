@@ -1,13 +1,2 @@
 /.git
-
-/node_modules
-/npm-debug.log
 *.swp
-/dist
-
-/server/resources/versionedDocuments
-/server/config.json
-/server/todos/data.json
-/server/livechat/tmp
-
-/server/logs

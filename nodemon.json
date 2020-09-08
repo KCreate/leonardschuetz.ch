@@ -1,9 +1,0 @@
-{
-    "verbose": true,
-    "ignore": [
-        "server/resources",
-        "server/livechat/tmp",
-        "data.json",
-        "config.json"
-    ]
-}
