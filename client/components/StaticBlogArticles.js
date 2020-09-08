@@ -95,7 +95,7 @@ class StaticBlogArticles extends Component {
         let cards = this.state.sources[this.props.active]
         .filter((item) => !item.meta.hidden)
         .map((item, index) => (
-            <Card key={index} meta={item.meta}>
+            <Card key={index} meta={item.meta} preview={this.props.active === "blog"}>
                 {item.markdown}
             </Card>
         ));

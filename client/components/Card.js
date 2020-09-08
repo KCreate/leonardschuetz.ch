@@ -108,12 +108,23 @@ class Card extends Component {
             article_address = "/blog/" + this.props.meta.filename
         }
 
-        return (
-            <div className={"Card" + (this.props.className || "")}>
-                {this.getMarkdown()}
-                {article_address ? <a href={article_address}>Share article</a> : undefined}
-            </div>
-        );
+        if (this.props.preview) {
+            return (
+                <div className={"Card" + (this.props.className || "")}>
+                    <Markdown className="Card-Content" container="div" options={MarkdownConfigHighlight}>
+                        <h1><a className="Card-Header-Link" href={article_address}>{this.props.meta.title}</a></h1>
+                        <h2>{this.props.meta.date}</h2>
+                    </Markdown>
+                </div>
+            );
+        } else {
+            return (
+                <div className={"Card" + (this.props.className || "")}>
+                    {this.getMarkdown()}
+                    {article_address ? <a href={article_address}>Share article</a> : undefined}
+                </div>
+            );
+        }
     }
 }
 

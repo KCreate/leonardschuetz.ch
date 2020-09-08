@@ -1,6 +1,5 @@
-### Draft
 # Dynamic Typing and NaN Boxing
-## The very near future
+## 8. September 2020
 
 ![NaN Boxing by @mechantecerises](%%PATH%%/nan-boxing.png)
 
@@ -806,8 +805,8 @@ The following two articles contain his implementation of pointer tagging.
 ## Links
 
 Source code:
-- [nan-boxing.c](https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200730_nanboxing/nan-boxing.c)
-- [tagged-union.c](https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200730_nanboxing/tagged-union.c)
+- [nan-boxing.c](https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/nan-boxing.c)
+- [tagged-union.c](https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/tagged-union.c)
 
 Other stuff:
 - [@mechantecerises IG (Header Graphic)](https://www.instagram.com/mechantecerises)

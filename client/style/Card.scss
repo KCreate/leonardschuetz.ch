@@ -59,7 +59,7 @@
 
             // Make links a different color
             & > a {
-                color: $colorBlue2;
+                color: $colorDark1;
                 text-decoration: underline;
             }
         }
@@ -230,7 +230,7 @@
         pre > code {
             background-color: $colorDark3;
             color: $colorLight1;
-            padding: 10px 16px;
+            padding: 10px 14px;
             overflow-x: auto;
             border-radius: 0;
 
