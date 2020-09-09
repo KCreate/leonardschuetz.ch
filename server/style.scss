@@ -1,0 +1,165 @@
+@import 'constants.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#content {
+  max-width: 900px;
+  margin: 20px auto 0 auto;
+  padding: 0 20px;
+
+  hr {
+    border: 0;
+    border-top: 3px dotted $colorTheme;
+    margin: 1em 0;
+  }
+}
+
+a {
+  color: inherit;
+  border-bottom: 3px solid $colorTheme;
+  text-decoration: none;
+
+  &:hover {
+    color: white;
+    background-color: $colorTheme;
+  }
+}
+
+header {
+  height: 40px;
+  font-family: Roboto Mono;
+  font-size: 16pt;
+
+  #name-container {
+    display: inline-block;
+  }
+
+  a {
+    line-height: 40px;
+    vertical-align: middle;
+    height: 100%;
+    padding: 0 4px;
+    color: black;
+  }
+
+  nav {
+    float: right;
+  }
+
+  @include mobile-small {
+    height: 70px;
+    font-size: 14pt;
+
+    #name-container {
+      width: 100%;
+      text-align: center;
+
+      a {
+        display: inline-block;
+      }
+    }
+
+    nav {
+      width: 100%;
+      text-align: center;
+
+      a {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+main {
+  font-family: Noto Sans;
+  margin: 15px 0;
+  padding: 15px 5px;
+
+  min-height: 600px;
+
+  @include mobile-small {
+    min-height: 0;
+  }
+
+  p {
+    padding: 5px 0;
+    line-height: 1.5em;
+  }
+}
+
+$heightFooter: 30px;
+footer {
+  height: $heightFooter;
+  font-family: Roboto Mono;
+  font-size: 0pt;
+  margin-bottom: 20px;
+
+  #social-links {
+    display: inline-block;
+    height: $heightFooter;
+
+    a {
+      display: inline-block;
+      margin: 0 5px;
+      padding-bottom: 3px;
+    }
+  }
+
+  #open-source-notice {
+    display: inline-block;
+    height: $heightFooter;
+    float: right;
+    font-size: 12pt;
+  }
+
+  @include mobile-small {
+    #social-links {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
+    #open-source-notice {
+      margin-top: 5px;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+#article-listing {
+  list-style-type: none;
+
+  li {
+    &::before {
+      content: "#";
+      margin-left: -15px;
+      margin-right: 10px;
+      color: $colorYellow1;
+      font-weight: bold;
+    }
+
+    max-width: 500px;
+    margin: 8px 0;
+
+    > a {
+
+    }
+
+    .submission-date {
+      background-color: $colorLight1;
+      border-radius: 2px;
+      padding: 2px 6px;
+      float: right;
+
+      @include mobile {
+        display: none;
+      }
+    }
+  }
+}
