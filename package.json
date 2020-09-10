@@ -1,0 +1,25 @@
+{
+  "name": "leonardschuetz.ch",
+  "version": "1.0.0",
+  "description": "Leonard Schütz personal website",
+  "main": "index.html",
+  "dependencies": {
+    "http-server": "^0.12.3"
+  },
+  "devDependencies": {
+    "marked": "^1.1.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KCreate/leonardschuetz.ch.git"
+  },
+  "author": "Leonard Schütz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KCreate/leonardschuetz.ch/issues"
+  },
+  "homepage": "https://github.com/KCreate/leonardschuetz.ch#readme"
+}

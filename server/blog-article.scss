@@ -1,0 +1,183 @@
+main.blog-article {
+
+  $elementMargin: 16px;
+  > * {
+    margin: $elementMargin 0;
+    font-size: 18px;
+    word-break: break-word;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  > h1, h2, h3, h4, h5, h6 {
+    border-left: 4px solid $colorTheme;
+    padding-left: 8px;
+  }
+
+  > h1 { font-size: 28px; }
+  > h2 { font-size: 22.4px; }
+  > h3 { font-size: 20px; }
+  > h4 { font-size: 20px; }
+  > h5 { font-size: 20px; }
+  > h6 { font-size: 20px; }
+
+  // Join adjacent descending headers together
+  @for $i from 1 through 6 {
+      @if $i < 6 {
+          // Join descending headers together
+          > h#{$i} + h#{$i+1} {
+              margin-top: -$elementMargin;
+          }
+      }
+  }
+
+  hr {
+    width: calc(100% - 8px);
+    margin: $elementMargin auto;
+    display: block;
+    height: 4px;
+    border: none;
+    background-color: $colorTheme;
+  }
+
+  ol, ul {
+    list-style: none;
+    padding-left: 1em;
+
+    li {
+      margin-bottom: 5px;
+
+      &::last-child {
+        margin-bottom: 0px;
+      }
+
+      &::before {
+        content: "- ";
+      }
+    }
+  }
+
+  /* Inline code blocks */
+  p code {
+    background-color: $colorLight1;
+    display: inline-block;
+    padding: 0 4px;
+    margin: 0;
+    border-radius: 2px;
+
+    font-size: 90%;
+    font-family: $fontCode;
+  }
+
+  strong {
+    font-weight: bold;
+    font-size: 95%;
+  }
+
+  blockquote > p {
+    background-color: $colorLight1;
+    padding: 10px 8px;
+    border-left: 4px solid $colorLight3;
+
+    > code {
+      background-color: $colorLight3;
+    }
+  }
+
+  figure, p {
+    img {
+      display: block;
+      width: calc(75%);
+      margin: 0 auto;
+      border-radius: 3px;
+      box-shadow: $shadow2;
+
+      &[alt*="noshadow"] {
+        box-shadow: none;
+      }
+
+      &[alt*="no-smooth"] {
+        image-rendering: pixelated;
+        -ms-interpolation-mode: nearest-neighbor;
+      }
+    }
+
+    figcaption {
+      display: none;
+    }
+  }
+
+  pre {
+    word-break: break-all;
+  }
+
+  // Non-inline code blocks
+  //
+  // Pandoc generates highlighted and non-highlighted blocks differently
+  // so we have to accomodate both styles
+  div.sourceCode {
+    background-color: white;
+  }
+  pre > code, code.sourceCode > pre > code {
+    padding: 10px 14px;
+    overflow-x: auto;
+    border-radius: 5px;
+
+    font-size: 75%;
+    font-family: $fontCode;
+    line-height: 1.45;
+    display: block;
+
+    background-color: $colorLight1;
+
+    > span {
+      float: left;
+    }
+
+    * {
+      font-weight: 400;
+      text-decoration: none;
+      font-family: $fontCode;
+    }
+  }
+
+  table {
+    width: 100%;
+    background-color: $colorLight1;
+    box-shadow: $shadow1;
+    border-collapse: collapse;
+    border-radius: 2px;
+    overflow: hidden;
+
+    tr {
+        border: 2px solid $colorLight2;
+    }
+
+    th, td {
+        padding: 4px 6px;
+    }
+
+    th {
+        height: 40px;
+    }
+
+    td {
+        height: 36px;
+        border: 2px solid $colorLight2;
+    }
+
+    strong {
+        padding: 0;
+        color: $colorBlue1;
+    }
+
+    thead {
+        background-color: $colorLight2;
+        tr th {
+            text-align: left;
+        }
+    }
+  }
+}
