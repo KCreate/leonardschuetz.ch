@@ -111,6 +111,10 @@ main.blog-article {
         image-rendering: pixelated;
         -ms-interpolation-mode: nearest-neighbor;
       }
+
+      @include mobile-small {
+        width: 100%;
+      }
     }
 
     figcaption {

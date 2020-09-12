@@ -108,6 +108,11 @@ main.blog-article figure img[alt*=no-smooth], main.blog-article p img[alt*=no-sm
   image-rendering: pixelated;
   -ms-interpolation-mode: nearest-neighbor;
 }
+@media (max-width: 450px) {
+  main.blog-article figure img, main.blog-article p img {
+    width: 100%;
+  }
+}
 main.blog-article figure figcaption, main.blog-article p figcaption {
   display: none;
 }

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--
+██   ██ ███████ ██      ██       ██████  ██ 
+██   ██ ██      ██      ██      ██    ██ ██ 
+███████ █████   ██      ██      ██    ██ ██ 
+██   ██ ██      ██      ██      ██    ██    
+██   ██ ███████ ███████ ███████  ██████  ██ 
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Writing a virtual machine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Leonard Schütz">
+    <meta name="description" content="Writing a stack based virtual machine">
+    <meta name="keywords" content="leonard schütz, programming, compilers, ">
+    <meta name="language" content="English">
+    <meta name="contact" content="leni.schuetz@me.com">
+    <meta name="date" content="Sun, 23 Apr 2017 16:00:00 +0100">
+
+    <meta property="og:url" content="https://leonardschuetz.ch/">
+    <meta property="og:title" content="Writing a virtual machine">
+    <meta property="og:description" content="Writing a stack based virtual machine">
+    <meta property="og:site_name" content="Leonard Schütz">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@leni4838">
+    <meta name="twitter:title" content="Writing a virtual machine">
+    <meta name="twitter:description" content="Writing a stack based virtual machine">
+
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
+    <link rel="alternate" type="application/rss+xml" title="Blog" href="/feed.xml" />
+
+      </head>
+  <body>
+    <div id="content">
+      <header>
+        <div id="name-container">
+          <a href="/">leonard schütz</a>
+        </div>
+        <nav>
+          <a href="/">home</a>
+          <a href="/blog">blog</a>
+        </nav>
+      </header>
+      <main class="blog-article">
+<h1 id="writing-a-virtual-machine">Writing a virtual machine</h1>
+<h2 id="april-2017">23. April 2017</h2>
+<p>In the last couple months, my main focus was on writing a virtual machine from scratch. What I wanted was a fully turing-complete machine which would support the following features right out of the box:</p>
+<ul class="incremental">
+<li>64-bit floating point calculations</li>
+<li>An implementation of a call stack</li>
+<li>Registers of varying size</li>
+<li>It shouldn’t be slow</li>
+<li>Implement a debugger to step through execution</li>
+<li>Separate process that shows a vram monitor</li>
+</ul>
+<p>Besides the actual instruction set, I’ve also created my own version of an assembly language. The syntax of the language is strongly inspired by the AVR assembly language.</p>
+<h2 id="overview">Overview</h2>
+<p>The general principle behind a virtual machine is pretty easy to grasp. What you have is a list of instructions, some registers of a given size and memory. Not all virtual machines have the same amount of registers and not all registers have the same meaning assigned to them.</p>
+<p>One of the registers is the <code>ip</code> (Instruction Pointer) register. It points to the current instruction. At the beginning of each cycle, the machine reads an opcode from the address pointed to by the <code>ip</code> register. It then runs the assigned task of that instruction.</p>
+<p>The meaning of each opcode is completly up to the semantic design of the machine. One could assign any meaning to an opcode.</p>
+<h2 id="encoding">Encoding</h2>
+<p>The executable format the machine expects is divided into two parts.</p>
+<pre><code>+--------------------------------------------------------+
+| - Header section                                       |
+|                                                        |
+| magic            : ascii encoded NICE                  |
+| entry_addr       : initial value of the ip register    |
+| load_table_size  : number of entries in the load table |
+| load_table       : load table                          |
++--------------------------------------------------------+
+| - Segments section                                     |
++--------------------------------------------------------+</code></pre>
+<p>Each entry consts of three integers.</p>
+<pre><code>+--------------------------------------------------------+
+| - Load table entry                                     |
+|                                                        |
+| offset  : offset into the executables segments section |
+| size    : size of the segment                          |
+| address : target address in the machines memory        |
++--------------------------------------------------------+</code></pre>
+<p>Given the following assembly file:</p>
+<pre class="avrasm"><code>.org 0x500
+.label entry_addr
+  loadi r0, 25
+  loadi r1, 25
+  add r0, r0, r1
+
+.org 0x600
+.db msg_welcome 11 &quot;hello world&quot;</code></pre>
+<p>The machine would load the three instructions onto address <code>0x500</code> and the <code>"hello world"</code> constant at address <code>0x600</code>.</p>
+<h2 id="registers">Registers</h2>
+<p>Available registers:</p>
+<ul class="incremental">
+<li><code>r0 - r59</code> General purpose registers</li>
+<li><code>ip</code> Instruction pointer</li>
+<li><code>sp</code> Stack pointer</li>
+<li><code>fp</code> Frame pointer</li>
+<li><code>flags</code> Flags register</li>
+</ul>
+<p>The machine’s registers are able to hold a 64-bit value. By default however, only the lower 32-bits are targeted. The below code reads 16 bytes from a buffer at <code>0x500</code> and writes each <code>dword</code> into the registers <code>r0</code> to <code>r3</code>. It also demonstrates the automatic label resolution and offset calculation features in the assembler.</p>
+<pre class="avrasm"><code>.def BUFFER_SIZE 16
+
+.label entry_addr
+  readc r0, (buffer + 0)
+  readc r1, (buffer + 4)
+  readc r2, (buffer + 8)
+  readc r3, (buffer + 12)
+
+.org 0x500
+.db buffer BUFFER_SIZE 0</code></pre>
+<h2 id="virtual-display">Virtual Display</h2>
+<p>The last 38’800 bytes in memory are reserved for VRAM. The monitor process, which is also built into the vm, displays the contents of this area in memory in color. The monitor supports <code>255</code> different colors. A single byte encodes the color of a single pixel as <code>rrrgggbb</code>.</p>
+<figure>
+<img src="virtual-display.gif" alt="Virtual Display" /><figcaption aria-hidden="true">Virtual Display</figcaption>
+</figure>
+<h2 id="roadmap">Roadmap</h2>
+<p>In the months to come, I want to focus on writing some built-in methods for doing graphics stuff. I’d also like to experiment with writing a simple compiler to be able to use a subset of C on my vm.</p>
+<p>I’m open for contributions of any kind and I’d love to get some feedback on the design of my vm.</p>
+<p>The repository is on GitHub at <a href="https://github.com/KCreate/stackvm">github.com/KCreate/stackvm</a> and is licensed under the MIT license.</p>
+      </main>
+      <hr/>
+      <footer>
+        <div id="social-links">
+          <a href="https://github.com/KCreate">
+            <img height="20" width="20" src="/resources/github.svg" alt="GitHub Link"/>
+          </a>
+          <a href="https://twitter.com/leni4838">
+            <img height="20" width="20" src="/resources/twitter.svg" alt="Twitter Link"/>
+          </a>
+          <a href="https://linkedin.com/in/leonardschuetz">
+            <img height="20" width="20" src="/resources/linkedin.svg" alt="LinkedIn Link"/>
+          </a>
+          <a href="mailto:leni.schuetz@me.com?subject=Hello%20Leonard!">
+            <img height="20" width="20" src="/resources/mail.svg" alt="Email Link"/>
+          </a>
+          <a href="/rss.xml">
+            <img height="20" width="20" src="/resources/rss.svg" alt="RSS Link"/>
+          </a>
+        </div>
+        <div id="open-source-notice">
+          <span>this blog is <a href="https://github.com/KCreate/leonardschuetz.ch">open-source</a></span>
+        </div>
+      </footer>
+      <span id="copyright">Copyright © 2020 Leonard Schütz | <a href="/attributions">Attributions</a></span>
+    </div>
+  </body>
+  <script src="/script.js" async></script>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+</html>
