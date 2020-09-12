@@ -1,4 +1,6 @@
 main.blog-article {
+  font-size: 12pt;
+
   &#index-page {
     > * {
       margin: 0;
@@ -8,7 +10,6 @@ main.blog-article {
   $elementMargin: 16px;
   > * {
     margin: $elementMargin 0;
-    font-size: 16px;
     word-break: break-word;
 
     &:first-child {
@@ -22,12 +23,12 @@ main.blog-article {
     font-weight: normal;
   }
 
-  > h1 { font-size: 28px; }
-  > h2 { font-size: 22.4px; }
-  > h3 { font-size: 20px; }
-  > h4 { font-size: 20px; }
-  > h5 { font-size: 20px; }
-  > h6 { font-size: 20px; }
+  > h1 { font-size: 21pt; }
+  > h2 { font-size: 16pt; }
+  > h3 { font-size: 15pt; }
+  > h4 { font-size: 15pt; }
+  > h5 { font-size: 15pt; }
+  > h6 { font-size: 15pt; }
 
   // Join adjacent descending headers together
   @for $i from 1 through 6 {
@@ -76,13 +77,13 @@ main.blog-article {
     margin: 0;
     border-radius: 2px;
 
-    font-size: 90%;
+    font-size: 11pt;
     font-family: $fontCode;
   }
 
   strong {
     font-weight: bold;
-    font-size: 95%;
+    font-size: 11pt;
   }
 
   blockquote > p {
@@ -138,7 +139,7 @@ main.blog-article {
     overflow-x: auto;
     border-radius: 3px;
 
-    font-size: 80%;
+    font-size: 10pt;
     font-family: $fontCode;
     line-height: 1.45;
     display: block;

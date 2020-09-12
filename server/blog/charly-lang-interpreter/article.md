@@ -15,8 +15,6 @@ Charly is a interpreted, dynamically-typed and object-oriented programming langu
 It borrows some concepts from Ruby, such as operator overloading or treating the primitive types as objects.
 The syntax is inspired by JavaScript.
 
-Check out the official language and syntax guide at [leonardschuetz.ch/charly](https://leonardschuetz.ch/charly/)
-
 ## Hello World
 This is the simplest way to print "Hello World" in Charly.
 

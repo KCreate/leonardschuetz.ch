@@ -1,4 +1,5 @@
 main.blog-article {
+  font-size: 12pt;
   /* Inline code blocks */
 }
 main.blog-article#index-page > * {
@@ -6,7 +7,6 @@ main.blog-article#index-page > * {
 }
 main.blog-article > * {
   margin: 16px 0;
-  font-size: 16px;
   word-break: break-word;
 }
 main.blog-article > *:first-child {
@@ -18,22 +18,22 @@ main.blog-article > h1, main.blog-article h2, main.blog-article h3, main.blog-ar
   font-weight: normal;
 }
 main.blog-article > h1 {
-  font-size: 28px;
+  font-size: 21pt;
 }
 main.blog-article > h2 {
-  font-size: 22.4px;
+  font-size: 16pt;
 }
 main.blog-article > h3 {
-  font-size: 20px;
+  font-size: 15pt;
 }
 main.blog-article > h4 {
-  font-size: 20px;
+  font-size: 15pt;
 }
 main.blog-article > h5 {
-  font-size: 20px;
+  font-size: 15pt;
 }
 main.blog-article > h6 {
-  font-size: 20px;
+  font-size: 15pt;
 }
 main.blog-article > h1 + h2 {
   margin-top: -16px;
@@ -79,12 +79,12 @@ main.blog-article p code {
   padding: 0 4px;
   margin: 0;
   border-radius: 2px;
-  font-size: 90%;
+  font-size: 11pt;
   font-family: monospace;
 }
 main.blog-article strong {
   font-weight: bold;
-  font-size: 95%;
+  font-size: 11pt;
 }
 main.blog-article blockquote > p {
   background-color: #ededed;
@@ -126,7 +126,7 @@ main.blog-article pre > code, main.blog-article code.sourceCode > pre > code {
   padding: 10px 10px;
   overflow-x: auto;
   border-radius: 3px;
-  font-size: 80%;
+  font-size: 10pt;
   font-family: monospace;
   line-height: 1.45;
   display: block;
