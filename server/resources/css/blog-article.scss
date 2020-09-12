@@ -1,9 +1,14 @@
 main.blog-article {
+  &#index-page {
+    > * {
+      margin: 0;
+    }
+  }
 
   $elementMargin: 16px;
   > * {
     margin: $elementMargin 0;
-    font-size: 18px;
+    font-size: 16px;
     word-break: break-word;
 
     &:first-child {
@@ -12,8 +17,9 @@ main.blog-article {
   }
 
   > h1, h2, h3, h4, h5, h6 {
-    border-left: 4px solid $colorTheme;
-    padding-left: 8px;
+    border-left: 4px solid $colorTheme2;
+    padding: 4px 8px;
+    font-weight: normal;
   }
 
   > h1 { font-size: 28px; }
@@ -39,7 +45,7 @@ main.blog-article {
     display: block;
     height: 4px;
     border: none;
-    background-color: $colorTheme;
+    background-color: $colorTheme1;
   }
 
   ol, ul {
@@ -54,7 +60,10 @@ main.blog-article {
       }
 
       &::before {
-        content: "- ";
+        //content: "■";
+        content: "#";
+        color: $colorTheme1;
+        padding-right: 7px;
       }
     }
   }
@@ -121,11 +130,11 @@ main.blog-article {
     background-color: white;
   }
   pre > code, code.sourceCode > pre > code {
-    padding: 10px 14px;
+    padding: 10px 10px;
     overflow-x: auto;
-    border-radius: 5px;
+    border-radius: 3px;
 
-    font-size: 75%;
+    font-size: 80%;
     font-family: $fontCode;
     line-height: 1.45;
     display: block;

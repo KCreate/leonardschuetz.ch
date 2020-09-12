@@ -9,24 +9,25 @@
 
 #content {
   max-width: 650px;
-  margin: 20px auto 0 auto;
+  margin: 20px auto 40px auto;
   padding: 0 20px;
+  font-family: $fontRegular;
 
   hr {
     border: 0;
-    border-top: 3px dotted $colorTheme;
+    border-top: 3px dotted $colorTheme1;
     margin: 1em 0;
   }
 }
 
 a {
   color: inherit;
-  border-bottom: 3px solid $colorTheme;
+  border-bottom: 3px solid $colorTheme1;
   text-decoration: none;
 
   &:hover {
     color: white;
-    background-color: $colorTheme;
+    background-color: $colorTheme1;
   }
 }
 
@@ -118,6 +119,8 @@ footer {
   }
 
   @include mobile-small {
+    height: 60px;
+
     #social-links {
       display: block;
       width: 100%;
@@ -134,32 +137,28 @@ footer {
 }
 
 #article-listing {
-  list-style-type: none;
+  @include mobile-small {
+    font-size: 14px;
+  }
 
   li {
-    &::before {
-      content: "#";
-      margin-left: -15px;
-      margin-right: 10px;
-      color: $colorYellow1;
-      font-weight: bold;
-    }
-
-    margin-bottom: 15px;
-
-    &::last-child {
-      margin-bottom: 0;
-    }
-
     .submission-date {
       background-color: $colorLight1;
+      padding: 0 6px;
       border-radius: 2px;
-      padding: 2px 6px;
       float: right;
-
-      @include mobile-small {
-        display: none;
-      }
+      font-style: italic;
     }
+  }
+}
+
+#copyright {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: $colorLight3;
+
+  @include mobile-small {
+    font-size: 14px;
   }
 }

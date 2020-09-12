@@ -1,17 +1,21 @@
 main.blog-article {
   /* Inline code blocks */
 }
+main.blog-article#index-page > * {
+  margin: 0;
+}
 main.blog-article > * {
   margin: 16px 0;
-  font-size: 18px;
+  font-size: 16px;
   word-break: break-word;
 }
 main.blog-article > *:first-child {
   margin-top: 0;
 }
 main.blog-article > h1, main.blog-article h2, main.blog-article h3, main.blog-article h4, main.blog-article h5, main.blog-article h6 {
-  border-left: 4px solid #FFBE0B;
-  padding-left: 8px;
+  border-left: 4px solid #f1b000;
+  padding: 4px 8px;
+  font-weight: normal;
 }
 main.blog-article > h1 {
   font-size: 28px;
@@ -65,7 +69,9 @@ main.blog-article ol li::last-child, main.blog-article ul li::last-child {
   margin-bottom: 0px;
 }
 main.blog-article ol li::before, main.blog-article ul li::before {
-  content: "- ";
+  content: "#";
+  color: #FFBE0B;
+  padding-right: 7px;
 }
 main.blog-article p code {
   background-color: #ededed;
@@ -112,10 +118,10 @@ main.blog-article div.sourceCode {
   background-color: white;
 }
 main.blog-article pre > code, main.blog-article code.sourceCode > pre > code {
-  padding: 10px 14px;
+  padding: 10px 10px;
   overflow-x: auto;
-  border-radius: 5px;
-  font-size: 75%;
+  border-radius: 3px;
+  font-size: 80%;
   font-family: monospace;
   line-height: 1.45;
   display: block;
@@ -169,8 +175,9 @@ main.blog-article table thead tr th {
 
 #content {
   max-width: 650px;
-  margin: 20px auto 0 auto;
+  margin: 20px auto 40px auto;
   padding: 0 20px;
+  font-family: "Noto Sans";
 }
 #content hr {
   border: 0;
@@ -265,6 +272,9 @@ footer #open-source-notice {
   font-size: 12pt;
 }
 @media (max-width: 450px) {
+  footer {
+    height: 60px;
+  }
   footer #social-links {
     display: block;
     width: 100%;
@@ -278,31 +288,28 @@ footer #open-source-notice {
   }
 }
 
-#article-listing {
-  list-style-type: none;
-}
-#article-listing li {
-  margin-bottom: 15px;
-}
-#article-listing li::before {
-  content: "#";
-  margin-left: -15px;
-  margin-right: 10px;
-  color: #FFBE0B;
-  font-weight: bold;
-}
-#article-listing li::last-child {
-  margin-bottom: 0;
+@media (max-width: 450px) {
+  #article-listing {
+    font-size: 14px;
+  }
 }
 #article-listing li .submission-date {
   background-color: #ededed;
+  padding: 0 6px;
   border-radius: 2px;
-  padding: 2px 6px;
   float: right;
+  font-style: italic;
+}
+
+#copyright {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: #d4d4d4;
 }
 @media (max-width: 450px) {
-  #article-listing li .submission-date {
-    display: none;
+  #copyright {
+    font-size: 14px;
   }
 }
 

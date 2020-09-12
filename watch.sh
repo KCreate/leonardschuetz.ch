@@ -1,2 +1,2 @@
 #!/bin/sh
-while inotifywait -e close_write server/*.scss server/blog/*/*.md; do ./build.sh; done
+while inotifywait --quiet --event close_write server/resources/css/*.scss server/blog/*/*.md; do ./build.sh; done

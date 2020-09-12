@@ -1,6 +1,6 @@
 ---
 title: Blog Template
-date: 1. January 1990
+date: Mon, 01 Jan 1990 00:00:00 +0100
 description: Template blog article
 ---
 

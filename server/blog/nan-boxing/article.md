@@ -1,7 +1,8 @@
 ---
 title: Dynamic Typing and NaN Boxing
-date: 8. September 2020
+date: Tue, 08 Sep 2020 16:00:00 +0200
 description: Introduction to NaN boxing
+keywords: dynamic-typing, nan-boxing, interpreters, tagged-union
 ---
 
 # Dynamic Typing and NaN Boxing
@@ -335,7 +336,7 @@ S[Exponent-][Mantissa------------------------------------------]
 
 An IEEE 754 `double` is a 8 byte value.
 The first bit is called the sign bit.
-The next 11 bits represents the Exponent
+The next 11 bits represents the Exponent.
 The remaining 52 bits are called the Mantissa.
 The exact way these bits are interpreted and decoded into float numbers is not important right now.
 The only thing we care about is the way a NaN value is encoded.
@@ -576,10 +577,10 @@ The reason we do this is to prevent negative integers from polluting the rest of
 The reason this happens is because of an operation called "sign extension".
 When casting from a smaller to a bigger type (in our case an implicit cast from `int32_t` to `uint64_t`)
 the value will be sign extended to preserve its sign (positive / negative).
-For example, if eight bits are used to store the number "`0101 1110`" (decimal 94) and we extend this
-number to 16 bits, the resulting value would be stored as "`0000 0000 0101 1110`".
-If eight bits are used to store the number "`1110 1010`" (decimal -22) and we extend this number
-to 16 bits, the resulting value would be stored as "`1111 1111 1110 1010`".
+For example, if eight bits are used to store the number `0101 1110` (decimal 94) and we extend this
+number to 16 bits, the resulting value would be stored as `0000 0000 0101 1110`.
+If eight bits are used to store the number `1110 1010` (decimal -22) and we extend this number
+to 16 bits, the resulting value would be stored as `1111 1111 1110 1010`.
 We do not want this to happen so we cast the signed integer value to its unsigned counterpart, removing
 the sign extension operation completely.
 
@@ -810,11 +811,8 @@ The following two articles contain his implementation of pointer tagging.
 
 ## Links
 
-Source code:
 - [nan-boxing.c](https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/nan-boxing.c)
 - [tagged-union.c](https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/tagged-union.c)
-
-Other stuff:
-- [@mechantecerises IG (Header Graphic)](https://www.instagram.com/mechantecerises)
+- [mechantecerises IG (Header Graphic)](https://www.instagram.com/mechantecerises)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
 - [Max Bernstein's Blog](https://bernsteinbear.com)

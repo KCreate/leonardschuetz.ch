@@ -6,7 +6,7 @@
 ██   ██ ██      ██      ██      ██    ██    
 ██   ██ ███████ ███████ ███████  ██████  ██ 
 -->
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>Leonard Schütz</title>
@@ -30,10 +30,8 @@
     <meta name="twitter:description" content="Leonard Schütz personal website">
 
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
-    <link rel="stylesheet" type="text/css" href="/style.css"/>
-
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
+    <link rel="alternate" type="application/rss+xml" title="Blog" href="/feed.xml" />
   </head>
   <body>
     <div id="content">
@@ -46,41 +44,57 @@
           <a href="/blog">blog</a>
         </nav>
       </header>
-      <main>
+      <main id="index-page" class="blog-article">
         <p>
-          I like to ride my motorcycle and work on my programming language
+          Hello!
+        </p>
+        <p>
+          I'm a software engineering student at the
+          <a href="https://www.ost.ch/en/"><i>Ostschweizer Fachhochschule</i></a> in Switzerland.
+        </p>
+        <p>
+          In my free time I like to ride my motorcycle and work on my toy programming language
           <a href="https://github.com/KCreate/charly-vm">Charly</a>.
         </p>
         <p>
-          If you want to, you can <a href="mailto:leni.schuetz@me.com">send me an email</a>.
-        </p>
-        <p>
-          At the moment I'm a student at the
-          <a href="https://www.ost.ch/en/">Ostschweizer Fachhochschule</a> in Switzerland.
-        </p>
-        <p>
-          Sometimes I write about stuff on
+          Sometimes I upload stuff to
           <a href="/blog">my blog</a>.
+        </p>
+        <p>
+          You can send me
+          <a href="mailto:leni.schuetz@me.com?subject=Hello%20Leonard!">an email</a> if that makes you happy.
+        </p>
+        <p>
+          Take care!
         </p>
       </main>
       <hr/>
       <footer>
         <div id="social-links">
           <a href="https://github.com/KCreate">
-            <img height="20" width="20" src="/resources/github.svg" />
+            <img height="20" width="20" src="/resources/github.svg" alt="GitHub Link"/>
           </a>
           <a href="https://twitter.com/leni4838">
-            <img height="20" width="20" src="/resources/twitter.svg" />
+            <img height="20" width="20" src="/resources/twitter.svg" alt="Twitter Link"/>
           </a>
           <a href="https://linkedin.com/in/leonardschuetz">
-            <img height="20" width="20" src="/resources/linkedin.svg" />
+            <img height="20" width="20" src="/resources/linkedin.svg" alt="LinkedIn Link"/>
+          </a>
+          <a href="mailto:leni.schuetz@me.com?subject=Hello%20Leonard!">
+            <img height="20" width="20" src="/resources/mail.svg" alt="Email Link"/>
+          </a>
+          <a href="/rss.xml">
+            <img height="20" width="20" src="/resources/rss.svg" alt="RSS Link"/>
           </a>
         </div>
         <div id="open-source-notice">
           <span>this blog is <a href="https://github.com/KCreate/leonardschuetz.ch">open-source</a></span>
         </div>
       </footer>
+      <span id="copyright">Copyright © 2020 Leonard Schütz | <a href="/attributions">Attributions</a></span>
     </div>
   </body>
-  <script src="/script.js"></script>
+  <script src="/script.js" async></script>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
 </html>

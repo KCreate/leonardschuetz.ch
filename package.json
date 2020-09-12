@@ -6,12 +6,8 @@
   "dependencies": {
     "http-server": "^0.12.3"
   },
-  "devDependencies": {
-    "marked": "^1.1.1"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "devDependencies": {},
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KCreate/leonardschuetz.ch.git"

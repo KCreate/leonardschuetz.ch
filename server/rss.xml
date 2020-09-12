@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Leonard Schütz's Blog</title>
+    <link>https://leonardschuetz.ch</link>
+    <description>Leonard Schütz's personal website and blog</description>
+    <atom:link href="https://leonardschuetz.com/rss.xml" rel="self" type="application/rss+xml"/>
+
+    <item>
+      <title>Dynamic Typing and NaN Boxing</title>
+      <link>https://leonardschuetz.ch/blog/nan-boxing</link>
+      <description>Introduction to NaN boxing</description>
+      <pubDate>Tue, 08 Sep 2020 16:00:00 +0200</pubDate>
+    </item>
+
+  </channel>
+</rss>

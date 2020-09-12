@@ -6,17 +6,17 @@
 ██   ██ ██      ██      ██      ██    ██    
 ██   ██ ███████ ███████ ███████  ██████  ██ 
 -->
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>Dynamic Typing and NaN Boxing</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Leonard Schütz">
     <meta name="description" content="Introduction to NaN boxing">
-    <meta name="keywords" content="leonard schütz, programming, compilers">
+    <meta name="keywords" content="leonard schütz, programming, compilers, dynamic-typing, nan-boxing, interpreters, tagged-union">
     <meta name="language" content="English">
     <meta name="contact" content="leni.schuetz@me.com">
-    <meta name="date" content="8. September 2020">
+    <meta name="date" content="Tue, 08 Sep 2020 16:00:00 +0200">
 
     <meta property="og:url" content="https://leonardschuetz.ch/">
     <meta property="og:title" content="Dynamic Typing and NaN Boxing">
@@ -31,10 +31,8 @@
     <meta name="twitter:description" content="Introduction to NaN boxing">
 
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
-    <link rel="stylesheet" type="text/css" href="/style.css"/>
-
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
+    <link rel="alternate" type="application/rss+xml" title="Blog" href="/feed.xml" />
 
           <style type="text/css">
         code {
@@ -321,7 +319,7 @@ null</code></pre>
 ||          +- 52 Mantissa bits
 vv          v
 S[Exponent-][Mantissa------------------------------------------]</code></pre>
-<p>An IEEE 754 <code>double</code> is a 8 byte value. The first bit is called the sign bit. The next 11 bits represents the Exponent The remaining 52 bits are called the Mantissa. The exact way these bits are interpreted and decoded into float numbers is not important right now. The only thing we care about is the way a NaN value is encoded.</p>
+<p>An IEEE 754 <code>double</code> is a 8 byte value. The first bit is called the sign bit. The next 11 bits represents the Exponent. The remaining 52 bits are called the Mantissa. The exact way these bits are interpreted and decoded into float numbers is not important right now. The only thing we care about is the way a NaN value is encoded.</p>
 <pre><code>-11111111111Q---------------------------------------------------
             ^
             +- Signalling / Quiet bit</code></pre>
@@ -457,7 +455,7 @@ null</code></pre>
 <div class="sourceCode" id="cb25"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="bn">0x0000000000000000</span> |  (<span class="dt">int32_t</span>)( <span class="dv">1</span>) <span class="co">// 0x0000000000000001</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a><span class="bn">0x0000000000000000</span> |  (<span class="dt">int32_t</span>)(-<span class="dv">1</span>) <span class="co">// 0xffffffffffffffff</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a><span class="bn">0x0000000000000000</span> | (<span class="dt">uint32_t</span>)(-<span class="dv">1</span>) <span class="co">// 0x00000000ffffffff</span></span></code></pre></div>
-<p>The reason this happens is because of an operation called “sign extension”. When casting from a smaller to a bigger type (in our case an implicit cast from <code>int32_t</code> to <code>uint64_t</code>) the value will be sign extended to preserve its sign (positive / negative). For example, if eight bits are used to store the number “<code>0101 1110</code>” (decimal 94) and we extend this number to 16 bits, the resulting value would be stored as “<code>0000 0000 0101 1110</code>”. If eight bits are used to store the number “<code>1110 1010</code>” (decimal -22) and we extend this number to 16 bits, the resulting value would be stored as “<code>1111 1111 1110 1010</code>”. We do not want this to happen so we cast the signed integer value to its unsigned counterpart, removing the sign extension operation completely.</p>
+<p>The reason this happens is because of an operation called “sign extension”. When casting from a smaller to a bigger type (in our case an implicit cast from <code>int32_t</code> to <code>uint64_t</code>) the value will be sign extended to preserve its sign (positive / negative). For example, if eight bits are used to store the number <code>0101 1110</code> (decimal 94) and we extend this number to 16 bits, the resulting value would be stored as <code>0000 0000 0101 1110</code>. If eight bits are used to store the number <code>1110 1010</code> (decimal -22) and we extend this number to 16 bits, the resulting value would be stored as <code>1111 1111 1110 1010</code>. We do not want this to happen so we cast the signed integer value to its unsigned counterpart, removing the sign extension operation completely.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>  VALUE v_int = create_integer(-<span class="dv">25</span>);</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a>  print_value(v_int);</span>
@@ -584,27 +582,41 @@ null</code></pre>
 <li><a href="https://bernsteinbear.com/blog/compiling-a-lisp-3/">Compiling a Lisp: Booleans, characters, nil</a></li>
 </ul>
 <h2 id="links">Links</h2>
-<p>Source code: - <a href="https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/nan-boxing.c">nan-boxing.c</a> - <a href="https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/tagged-union.c">tagged-union.c</a></p>
-<p>Other stuff: - <span class="citation" data-cites="mechantecerises">[@mechantecerises IG (Header Graphic)]</span>(https://www.instagram.com/mechantecerises) - <a href="https://github.com/KCreate/charly-vm">Charly Programming Language</a> - <a href="https://bernsteinbear.com">Max Bernstein’s Blog</a></p>
+<ul class="incremental">
+<li><a href="https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/nan-boxing.c">nan-boxing.c</a></li>
+<li><a href="https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/tagged-union.c">tagged-union.c</a></li>
+<li><a href="https://www.instagram.com/mechantecerises">mechantecerises IG (Header Graphic)</a></li>
+<li><a href="https://github.com/KCreate/charly-vm">Charly Programming Language</a></li>
+<li><a href="https://bernsteinbear.com">Max Bernstein’s Blog</a></li>
+</ul>
       </main>
       <hr/>
       <footer>
         <div id="social-links">
           <a href="https://github.com/KCreate">
-            <img height="20" width="20" src="/resources/github.svg" />
+            <img height="20" width="20" src="/resources/github.svg" alt="GitHub Link"/>
           </a>
           <a href="https://twitter.com/leni4838">
-            <img height="20" width="20" src="/resources/twitter.svg" />
+            <img height="20" width="20" src="/resources/twitter.svg" alt="Twitter Link"/>
           </a>
           <a href="https://linkedin.com/in/leonardschuetz">
-            <img height="20" width="20" src="/resources/linkedin.svg" />
+            <img height="20" width="20" src="/resources/linkedin.svg" alt="LinkedIn Link"/>
+          </a>
+          <a href="mailto:leni.schuetz@me.com?subject=Hello%20Leonard!">
+            <img height="20" width="20" src="/resources/mail.svg" alt="Email Link"/>
+          </a>
+          <a href="/rss.xml">
+            <img height="20" width="20" src="/resources/rss.svg" alt="RSS Link"/>
           </a>
         </div>
         <div id="open-source-notice">
           <span>this blog is <a href="https://github.com/KCreate/leonardschuetz.ch">open-source</a></span>
         </div>
       </footer>
+      <span id="copyright">Copyright © 2020 Leonard Schütz | <a href="/attributions">Attributions</a></span>
     </div>
   </body>
-  <script src="/script.js"></script>
+  <script src="/script.js" async></script>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
 </html>

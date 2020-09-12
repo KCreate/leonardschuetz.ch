@@ -30,7 +30,10 @@ $colorYellow2:  darken($colorYellow1, $colorChangePercentage);
 $colorYellow3:  darken($colorYellow2, $colorChangePercentage);
 $colorYellow4:  darken($colorYellow3, $colorChangePercentage);
 
-$colorTheme: $colorYellow1;
+$colorTheme1: $colorYellow1;
+$colorTheme2: darken($colorTheme1, $colorChangePercentage);
+$colorTheme3: darken($colorTheme2, $colorChangePercentage);
+$colorTheme4: darken($colorTheme3, $colorChangePercentage);
 
 // Shadows
 $shadow1: 0 1px  3px  rgba(0,0,0,0.12), 0 1px  2px  rgba(0,0,0,0.24);
@@ -42,7 +45,6 @@ $shadow5: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 $fontRegular: "Noto Sans";
 $fontMono: "Roboto Mono";
 $fontCode: monospace;
-
 
 // Media queries
 @mixin mobile {

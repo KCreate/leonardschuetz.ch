@@ -1,18 +1,28 @@
 #!/bin/sh
-sass server/style.scss server/style.css
+RED=1
+GREEN=2
+colorecho() {
+  tput setaf $2
+  echo $1
+  tput sgr0
+}
 
-pandoc \
-  -f markdown \
-  -t html \
-  -i server/blog/template/article.md \
-  -o server/blog/template/index.html \
-  --template resources/blog-template.html \
-  --highlight-style tango
+if sass server/resources/css/style.scss server/resources/css/style.css; then
+  colorecho "Built css" $GREEN
+else
+  colorecho "Failed to build css" $RED
+fi
 
-pandoc \
-  -f markdown \
-  -t html \
-  -i server/blog/nan-boxing/article.md \
-  -o server/blog/nan-boxing/index.html \
-  --template resources/blog-template.html \
-  --highlight-style tango
+find server/blog -name "*.md" | while read -r file; do
+  if pandoc \
+    -f markdown \
+    -t html \
+    -i $file \
+    -o ${file%/*}/index.html \
+    --template resources/blog-template.html \
+    --highlight-style tango; then
+    colorecho "Built ${file%/*}" $GREEN
+  else
+    colorecho "Failed to build ${file%/*}" $RED
+  fi
+done
