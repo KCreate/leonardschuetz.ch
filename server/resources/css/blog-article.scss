@@ -96,28 +96,44 @@ main.blog-article {
     }
   }
 
-  figure, p {
-    img {
-      display: block;
-      width: calc(75%);
-      margin: 0 auto;
-      border-radius: 3px;
-      box-shadow: $shadow2;
+  figure img, p img, img {
+    display: block;
+    width: calc(75%);
+    margin: 0 auto;
+    border-radius: 3px;
+    box-shadow: $shadow2;
 
-      &[alt*="noshadow"] {
-        box-shadow: none;
-      }
+    &[alt*="noshadow"] {
+      box-shadow: none;
+    }
 
-      &[alt*="no-smooth"] {
-        image-rendering: pixelated;
-        -ms-interpolation-mode: nearest-neighbor;
-      }
+    &[alt*="no-smooth"] {
+      image-rendering: pixelated;
+      -ms-interpolation-mode: nearest-neighbor;
+    }
+
+    &[alt*="circle"] {
+      border-radius: 50%;
+    }
+
+    &[alt*="rounded"] {
+      border-radius: 25%;
+    }
+
+    &[alt*="small"] {
+      width: calc(50%);
 
       @include mobile-small {
-        width: 100%;
+        width: 75%;
       }
     }
 
+    @include mobile-small {
+      width: 100%;
+    }
+  }
+
+  figure, p {
     figcaption {
       display: none;
     }

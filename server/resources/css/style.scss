@@ -151,6 +151,10 @@ footer {
       border-radius: 2px;
       float: right;
       font-style: italic;
+
+      @include mobile-small {
+        display: none;
+      }
     }
   }
 }
@@ -163,5 +167,74 @@ footer {
 
   @include mobile-small {
     font-size: 14px;
+  }
+}
+
+.education-entry {
+  padding-bottom: 16px;
+
+  .what {
+    font-weight: bold;
+  }
+
+  .where {
+    display: block;
+  }
+
+  .when {
+    display: block;
+    float: right;
+
+    background-color: $colorLight1;
+    border-radius: 2px;
+    padding: 0 6px;
+    font-style: italic;
+  }
+}
+
+.project-container {
+  height: auto;
+  overflow: hidden;
+
+  .project-card {
+    border-bottom: none;
+    text-decoration: none;
+
+    background-color: $colorLight1;
+    //border: 2px solid $colorLight2;
+    border-radius: 6px;
+    box-shadow: $shadow1;
+
+    margin: 10px !important;
+    padding: 8px;
+    width: calc(50% - 20px);
+    min-height: 200px;
+    display: inline-block;
+    float: left;
+
+    transition: box-shadow 100ms ease-in-out;
+
+    &:hover {
+      box-shadow: $shadow2;
+      color: inherit;
+    }
+
+    @include mobile {
+      width: calc(100% - 10px);
+      min-height: 0;
+      margin: 8px 5px !important;
+    }
+
+    .title {
+      border-bottom: 3px solid $colorTheme1;
+    }
+
+    .languages {
+      float: right;
+    }
+
+    .description {
+      margin-top: 10px;
+    }
   }
 }
