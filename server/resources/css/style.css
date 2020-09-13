@@ -246,7 +246,7 @@ main {
   font-family: "Noto Sans";
   margin: 15px 0;
   padding: 15px 5px;
-  min-height: 600px;
+  min-height: 400px;
 }
 @media (max-width: 450px) {
   main {
