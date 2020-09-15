@@ -121,7 +121,7 @@ footer {
     font-size: 12pt;
   }
 
-  @include mobile-small {
+  @include mobile {
     height: 60px;
 
     #social-links {
@@ -170,11 +170,16 @@ footer {
   }
 }
 
-.education-entry {
+.list-entry {
   padding-bottom: 16px;
 
   .what {
+    display: block;
     font-weight: bold;
+  }
+
+  .what-detail {
+    display: block;
   }
 
   .where {
@@ -187,12 +192,13 @@ footer {
 
     background-color: $colorLight1;
     border-radius: 2px;
-    padding: 0 6px;
+    padding: 0 4px;
     font-style: italic;
   }
 }
 
 .project-container {
+  margin: 0 !important;
   height: auto;
   overflow: hidden;
 
@@ -200,23 +206,43 @@ footer {
     border-bottom: none;
     text-decoration: none;
 
-    background-color: $colorLight1;
-    //border: 2px solid $colorLight2;
-    border-radius: 6px;
+    color: black;
+    background: linear-gradient(25deg, #fdc500 0%, #ffd500 100%);
+
+    &.card-blue {
+      color: white;
+      background: linear-gradient(25deg, #013b73 0%, #046acc 100%);
+    }
+
+    &.card-green {
+      color: white;
+      background: linear-gradient(25deg, #018a7b 0%, #01d6a9 100%);
+    }
+
+    &.card-red {
+      color: white;
+      background: linear-gradient(25deg, #9f1a2e 0%, #da1e37 100%);
+    }
+
+    border-radius: 10px;
     box-shadow: $shadow1;
 
-    margin: 10px !important;
-    padding: 8px;
-    width: calc(50% - 20px);
+    margin: 5px !important;
+    padding: 10px 12px 35px 12px;
+    width: calc(50% - 10px);
     min-height: 200px;
     display: inline-block;
     float: left;
+    position: relative;
 
-    transition: box-shadow 100ms ease-in-out;
-
+    transition: transform 200ms ease-out, box-shadow 200ms ease-out;
     &:hover {
+      &::after {
+        opacity: 1;
+      }
+
       box-shadow: $shadow2;
-      color: inherit;
+      transform: translateY(-3px);
     }
 
     @include mobile {
@@ -226,15 +252,32 @@ footer {
     }
 
     .title {
-      border-bottom: 3px solid $colorTheme1;
+      font-family: $fontMono;
+      font-size: 14pt;
+      //font-style: italic;
+      font-weight: bold;
     }
 
     .languages {
+      font-family: $fontMono;
+      font-weight: bold;
       float: right;
+      margin-left: 10px;
     }
 
     .description {
-      margin-top: 10px;
+      margin-top: 15px;
+    }
+
+    .repo {
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+
+      font-family: $fontMono;
+      font-style: italic;
+      font-size: 10pt;
+      color: rgba(black, 80%);
     }
   }
 }

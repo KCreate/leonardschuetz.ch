@@ -48,7 +48,7 @@ $fontCode: monospace;
 
 // Media queries
 @mixin mobile {
-    @media (max-width: 780px) {
+    @media (max-width: 700px) {
         @content;
     }
 }
