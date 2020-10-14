@@ -19,6 +19,7 @@ Make sure the following tools are installed:
 
 ## New blog article checklist
 
+- 'article-id' set to directory name? (for disqus)
 - Markdown compiled?
 - Add entry to `blog.html`
 - Add entry to `rss.xml`

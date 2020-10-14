@@ -1,4 +1,5 @@
 ---
+article-id: nan-boxing
 title: Dynamic Typing and NaN Boxing
 date: Tue, 08 Sep 2020 16:00:00 +0100
 description: Introduction to NaN boxing

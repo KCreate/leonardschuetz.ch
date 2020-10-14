@@ -1,4 +1,5 @@
 ---
+article-id: stackvm
 title: Writing a virtual machine
 date: Sun, 23 Apr 2017 16:00:00 +0100
 description: Writing a stack based virtual machine
