@@ -9,3 +9,5 @@ description: Template blog article
 ## 1. January 1990
 
 ![Picture of Jupiter](test-image.jpg)
+
+[Link to some subarticle](subarticle)
