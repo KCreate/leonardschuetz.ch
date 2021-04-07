@@ -13,7 +13,7 @@ main.blog-article > *:first-child {
   margin-top: 0;
 }
 main.blog-article > h1, main.blog-article h2, main.blog-article h3, main.blog-article h4, main.blog-article h5, main.blog-article h6 {
-  border-left: 4px solid #f1b000;
+  border-left: 4px solid #3849a2;
   padding: 4px 8px;
   font-weight: normal;
 }
@@ -56,7 +56,7 @@ main.blog-article hr {
   display: block;
   height: 4px;
   border: none;
-  background-color: #FFBE0B;
+  background-color: #3F51B5;
 }
 main.blog-article ol, main.blog-article ul {
   list-style: none;
@@ -70,7 +70,7 @@ main.blog-article ol li::last-child, main.blog-article ul li::last-child {
 }
 main.blog-article ol li::before, main.blog-article ul li::before {
   content: "#";
-  color: #FFBE0B;
+  color: #3F51B5;
   padding-right: 7px;
 }
 main.blog-article p code {
@@ -203,18 +203,18 @@ main.blog-article table thead tr th {
 }
 #content hr {
   border: 0;
-  border-top: 3px dotted #FFBE0B;
+  border-top: 3px dotted #3F51B5;
   margin: 1em 0;
 }
 
 a {
   color: inherit;
-  border-bottom: 3px solid #FFBE0B;
+  border-bottom: 3px solid #3F51B5;
   text-decoration: none;
 }
 a:hover {
   color: white;
-  background-color: #FFBE0B;
+  background-color: #3F51B5;
 }
 
 header {
