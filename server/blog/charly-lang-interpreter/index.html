@@ -12,7 +12,8 @@
     <title>The Charly Programming Language Interpreter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Leonard Schütz">
-    <meta name="description" content="Interpreter for the Charly Programming Language written in Crystal">
+    <meta name="description" content="Interpreter for the Charly
+Programming Language written in Crystal">
     <meta name="keywords" content="leonard schütz, programming, compilers, ">
     <meta name="language" content="English">
     <meta name="contact" content="leni.schuetz@me.com">
@@ -20,7 +21,8 @@
 
     <meta property="og:url" content="https://leonardschuetz.ch/">
     <meta property="og:title" content="The Charly Programming Language Interpreter">
-    <meta property="og:description" content="Interpreter for the Charly Programming Language written in Crystal">
+    <meta property="og:description" content="Interpreter for the Charly
+Programming Language written in Crystal">
     <meta property="og:site_name" content="Leonard Schütz">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
@@ -28,7 +30,8 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@leni4838">
     <meta name="twitter:title" content="The Charly Programming Language Interpreter">
-    <meta name="twitter:description" content="Interpreter for the Charly Programming Language written in Crystal">
+    <meta name="twitter:description" content="Interpreter for the Charly
+Programming Language written in Crystal">
 
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
     <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
@@ -45,6 +48,7 @@
         pre > code.sourceCode { white-space: pre; position: relative; }
         pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
         pre > code.sourceCode > span:empty { height: 1.2em; }
+        .sourceCode { overflow: visible; }
         code.sourceCode > span { color: inherit; text-decoration: inherit; }
         div.sourceCode { margin: 1em 0; }
         pre.sourceCode { margin: 0; }
@@ -117,42 +121,52 @@
         </nav>
       </header>
       <main class="blog-article">
-<h1 id="the-charly-programming-language">The Charly programming language</h1>
+<h1 id="the-charly-programming-language">The Charly programming
+language</h1>
 <h2 id="november-2016">20. November 2016</h2>
 <p>I’ve recently been working on my own programming language.</p>
 <p>I call it Charly.</p>
-<p>Charly is a interpreted, dynamically-typed and object-oriented programming language. It borrows some concepts from Ruby, such as operator overloading or treating the primitive types as objects. The syntax is inspired by JavaScript.</p>
+<p>Charly is a interpreted, dynamically-typed and object-oriented
+programming language. It borrows some concepts from Ruby, such as
+operator overloading or treating the primitive types as objects. The
+syntax is inspired by JavaScript.</p>
 <h2 id="hello-world">Hello World</h2>
 <p>This is the simplest way to print “Hello World” in Charly.</p>
 <blockquote>
-<p>Note: All syntax samples are highlighted using the JavaScript highlighter. Since both languages share a lot of their syntax and grammar, this works out most of the time.</p>
+<p>Note: All syntax samples are highlighted using the JavaScript
+highlighter. Since both languages share a lot of their syntax and
+grammar, this works out most of the time.</p>
 </blockquote>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">print</span>(<span class="st">&quot;Hello World&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Hello World&quot;</span>)</span></code></pre></div>
 <p>You can also do it via callbacks</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="st">&quot;Hello World&quot;</span><span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(char) {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  <span class="fu">write</span>(char)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Hello World&quot;</span><span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(char) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write</span>(char)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
 <p>Or via an object</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">class</span> Greeter {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  property name</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>  func <span class="fu">constructor</span>(name) {</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    @name <span class="op">=</span> name</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>  }</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>  func <span class="fu">greet</span>() {</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>    <span class="fu">print</span>(<span class="st">&quot;Hello &quot;</span> <span class="op">+</span> @name)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>  }</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>}</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a><span class="kw">let</span> myGreeter <span class="op">=</span> <span class="fu">Greeter</span>(<span class="st">&quot;World&quot;</span>)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>myGreeter<span class="op">.</span><span class="fu">greet</span>() # Hello World</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Greeter {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  property name</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  func <span class="fu">constructor</span>(name) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    @name <span class="op">=</span> name</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  func <span class="fu">greet</span>() {</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;Hello &quot;</span> <span class="op">+</span> @name)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> myGreeter <span class="op">=</span> <span class="fu">Greeter</span>(<span class="st">&quot;World&quot;</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>myGreeter<span class="op">.</span><span class="fu">greet</span>() # Hello World</span></code></pre></div>
 <p>You also have the ability to extend the primitive types</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="bu">String</span><span class="op">.</span><span class="at">methods</span><span class="op">.</span><span class="at">greet</span> <span class="op">=</span> <span class="op">-&gt;</span>{</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  <span class="fu">print</span>(<span class="st">&quot;Hello &quot;</span> <span class="op">+</span> self)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>}</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="st">&quot;World&quot;</span><span class="op">.</span><span class="fu">greet</span>() # Hello World</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">String</span><span class="op">.</span><span class="at">methods</span><span class="op">.</span><span class="at">greet</span> <span class="op">=</span> <span class="op">-&gt;</span>{</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;Hello &quot;</span> <span class="op">+</span> self)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;World&quot;</span><span class="op">.</span><span class="fu">greet</span>() # Hello World</span></code></pre></div>
 <h2 id="primitives">Primitives</h2>
 <p>Currently there are 9 primitives in the language.</p>
 <ul class="incremental">
@@ -168,8 +182,11 @@
 </ul>
 <p>You can extend each of these primitives with your own methods.</p>
 <h2 id="native-extensions">Native extensions</h2>
-<p>Charly currently has rudimentary support for native extensions written in crystal. The way this works is via crystal files that are compiled directly into the interpreter.</p>
-<p>You can create your own extensions by adding a new file to <strong>src/charly/interpreter/internals</strong>.</p>
+<p>Charly currently has rudimentary support for native extensions
+written in crystal. The way this works is via crystal files that are
+compiled directly into the interpreter.</p>
+<p>You can create your own extensions by adding a new file to
+<strong>src/charly/interpreter/internals</strong>.</p>
 <pre class="crystal"><code>require &quot;../**&quot;
 
 module Charly::Internals
@@ -179,11 +196,17 @@ module Charly::Internals
   end
 
 end</code></pre>
-<p>After you’ve recompiled and reinstalled the interpreter, you are able to link against the method inside your charly program like this:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">const</span> mymethod <span class="op">=</span> <span class="fu">__internal__method</span>(<span class="st">&quot;mymethod&quot;</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="fu">print</span>(<span class="fu">mymethod</span>(<span class="st">&quot;Hello World&quot;</span>)) # You said<span class="op">:</span> Hello World</span></code></pre></div>
-<p>You can check out the source code on the <a href="https://github.com/charly-lang">GitHub repo</a>. Charly is also featured inside <a href="http://awesome-crystal.com/#awesome-crystal-implementationscompilers">awesome-crystal</a> under the section <code>Implementations/Compilers</code></p>
+<p>After you’ve recompiled and reinstalled the interpreter, you are able
+to link against the method inside your charly program like this:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> mymethod <span class="op">=</span> <span class="fu">__internal__method</span>(<span class="st">&quot;mymethod&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">mymethod</span>(<span class="st">&quot;Hello World&quot;</span>)) # You said<span class="op">:</span> Hello World</span></code></pre></div>
+<p>You can check out the source code on the <a
+href="https://github.com/charly-lang">GitHub repo</a>. Charly is also
+featured inside <a
+href="http://awesome-crystal.com/#awesome-crystal-implementationscompilers">awesome-crystal</a>
+under the section <code>Implementations/Compilers</code></p>
       </main>
       <!--<hr/>-->
       <!--<div id="comment_section">-->
@@ -228,7 +251,7 @@ end</code></pre>
           <span>this blog is <a href="https://github.com/KCreate/leonardschuetz.ch" target="_blank">open-source</a></span>
         </div>
       </footer>
-      <span id="copyright">Copyright © 2020 Leonard Schütz | <a href="/attributions">Attributions</a></span>
+      <span id="copyright">Copyright © 2024 Leonard Schütz | <a href="/attributions">Attributions</a></span>
     </div>
   </body>
   <script src="/script.js" async></script>

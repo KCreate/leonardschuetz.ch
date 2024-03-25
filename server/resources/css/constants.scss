@@ -30,7 +30,7 @@ $colorYellow2:  darken($colorYellow1, $colorChangePercentage);
 $colorYellow3:  darken($colorYellow2, $colorChangePercentage);
 $colorYellow4:  darken($colorYellow3, $colorChangePercentage);
 
-$colorTheme1: $colorYellow1;
+$colorTheme1: $colorBlue1;
 $colorTheme2: darken($colorTheme1, $colorChangePercentage);
 $colorTheme3: darken($colorTheme2, $colorChangePercentage);
 $colorTheme4: darken($colorTheme3, $colorChangePercentage);

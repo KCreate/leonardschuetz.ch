@@ -13,7 +13,7 @@ main.blog-article > *:first-child {
   margin-top: 0;
 }
 main.blog-article > h1, main.blog-article h2, main.blog-article h3, main.blog-article h4, main.blog-article h5, main.blog-article h6 {
-  border-left: 4px solid #f1b000;
+  border-left: 4px solid #3849a2;
   padding: 4px 8px;
   font-weight: normal;
 }
@@ -56,7 +56,7 @@ main.blog-article hr {
   display: block;
   height: 4px;
   border: none;
-  background-color: #FFBE0B;
+  background-color: #3F51B5;
 }
 main.blog-article ol, main.blog-article ul {
   list-style: none;
@@ -70,7 +70,7 @@ main.blog-article ol li::last-child, main.blog-article ul li::last-child {
 }
 main.blog-article ol li::before, main.blog-article ul li::before {
   content: "#";
-  color: #FFBE0B;
+  color: #3F51B5;
   padding-right: 7px;
 }
 main.blog-article p code {
@@ -96,7 +96,7 @@ main.blog-article blockquote > p > code {
 }
 main.blog-article figure img, main.blog-article p img, main.blog-article img {
   display: block;
-  width: calc(75%);
+  width: 75%;
   margin: 0 auto;
   border-radius: 3px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -115,7 +115,7 @@ main.blog-article figure img[alt*=rounded], main.blog-article p img[alt*=rounded
   border-radius: 25%;
 }
 main.blog-article figure img[alt*=small], main.blog-article p img[alt*=small], main.blog-article img[alt*=small] {
-  width: calc(50%);
+  width: 50%;
 }
 @media (max-width: 450px) {
   main.blog-article figure img[alt*=small], main.blog-article p img[alt*=small], main.blog-article img[alt*=small] {
@@ -203,18 +203,18 @@ main.blog-article table thead tr th {
 }
 #content hr {
   border: 0;
-  border-top: 3px dotted #FFBE0B;
+  border-top: 3px dotted #3F51B5;
   margin: 1em 0;
 }
 
 a {
   color: inherit;
-  border-bottom: 3px solid #FFBE0B;
+  border-bottom: 3px solid #3F51B5;
   text-decoration: none;
 }
 a:hover {
   color: white;
-  background-color: #FFBE0B;
+  background-color: #3F51B5;
 }
 
 header {
@@ -385,15 +385,24 @@ footer #open-source-notice {
 }
 .project-container .project-card.card-blue {
   color: white;
-  background: linear-gradient(25deg, #013b73 0%, #046acc 100%);
+  background: #3F51B5;
+}
+.project-container .project-card.card-blue .repo {
+  color: rgba(255, 255, 255, 0.8);
 }
 .project-container .project-card.card-green {
   color: white;
   background: linear-gradient(25deg, #018a7b 0%, #01d6a9 100%);
 }
+.project-container .project-card.card-green .repo {
+  color: rgba(255, 255, 255, 0.8);
+}
 .project-container .project-card.card-red {
   color: white;
   background: linear-gradient(25deg, #9f1a2e 0%, #da1e37 100%);
+}
+.project-container .project-card.card-red .repo {
+  color: rgba(255, 255, 255, 0.8);
 }
 .project-container .project-card:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);

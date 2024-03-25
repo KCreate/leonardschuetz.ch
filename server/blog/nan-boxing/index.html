@@ -13,14 +13,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Leonard Schütz">
     <meta name="description" content="Introduction to NaN boxing">
-    <meta name="keywords" content="leonard schütz, programming, compilers, dynamic-typing, nan-boxing, interpreters, tagged-union">
+    <meta name="keywords" content="leonard schütz, programming, compilers, dynamic-typing,
+nan-boxing, interpreters, tagged-union">
     <meta name="language" content="English">
     <meta name="contact" content="leni.schuetz@me.com">
     <meta name="date" content="Tue, 08 Sep 2020 16:00:00 +0100">
 
     <meta property="og:url" content="https://leonardschuetz.ch/">
     <meta property="og:title" content="Dynamic Typing and NaN Boxing">
-    <meta property="og:description" content="Introduction to NaN boxing">
+    <meta property="og:description" content="Introduction to NaN
+boxing">
     <meta property="og:site_name" content="Leonard Schütz">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
@@ -28,7 +30,8 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@leni4838">
     <meta name="twitter:title" content="Dynamic Typing and NaN Boxing">
-    <meta name="twitter:description" content="Introduction to NaN boxing">
+    <meta name="twitter:description" content="Introduction to NaN
+boxing">
 
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
     <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
@@ -45,6 +48,7 @@
         pre > code.sourceCode { white-space: pre; position: relative; }
         pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
         pre > code.sourceCode > span:empty { height: 1.2em; }
+        .sourceCode { overflow: visible; }
         code.sourceCode > span { color: inherit; text-decoration: inherit; }
         div.sourceCode { margin: 1em 0; }
         pre.sourceCode { margin: 0; }
@@ -117,227 +121,342 @@
         </nav>
       </header>
       <main class="blog-article">
-<h1 id="dynamic-typing-and-nan-boxing">Dynamic Typing and NaN Boxing</h1>
+<h1 id="dynamic-typing-and-nan-boxing">Dynamic Typing and NaN
+Boxing</h1>
 <h2 id="september-2020">8. September 2020</h2>
 <figure>
-<img src="nan-boxing.png" alt="NaN Boxing by @mechantecerises noshadow" /><figcaption aria-hidden="true">NaN Boxing by <span class="citation" data-cites="mechantecerises">@mechantecerises</span> noshadow</figcaption>
+<img src="nan-boxing.png"
+alt="NaN Boxing by @mechantecerises noshadow" />
+<figcaption aria-hidden="true">NaN Boxing by <span class="citation"
+data-cites="mechantecerises">@mechantecerises</span>
+noshadow</figcaption>
 </figure>
-<p>Many modern programming languages have a feature called dynamic typing. The key distinction between a dynamically typed and a statically typed language is that most type checks are performed at run-time as opposed to at compile-time. Types are no longer associated with a variable, but with the underlying value stored inside. Because a variable can hold any type it wants, the author has to make sure that the expectations match the actual code.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">// Variable &#39;a&#39; gets initialized with a value of type String</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">let</span> a <span class="op">=</span> <span class="st">&quot;hello world&quot;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="co">// Binding is changed to a value of type Array</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="co">// The array itself can also contain any mix of types</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>a <span class="op">=</span> [<span class="kw">false</span><span class="op">,</span> <span class="st">&quot;bears&quot;</span><span class="op">,</span> <span class="st">&quot;beets&quot;</span><span class="op">,</span> <span class="st">&quot;battlestar galactica&quot;</span><span class="op">,</span> <span class="fl">3.21</span>]</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="co">// The type of the value that ends up being stored inside</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="co">// the variable &#39;result&#39; depends on the result of the coin flip</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="kw">const</span> result <span class="op">=</span> <span class="fu">coinflip</span>() <span class="op">?</span> <span class="st">&quot;test&quot;</span> <span class="op">:</span> <span class="dv">512</span></span></code></pre></div>
-<p>This article isn’t about whether dynamic typing is a good thing or not. My goal for this article is to show you two ways how dynamic typing might be implemented in a language runtime and how they differ from each other.</p>
-<p>One of those methods will be NaN boxing, a technique in which you “box” certain types of values into the 8 bytes of a double-precision floating-point value.</p>
+<p>Many modern programming languages have a feature called dynamic
+typing. The key distinction between a dynamically typed and a statically
+typed language is that most type checks are performed at run-time as
+opposed to at compile-time. Types are no longer associated with a
+variable, but with the underlying value stored inside. Because a
+variable can hold any type it wants, the author has to make sure that
+the expectations match the actual code.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Variable &#39;a&#39; gets initialized with a value of type String</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> a <span class="op">=</span> <span class="st">&quot;hello world&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Binding is changed to a value of type Array</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">// The array itself can also contain any mix of types</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> [<span class="kw">false</span><span class="op">,</span> <span class="st">&quot;bears&quot;</span><span class="op">,</span> <span class="st">&quot;beets&quot;</span><span class="op">,</span> <span class="st">&quot;battlestar galactica&quot;</span><span class="op">,</span> <span class="fl">3.21</span>]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">// The type of the value that ends up being stored inside</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">// the variable &#39;result&#39; depends on the result of the coin flip</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> <span class="fu">coinflip</span>() <span class="op">?</span> <span class="st">&quot;test&quot;</span> <span class="op">:</span> <span class="dv">512</span></span></code></pre></div>
+<p>This article isn’t about whether dynamic typing is a good thing or
+not. My goal for this article is to show you two ways how dynamic typing
+might be implemented in a language runtime and how they differ from each
+other.</p>
+<p>One of those methods will be NaN boxing, a technique in which you
+“box” certain types of values into the 8 bytes of a double-precision
+floating-point value.</p>
 <h2 id="background-knowledge">Background knowledge</h2>
-<p>In order to really understand what’s going on here, I recommend you have at least some familiarity with the C programming language. If bitmasks and pointers are something you’re scared of, I recommend you brush up your skills by reading the following resources first:</p>
+<p>In order to really understand what’s going on here, I recommend you
+have at least some familiarity with the C programming language. If
+bitmasks and pointers are something you’re scared of, I recommend you
+brush up your skills by reading the following resources first:</p>
 <ul class="incremental">
-<li><a href="https://en.wikipedia.org/wiki/Mask_(computing)">Mask (wikipedia.com)</a></li>
-<li><a href="https://beginnersbook.com/2014/01/c-pointers/">Pointers in C Programming with examples</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Mask_(computing)">Mask
+(wikipedia.com)</a></li>
+<li><a href="https://beginnersbook.com/2014/01/c-pointers/">Pointers in
+C Programming with examples</a></li>
 </ul>
-<p>If you feel like you’re comfortable with these topics, then let’s go ahead!</p>
+<p>If you feel like you’re comfortable with these topics, then let’s go
+ahead!</p>
 <h2 id="tagged-unions">Tagged Unions</h2>
-<p>A tagged union is a struct which contains a union of many different other types and a tag (or type) field which signals which type is actually stored. We’ll be implementing a tagged union supporting integers, floats, booleans and “null”. Later we’ll extend the code to also support an array type.</p>
+<p>A tagged union is a struct which contains a union of many different
+other types and a tag (or type) field which signals which type is
+actually stored. We’ll be implementing a tagged union supporting
+integers, floats, booleans and “null”. Later we’ll extend the code to
+also support an array type.</p>
 <blockquote>
-<p>Note: I’m not going to bother with any real memory management (we’re not calling <code>free</code> on anything) and I’m also going to ignore any kinds of security concerns.</p>
+<p>Note: I’m not going to bother with any real memory management (we’re
+not calling <code>free</code> on anything) and I’m also going to ignore
+any kinds of security concerns.</p>
 </blockquote>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co">// The type of the stored value</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">enum</span> {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  TYPE_INTEGER,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>  TYPE_FLOAT,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>  TYPE_BOOL,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>  TYPE_NULL</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>} ValueType;</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="co">// Container type for values</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">struct</span> {</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>  ValueType type;</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>  <span class="kw">union</span> {</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>    <span class="dt">int64_t</span> as_integer;</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>    <span class="dt">double</span>  as_float;</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>    <span class="dt">bool</span>    as_bool;</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>  };</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>} Value;</span></code></pre></div>
-<p>Via the enum <code>ValueType</code>, we’re defining type IDs for all currently supported types. This enum serves as the “tag” part of our tagged union. In case you’re unfamiliar with what the <code>union</code> keyword does, it basically overlays all its members over the same memory. The fields <code>as_integer</code> and <code>as_float</code> physically occupy the same space. If we omitted the <code>union</code>, all members would be laid out consecutively. We would waste the memory of the types that we don’t use. By using a <code>union</code> we reduce the minimum size of the <code>Value</code> struct from the sum of all member types to the size of the biggest member type.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="dt">void</span> print_value(Value* value) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  <span class="cf">switch</span> (value-&gt;type) {</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="cf">case</span> TYPE_INTEGER: {</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>      printf(<span class="st">&quot;%li&quot;</span>, value-&gt;as_integer);</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>      <span class="cf">break</span>;</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>    }</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    <span class="cf">case</span> TYPE_FLOAT: {</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>      printf(<span class="st">&quot;%f&quot;</span>, value-&gt;as_float);</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>      <span class="cf">break</span>;</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>    }</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>    <span class="cf">case</span> TYPE_BOOL: {</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>      printf(<span class="st">&quot;%s&quot;</span>, value-&gt;as_bool ? <span class="st">&quot;true&quot;</span> : <span class="st">&quot;false&quot;</span>);</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>      <span class="cf">break</span>;</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>    }</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>    <span class="cf">case</span> TYPE_NULL: {</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a>      printf(<span class="st">&quot;null&quot;</span>);</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>      <span class="cf">break</span>;</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a>    }</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a>    <span class="cf">default</span>: {</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true"></a>      printf(<span class="st">&quot;Unknown value type!&quot;</span>);</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a>    }</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true"></a>  }</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true"></a>}</span></code></pre></div>
-<p>Next we’re defining a function which prints any value passed to it to the console. We’ll later be extending this method to accommodate more types.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>Value* alloc_value(ValueType type) {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  Value* ptr = (Value*)malloc(<span class="kw">sizeof</span>(Value));</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>  ptr-&gt;type = type;</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>  <span class="cf">return</span> ptr;</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>}</span></code></pre></div>
-<p>The function <code>alloc_value</code> allocates our Value object and assigns it a given type. We’re defining this method so we don’t have to rewrite this code all the time.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>Value* create_integer(<span class="dt">int64_t</span> value) {</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>  Value* ptr = alloc_value(TYPE_INTEGER);</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  ptr-&gt;as_integer = value;</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>  <span class="cf">return</span> ptr;</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>}</span></code></pre></div>
-<p>The function <code>create_integer</code> simply allocates a new Value object using the previously defined <code>alloc_value</code> function and then writes the integer argument into the correct field. Other methods such as <code>create_float</code> and <code>create_bool</code> follow the same principle, which is why I’ve omitted them. You can find the complete source code to everything we’re doing here at the end of this article.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>  print_value(create_integer(<span class="dv">25</span>));</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>  printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>  print_value(create_float(-<span class="fl">512.1234</span>));</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>  printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>  print_value(create_bool(true));</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>  printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a>  print_value(create_null());</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true"></a>  printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true"></a>  <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true"></a>}</span></code></pre></div>
-<p>Finally, we’re printing the created values using the <code>print_value</code> function. After compiling and running the program I get the following output:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// The type of the stored value</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  TYPE_INTEGER<span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  TYPE_FLOAT<span class="op">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  TYPE_BOOL<span class="op">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  TYPE_NULL</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> ValueType<span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Container type for values</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  ValueType type<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">union</span> <span class="op">{</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int64_t</span> as_integer<span class="op">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span>  as_float<span class="op">;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span>    as_bool<span class="op">;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Value<span class="op">;</span></span></code></pre></div>
+<p>Via the enum <code>ValueType</code>, we’re defining type IDs for all
+currently supported types. This enum serves as the “tag” part of our
+tagged union. In case you’re unfamiliar with what the <code>union</code>
+keyword does, it basically overlays all its members over the same
+memory. The fields <code>as_integer</code> and <code>as_float</code>
+physically occupy the same space. If we omitted the <code>union</code>,
+all members would be laid out consecutively. We would waste the memory
+of the types that we don’t use. By using a <code>union</code> we reduce
+the minimum size of the <code>Value</code> struct from the sum of all
+member types to the size of the biggest member type.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> print_value<span class="op">(</span>Value<span class="op">*</span> value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> <span class="op">(</span>value<span class="op">-&gt;</span>type<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> TYPE_INTEGER<span class="op">:</span> <span class="op">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      printf<span class="op">(</span><span class="st">&quot;%li&quot;</span><span class="op">,</span> value<span class="op">-&gt;</span>as_integer<span class="op">);</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> TYPE_FLOAT<span class="op">:</span> <span class="op">{</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      printf<span class="op">(</span><span class="st">&quot;%f&quot;</span><span class="op">,</span> value<span class="op">-&gt;</span>as_float<span class="op">);</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> TYPE_BOOL<span class="op">:</span> <span class="op">{</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      printf<span class="op">(</span><span class="st">&quot;%s&quot;</span><span class="op">,</span> value<span class="op">-&gt;</span>as_bool <span class="op">?</span> <span class="st">&quot;true&quot;</span> <span class="op">:</span> <span class="st">&quot;false&quot;</span><span class="op">);</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> TYPE_NULL<span class="op">:</span> <span class="op">{</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      printf<span class="op">(</span><span class="st">&quot;null&quot;</span><span class="op">);</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">default</span><span class="op">:</span> <span class="op">{</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>      printf<span class="op">(</span><span class="st">&quot;Unknown value type!&quot;</span><span class="op">);</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Next we’re defining a function which prints any value passed to it to
+the console. We’ll later be extending this method to accommodate more
+types.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Value<span class="op">*</span> alloc_value<span class="op">(</span>ValueType type<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  Value<span class="op">*</span> ptr <span class="op">=</span> <span class="op">(</span>Value<span class="op">*)</span>malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span>Value<span class="op">));</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  ptr<span class="op">-&gt;</span>type <span class="op">=</span> type<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ptr<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The function <code>alloc_value</code> allocates our Value object and
+assigns it a given type. We’re defining this method so we don’t have to
+rewrite this code all the time.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Value<span class="op">*</span> create_integer<span class="op">(</span><span class="dt">int64_t</span> value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  Value<span class="op">*</span> ptr <span class="op">=</span> alloc_value<span class="op">(</span>TYPE_INTEGER<span class="op">);</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  ptr<span class="op">-&gt;</span>as_integer <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ptr<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The function <code>create_integer</code> simply allocates a new Value
+object using the previously defined <code>alloc_value</code> function
+and then writes the integer argument into the correct field. Other
+methods such as <code>create_float</code> and <code>create_bool</code>
+follow the same principle, which is why I’ve omitted them. You can find
+the complete source code to everything we’re doing here at the end of
+this article.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  print_value<span class="op">(</span>create_integer<span class="op">(</span><span class="dv">25</span><span class="op">));</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  print_value<span class="op">(</span>create_float<span class="op">(-</span><span class="fl">512.1234</span><span class="op">));</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  print_value<span class="op">(</span>create_bool<span class="op">(</span>true<span class="op">));</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  print_value<span class="op">(</span>create_null<span class="op">());</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Finally, we’re printing the created values using the
+<code>print_value</code> function. After compiling and running the
+program I get the following output:</p>
 <pre><code>25
 -512.1234
 true
 null</code></pre>
-<p>That wasn’t too hard now, was it? Any other code can now build on top of these methods. Let’s add the more complex Array type now.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="co">// The type of the stored value</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">enum</span> {</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>  ...</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>  TYPE_ARRAY</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>} ValueType;</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a><span class="co">// Container for arrays</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a><span class="kw">struct</span> Value;</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">struct</span> {</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true"></a>  <span class="kw">struct</span> Value** data;</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true"></a>  <span class="dt">uint32_t</span> length;</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true"></a>  <span class="dt">uint32_t</span> capacity;</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true"></a>} Array;</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true"></a><span class="co">// Container type for values</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">struct</span> {</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true"></a>  ValueType type;</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true"></a></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true"></a>  <span class="kw">union</span> {</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true"></a>    ...</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true"></a>    Array as_array;</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true"></a>  };</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true"></a>} Value;</span></code></pre></div>
-<p>I’ve added a new type ID for the array type to our <code>ValueType</code> enum. Next I’ve embedded the newly created <code>Array</code> struct into our tagged union. Inside that struct we store a pointer to a list of <code>Value*</code> entries. We also store the current amount of items in the array (<code>length</code>) and the maximum capacity.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="dt">void</span> print_value(Value* value) {</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>  <span class="cf">switch</span> (value-&gt;type) {</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>    <span class="cf">case</span> TYPE_ARRAY: {</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>      Value** value_list = (Value**)(value-&gt;as_array.data);</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>      printf(<span class="st">&quot;[&quot;</span>);</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>      <span class="cf">for</span> (<span class="dt">uint32_t</span> i = <span class="dv">0</span>; i &lt; value-&gt;as_array.length; i++) {</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>        Value* item = value_list[i];</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>        print_value(item);</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>        <span class="cf">if</span> (i != value-&gt;as_array.length - <span class="dv">1</span>) printf(<span class="st">&quot;, &quot;</span>);</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a>      }</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true"></a>      printf(<span class="st">&quot;]&quot;</span>);</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true"></a></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true"></a>      <span class="cf">break</span>;</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true"></a>    }</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true"></a>  }</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true"></a>}</span></code></pre></div>
-<p>The <code>print_value</code> function gets another handler for the newly added <code>TYPE_ARRAY</code> type. It iterates over all the values inside the array and calls the <code>print_value</code> function recursively for each one. We also print some nice brackets and commas for better readability.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>Value* create_array(Value** data, <span class="dt">uint32_t</span> count) {</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  Value* ptr = alloc_value(TYPE_ARRAY);</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>  <span class="co">// Calculate initial capacity</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>  <span class="dt">uint32_t</span> initial_capacity = <span class="dv">4</span>;</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>  <span class="cf">while</span> (initial_capacity &lt; count) {</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a>    initial_capacity *= <span class="dv">2</span>;</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a>  }</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a>  <span class="co">// Allocate value buffer and copy over elements</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a>  <span class="dt">size_t</span> value_buffer_size = <span class="kw">sizeof</span>(Value*) * initial_capacity;</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true"></a>  Value** value_buffer = (Value**)malloc(value_buffer_size);</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true"></a>  memcpy(value_buffer, data, <span class="kw">sizeof</span>(Value*) * count);</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true"></a></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a>  ptr-&gt;as_array.data = (<span class="dt">void</span>*)value_buffer;</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true"></a>  ptr-&gt;as_array.length = count;</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true"></a>  ptr-&gt;as_array.capacity = initial_capacity;</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true"></a></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true"></a>  <span class="cf">return</span> ptr;</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true"></a>}</span></code></pre></div>
-<p>The <code>create_array</code> function starts off by calculating the initial capacity. This is done by finding the nearest power of 2 that is big enough to fit <code>count</code> items. Afterwards we allocate the buffer and copy all the items into it.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>  Value* values[<span class="dv">4</span>];</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>  values[<span class="dv">0</span>] = create_integer(<span class="dv">25</span>);</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>  values[<span class="dv">1</span>] = create_float(-<span class="fl">512.1234</span>);</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>  values[<span class="dv">2</span>] = create_bool(true);</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a>  values[<span class="dv">3</span>] = create_null();</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a>  Value* array = create_array((Values**)values, <span class="dv">4</span>);</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true"></a></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true"></a>  print_value(array);</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true"></a></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true"></a>  <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true"></a>}</span></code></pre></div>
-<p>This time we store our created values inside a stack allocated buffer. We then pass this buffer to our <code>create_array</code> function, which copies the pointers and returns a new array. Running this code results in the following console output:</p>
+<p>That wasn’t too hard now, was it? Any other code can now build on top
+of these methods. Let’s add the more complex Array type now.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// The type of the stored value</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  TYPE_ARRAY</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> ValueType<span class="op">;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Container for arrays</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Value<span class="op">;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">struct</span> Value<span class="op">**</span> data<span class="op">;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint32_t</span> length<span class="op">;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint32_t</span> capacity<span class="op">;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Array<span class="op">;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">// Container type for values</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  ValueType type<span class="op">;</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">union</span> <span class="op">{</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    Array as_array<span class="op">;</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Value<span class="op">;</span></span></code></pre></div>
+<p>I’ve added a new type ID for the array type to our
+<code>ValueType</code> enum. Next I’ve embedded the newly created
+<code>Array</code> struct into our tagged union. Inside that struct we
+store a pointer to a list of <code>Value*</code> entries. We also store
+the current amount of items in the array (<code>length</code>) and the
+maximum capacity.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> print_value<span class="op">(</span>Value<span class="op">*</span> value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> <span class="op">(</span>value<span class="op">-&gt;</span>type<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> TYPE_ARRAY<span class="op">:</span> <span class="op">{</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>      Value<span class="op">**</span> value_list <span class="op">=</span> <span class="op">(</span>Value<span class="op">**)(</span>value<span class="op">-&gt;</span>as_array<span class="op">.</span>data<span class="op">);</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      printf<span class="op">(</span><span class="st">&quot;[&quot;</span><span class="op">);</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> <span class="op">(</span><span class="dt">uint32_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> value<span class="op">-&gt;</span>as_array<span class="op">.</span>length<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        Value<span class="op">*</span> item <span class="op">=</span> value_list<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        print_value<span class="op">(</span>item<span class="op">);</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>i <span class="op">!=</span> value<span class="op">-&gt;</span>as_array<span class="op">.</span>length <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> printf<span class="op">(</span><span class="st">&quot;, &quot;</span><span class="op">);</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      printf<span class="op">(</span><span class="st">&quot;]&quot;</span><span class="op">);</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The <code>print_value</code> function gets another handler for the
+newly added <code>TYPE_ARRAY</code> type. It iterates over all the
+values inside the array and calls the <code>print_value</code> function
+recursively for each one. We also print some nice brackets and commas
+for better readability.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Value<span class="op">*</span> create_array<span class="op">(</span>Value<span class="op">**</span> data<span class="op">,</span> <span class="dt">uint32_t</span> count<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  Value<span class="op">*</span> ptr <span class="op">=</span> alloc_value<span class="op">(</span>TYPE_ARRAY<span class="op">);</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Calculate initial capacity</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint32_t</span> initial_capacity <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> <span class="op">(</span>initial_capacity <span class="op">&lt;</span> count<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    initial_capacity <span class="op">*=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Allocate value buffer and copy over elements</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">size_t</span> value_buffer_size <span class="op">=</span> <span class="kw">sizeof</span><span class="op">(</span>Value<span class="op">*)</span> <span class="op">*</span> initial_capacity<span class="op">;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  Value<span class="op">**</span> value_buffer <span class="op">=</span> <span class="op">(</span>Value<span class="op">**)</span>malloc<span class="op">(</span>value_buffer_size<span class="op">);</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  memcpy<span class="op">(</span>value_buffer<span class="op">,</span> data<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>Value<span class="op">*)</span> <span class="op">*</span> count<span class="op">);</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  ptr<span class="op">-&gt;</span>as_array<span class="op">.</span>data <span class="op">=</span> <span class="op">(</span><span class="dt">void</span><span class="op">*)</span>value_buffer<span class="op">;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  ptr<span class="op">-&gt;</span>as_array<span class="op">.</span>length <span class="op">=</span> count<span class="op">;</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  ptr<span class="op">-&gt;</span>as_array<span class="op">.</span>capacity <span class="op">=</span> initial_capacity<span class="op">;</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> ptr<span class="op">;</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The <code>create_array</code> function starts off by calculating the
+initial capacity. This is done by finding the nearest power of 2 that is
+big enough to fit <code>count</code> items. Afterwards we allocate the
+buffer and copy all the items into it.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  Value<span class="op">*</span> values<span class="op">[</span><span class="dv">4</span><span class="op">];</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  values<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> create_integer<span class="op">(</span><span class="dv">25</span><span class="op">);</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  values<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> create_float<span class="op">(-</span><span class="fl">512.1234</span><span class="op">);</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  values<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> create_bool<span class="op">(</span>true<span class="op">);</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  values<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> create_null<span class="op">();</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  Value<span class="op">*</span> array <span class="op">=</span> create_array<span class="op">((</span>Values<span class="op">**)</span>values<span class="op">,</span> <span class="dv">4</span><span class="op">);</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  print_value<span class="op">(</span>array<span class="op">);</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>This time we store our created values inside a stack allocated
+buffer. We then pass this buffer to our <code>create_array</code>
+function, which copies the pointers and returns a new array. Running
+this code results in the following console output:</p>
 <pre><code>[25, -512.123400, true, null]</code></pre>
-<p>Great! We now have a fully functioning value representation using tagged unions. Based on these principles you can add any other types you want. A <code>String</code> type could be implemented by storing a <code>char*</code> and associated length field. The possibilities really are endless.</p>
-<h2 id="shortcomings-of-using-tagged-unions">Shortcomings of using Tagged Unions</h2>
-<p>A big problem with using tagged unions is that you’re wasting a lot of memory for smaller values. Remember, the <code>Value</code> struct needs to be at least the size of its biggest member. A quick check using <code>sizeof</code> tells me that the current size of the <code>Value</code> struct is 24 bytes. If we want to store 100 integers, each only taking up 8 bytes of memory, we’re wasting 1600 bytes (or 1.6Kb) of memory. It gets even worse when we’re storing a bunch of boolean values. Since they take up only a single byte, for 100 booleans this is already a waste of 2.3Kb.</p>
-<p>Another concern is the duplication of identical values. The runtime would have to allocate a new <code>Value</code> struct for every single new number it encounters. This means that we potentially have hundreds or thousands of copies of the exact same number, just in different value containers. We could try to fix this by coming up with some scheme to reuse pointers of identical values, however this feels more like fighting the symptoms of a bad design rather than solving the core issue.</p>
+<p>Great! We now have a fully functioning value representation using
+tagged unions. Based on these principles you can add any other types you
+want. A <code>String</code> type could be implemented by storing a
+<code>char*</code> and associated length field. The possibilities really
+are endless.</p>
+<h2 id="shortcomings-of-using-tagged-unions">Shortcomings of using
+Tagged Unions</h2>
+<p>A big problem with using tagged unions is that you’re wasting a lot
+of memory for smaller values. Remember, the <code>Value</code> struct
+needs to be at least the size of its biggest member. A quick check using
+<code>sizeof</code> tells me that the current size of the
+<code>Value</code> struct is 24 bytes. If we want to store 100 integers,
+each only taking up 8 bytes of memory, we’re wasting 1600 bytes (or
+1.6Kb) of memory. It gets even worse when we’re storing a bunch of
+boolean values. Since they take up only a single byte, for 100 booleans
+this is already a waste of 2.3Kb.</p>
+<p>Another concern is the duplication of identical values. The runtime
+would have to allocate a new <code>Value</code> struct for every single
+new number it encounters. This means that we potentially have hundreds
+or thousands of copies of the exact same number, just in different value
+containers. We could try to fix this by coming up with some scheme to
+reuse pointers of identical values, however this feels more like
+fighting the symptoms of a bad design rather than solving the core
+issue.</p>
 <p>Can we do better than this?</p>
 <h2 id="nan-boxing">NaN boxing</h2>
-<p>This is where NaN boxing comes in. NaN boxing allows you to cram extra information into the NaN value that exists within the floating-point spectrum of numbers. Let’s take a look at how a <code>double</code> is stored in memory.</p>
+<p>This is where NaN boxing comes in. NaN boxing allows you to cram
+extra information into the NaN value that exists within the
+floating-point spectrum of numbers. Let’s take a look at how a
+<code>double</code> is stored in memory.</p>
 <blockquote>
-<p>Note: All the bit diagrams in this article have the high bit at the left side and the low bit on the right.</p>
+<p>Note: All the bit diagrams in this article have the high bit at the
+left side and the low bit on the right.</p>
 </blockquote>
 <pre><code>+- Sign bit
 |+- 11 Exponent bits
 ||          +- 52 Mantissa bits
 vv          v
 S[Exponent-][Mantissa------------------------------------------]</code></pre>
-<p>An IEEE 754 <code>double</code> is a 8 byte value. The first bit is called the sign bit. The next 11 bits represents the Exponent. The remaining 52 bits are called the Mantissa. The exact way these bits are interpreted and decoded into float numbers is not important right now. The only thing we care about is the way a NaN value is encoded.</p>
+<p>An IEEE 754 <code>double</code> is a 8 byte value. The first bit is
+called the sign bit. The next 11 bits represents the Exponent. The
+remaining 52 bits are called the Mantissa. The exact way these bits are
+interpreted and decoded into float numbers is not important right now.
+The only thing we care about is the way a NaN value is encoded.</p>
 <pre><code>-11111111111Q---------------------------------------------------
             ^
             +- Signalling / Quiet bit</code></pre>
-<p>A NaN value is any float value that has all its exponent bits set to 1. The hardware doesn’t actually care whats inside all the other bits, as long as all the exponent bits are set to 1, its a NaN. The standard also distinguishes between “quiet” and “signalling” NaN values. “Quiet” NaNs fall through any arithmetic operations, while the “signalling” type will throw an exception once detected. For our intents and purposes, we always use the quiet type.</p>
-<p>With the exponent and quiet bits set, we are now left with 52 bits. This is more than enough to store a full pointer. Pointers actually only use the lower 48 bits out of their total 64, meaning we can easily fit it into the leftover 52 bits of the NaN value.</p>
+<p>A NaN value is any float value that has all its exponent bits set to
+1. The hardware doesn’t actually care whats inside all the other bits,
+as long as all the exponent bits are set to 1, its a NaN. The standard
+also distinguishes between “quiet” and “signalling” NaN values. “Quiet”
+NaNs fall through any arithmetic operations, while the “signalling” type
+will throw an exception once detected. For our intents and purposes, we
+always use the quiet type.</p>
+<p>With the exponent and quiet bits set, we are now left with 52 bits.
+This is more than enough to store a full pointer. Pointers actually only
+use the lower 48 bits out of their total 64, meaning we can easily fit
+it into the leftover 52 bits of the NaN value.</p>
 <blockquote>
-<p>Note: This is an assumption about current hardware and architectures. It’s not guaranteed to always be the case so keep that in mind if you’re writing code that’s supposed to last for a very long time (decades+).</p>
+<p>Note: This is an assumption about current hardware and architectures.
+It’s not guaranteed to always be the case so keep that in mind if you’re
+writing code that’s supposed to last for a very long time
+(decades+).</p>
 </blockquote>
-<p>Let’s see how a pointer would be encoded into the NaN value and how we can distinguish a regular NaN value (these should still be available in our language) from an encoded pointer. We can set the sign bit at the beginning of the NaN value to signal that the value is actually an encoded pointer.</p>
+<p>Let’s see how a pointer would be encoded into the NaN value and how
+we can distinguish a regular NaN value (these should still be available
+in our language) from an encoded pointer. We can set the sign bit at the
+beginning of the NaN value to signal that the value is actually an
+encoded pointer.</p>
 <pre><code>+- If set, signals an encoded pointer
 v
 1[Exponent ]1---PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
                 ^
                 +- Encoded pointer value (lower 48 bits)</code></pre>
-<p>With the sign bit set and the pointer value added into the NaN value, we’re left with 3 bits that are still unused. We could for example use these bits to encode a type, which would save us an additional memory load if all we want to know is the type of whatever we’re pointing to.</p>
-<p>If the sign bit isn’t set, we would use these 3 bits to encode the type of the short encoded value. Let’s define some type IDs.</p>
+<p>With the sign bit set and the pointer value added into the NaN value,
+we’re left with 3 bits that are still unused. We could for example use
+these bits to encode a type, which would save us an additional memory
+load if all we want to know is the type of whatever we’re pointing
+to.</p>
+<p>If the sign bit isn’t set, we would use these 3 bits to encode the
+type of the short encoded value. Let’s define some type IDs.</p>
 <pre><code>000 -&gt; NaN
 001 -&gt; False
 010 -&gt; True
@@ -346,7 +465,11 @@ v
 101 -&gt; ???
 110 -&gt; ???
 111 -&gt; ???</code></pre>
-<p>Here it is very important that we assign the type ID <code>000</code> to NaN. This makes it so that the normal NaN value basically encodes itself, according to our scheme. The two boolean values and the null type are also just static constants, which means they don’t need any decoding and we can just use a single comparison to check for them.</p>
+<p>Here it is very important that we assign the type ID <code>000</code>
+to NaN. This makes it so that the normal NaN value basically encodes
+itself, according to our scheme. The two boolean values and the null
+type are also just static constants, which means they don’t need any
+decoding and we can just use a single comparison to check for them.</p>
 <pre><code>+- Sign bit set to 0
 |+- Exponent bits all set to 1
 ||
@@ -357,238 +480,337 @@ vv          vv
 0[Exponent ]1100IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
                 ^
                 +- 48 bits left to store an integer.</code></pre>
-<p>Encoding integers is very similar to encoding pointers, with the exception of setting the sign bit to 0 and putting in the type ID for an integer. This leaves us with enough space to store a 48 bit integer.</p>
+<p>Encoding integers is very similar to encoding pointers, with the
+exception of setting the sign bit to 0 and putting in the type ID for an
+integer. This leaves us with enough space to store a 48 bit integer.</p>
 <h2 id="implementation">Implementation</h2>
-<p>We’ll start by implementing the machinery needed to encode the simple short encoded types <code>NaN</code>, <code>false</code>, <code>true</code> and <code>null</code>. It will provide us with the basic functionality required to later implement integers and pointers. Due to the nature of using little unused crevices of float values to shove our values into, floats themselves are now basically free of charge to us.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="co">// Our short value type</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a><span class="kw">typedef</span> <span class="dt">uint64_t</span> VALUE;</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a><span class="co">// The type of the stored value</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">enum</span> {</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a>  TYPE_FLOAT,</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a>  TYPE_BOOL,</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a>  TYPE_NULL</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a>} ValueType;</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a><span class="co">// Masks for important segments of a float value</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true"></a><span class="pp">#define MASK_SIGN      0x8000000000000000</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true"></a><span class="pp">#define MASK_EXPONENT  0x7ff0000000000000</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true"></a><span class="pp">#define MASK_QUIET     0x0008000000000000</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true"></a><span class="pp">#define MASK_TYPE      0x0007000000000000</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true"></a><span class="pp">#define MASK_SIGNATURE 0xffff000000000000</span></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true"></a></span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true"></a><span class="co">// Type IDs for short encoded types</span></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true"></a><span class="pp">#define MASK_TYPE_NAN   0x0000000000000000</span></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true"></a><span class="pp">#define MASK_TYPE_FALSE 0x0001000000000000</span></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true"></a><span class="pp">#define MASK_TYPE_TRUE  0x0002000000000000</span></span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true"></a><span class="pp">#define MASK_TYPE_NULL  0x0003000000000000</span></span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true"></a></span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true"></a><span class="co">// Signatures of encoded types</span></span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true"></a><span class="pp">#define SIGNATURE_NAN     kNaN</span></span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true"></a><span class="pp">#define SIGNATURE_FALSE   kFalse</span></span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true"></a><span class="pp">#define SIGNATURE_TRUE    kTrue</span></span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true"></a><span class="pp">#define SIGNATURE_NULL    kNull</span></span></code></pre></div>
-<p>We declare a <code>VALUE</code> type so we can differentiate between encoded NaNs and actual <code>uint64_t</code>s. Next we declare some constants related to the different segments of a float number. The <code>SIGNATURE_*</code> values allow us to quickly lookup the type of an encoded value.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>VALUE create_float(<span class="dt">double</span> value) {</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>  <span class="cf">return</span> *(VALUE*)(&amp;value);</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>}</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a><span class="dt">double</span> decode_float(VALUE value) {</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a>  <span class="cf">return</span> *(<span class="dt">double</span>*)(&amp;value);</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a>}</span></code></pre></div>
-<p>As mentioned before, float values are basically free of charge. Its important to note here that we’re doing the conversion between <code>double</code> and <code>VALUE</code> with a pointer dereference. This is so that the compiler doesn’t generate any actual type conversion code. We want the underlying bytes of the value to stay the same, while changing the abstract type assigned to them. If you’re familiar with C++, this would be a <code>reinterpret_cast</code>.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>ValueType get_type(VALUE value) {</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>  <span class="dt">uint64_t</span> signature = value &amp; MASK_SIGNATURE;</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>  <span class="cf">if</span> ((~value &amp; MASK_EXPONENT) != <span class="dv">0</span>) <span class="cf">return</span> TYPE_FLOAT;</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a>  <span class="co">// Short encoded types</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a>  <span class="cf">switch</span> (signature) {</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a>    <span class="cf">case</span> SIGNATURE_NAN:   <span class="cf">return</span> TYPE_FLOAT;</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a>    <span class="cf">case</span> SIGNATURE_FALSE:</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true"></a>    <span class="cf">case</span> SIGNATURE_TRUE:  <span class="cf">return</span> TYPE_BOOL;</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true"></a>    <span class="cf">case</span> SIGNATURE_NULL:  <span class="cf">return</span> TYPE_NULL;</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true"></a>  }</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true"></a></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true"></a>  <span class="cf">return</span> TYPE_NULL;</span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true"></a>}</span></code></pre></div>
-<p>The <code>get_type</code> function first checks for regular float values. We can detect these by checking if any of the exponent bits are set to 0. Next we switch over the signature of the encoded type and return the relevant type.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>  VALUE v_float   = create_float(-<span class="fl">512.1234</span>);</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a>  VALUE v_bool    = kTrue;</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>  VALUE v_null    = kNull;</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a>  print_value(v_float);</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>  printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a>  print_value(v_bool);</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true"></a>  printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true"></a></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true"></a>  print_value(v_null);</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true"></a>  printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true"></a></span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true"></a>  <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true"></a>}</span></code></pre></div>
+<p>We’ll start by implementing the machinery needed to encode the simple
+short encoded types <code>NaN</code>, <code>false</code>,
+<code>true</code> and <code>null</code>. It will provide us with the
+basic functionality required to later implement integers and pointers.
+Due to the nature of using little unused crevices of float values to
+shove our values into, floats themselves are now basically free of
+charge to us.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Our short value type</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="dt">uint64_t</span> VALUE<span class="op">;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">// The type of the stored value</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  TYPE_FLOAT<span class="op">,</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  TYPE_BOOL<span class="op">,</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  TYPE_NULL</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> ValueType<span class="op">;</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Masks for important segments of a float value</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_SIGN      0x8000000000000000</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_EXPONENT  0x7ff0000000000000</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_QUIET     0x0008000000000000</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_TYPE      0x0007000000000000</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_SIGNATURE 0xffff000000000000</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="co">// Type IDs for short encoded types</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_TYPE_NAN   0x0000000000000000</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_TYPE_FALSE 0x0001000000000000</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_TYPE_TRUE  0x0002000000000000</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_TYPE_NULL  0x0003000000000000</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co">// Signatures of encoded types</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SIGNATURE_NAN     kNaN</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SIGNATURE_FALSE   kFalse</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SIGNATURE_TRUE    kTrue</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SIGNATURE_NULL    kNull</span></span></code></pre></div>
+<p>We declare a <code>VALUE</code> type so we can differentiate between
+encoded NaNs and actual <code>uint64_t</code>s. Next we declare some
+constants related to the different segments of a float number. The
+<code>SIGNATURE_*</code> values allow us to quickly lookup the type of
+an encoded value.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>VALUE create_float<span class="op">(</span><span class="dt">double</span> value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="op">*(</span>VALUE<span class="op">*)(&amp;</span>value<span class="op">);</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> decode_float<span class="op">(</span>VALUE value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="op">*(</span><span class="dt">double</span><span class="op">*)(&amp;</span>value<span class="op">);</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>As mentioned before, float values are basically free of charge. Its
+important to note here that we’re doing the conversion between
+<code>double</code> and <code>VALUE</code> with a pointer dereference.
+This is so that the compiler doesn’t generate any actual type conversion
+code. We want the underlying bytes of the value to stay the same, while
+changing the abstract type assigned to them. If you’re familiar with
+C++, this would be a <code>reinterpret_cast</code>.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ValueType get_type<span class="op">(</span>VALUE value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint64_t</span> signature <span class="op">=</span> value <span class="op">&amp;</span> MASK_SIGNATURE<span class="op">;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">((~</span>value <span class="op">&amp;</span> MASK_EXPONENT<span class="op">)</span> <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span> <span class="cf">return</span> TYPE_FLOAT<span class="op">;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Short encoded types</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> <span class="op">(</span>signature<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> SIGNATURE_NAN<span class="op">:</span>   <span class="cf">return</span> TYPE_FLOAT<span class="op">;</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> SIGNATURE_FALSE<span class="op">:</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> SIGNATURE_TRUE<span class="op">:</span>  <span class="cf">return</span> TYPE_BOOL<span class="op">;</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> SIGNATURE_NULL<span class="op">:</span>  <span class="cf">return</span> TYPE_NULL<span class="op">;</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> TYPE_NULL<span class="op">;</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The <code>get_type</code> function first checks for regular float
+values. We can detect these by checking if any of the exponent bits are
+set to 0. Next we switch over the signature of the encoded type and
+return the relevant type.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  VALUE v_float   <span class="op">=</span> create_float<span class="op">(-</span><span class="fl">512.1234</span><span class="op">);</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  VALUE v_bool    <span class="op">=</span> kTrue<span class="op">;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  VALUE v_null    <span class="op">=</span> kNull<span class="op">;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  print_value<span class="op">(</span>v_float<span class="op">);</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  print_value<span class="op">(</span>v_bool<span class="op">);</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  print_value<span class="op">(</span>v_null<span class="op">);</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>And we’re done! Let’s try to print some values.</p>
 <pre><code>-512.123400
 true
 null</code></pre>
 <p>Nice!</p>
 <h2 id="integer-encoding">Integer encoding</h2>
-<p>Encoding integers is the next step in our implementation. It requires us to add a new type ID, payload mask and signature.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="co">// The type of the stored value</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">enum</span> {</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a>  TYPE_INTEGER,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a>  ...</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true"></a>} ValueType;</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true"></a><span class="pp">#define MASK_PAYLOAD_INT  0x00000000ffffffff</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true"></a><span class="pp">#define MASK_TYPE_INTEGER 0x0004000000000000</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true"></a><span class="pp">#define SIGNATURE_INTEGER (kNaN | MASK_TYPE_INTEGER)</span></span></code></pre></div>
-<p>In order to keep the following code simpler, I’ve opted to only use 32 bit integers. Because there is no actual native 48 bit integer type, you’d have to perform some bound checks to make sure the value you’re trying to store wouldn’t get truncated. We’re not going to bother with that as it’s not really important to get the core concept across.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a>VALUE create_integer(<span class="dt">int32_t</span> value) {</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>  <span class="cf">return</span> SIGNATURE_INTEGER | (<span class="dt">uint32_t</span>)value;</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>}</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a><span class="dt">int32_t</span> decode_integer(VALUE value) {</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true"></a>  <span class="cf">return</span> value &amp; MASK_PAYLOAD_INT;</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true"></a>}</span></code></pre></div>
-<p>Note how inside of the <code>create_integer</code> function we’re casting the <code>int32_t</code> argument to a <code>uint32_t</code>. The reason we do this is to prevent negative integers from polluting the rest of the value.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="bn">0x0000000000000000</span> |  (<span class="dt">int32_t</span>)( <span class="dv">1</span>) <span class="co">// 0x0000000000000001</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a><span class="bn">0x0000000000000000</span> |  (<span class="dt">int32_t</span>)(-<span class="dv">1</span>) <span class="co">// 0xffffffffffffffff</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a><span class="bn">0x0000000000000000</span> | (<span class="dt">uint32_t</span>)(-<span class="dv">1</span>) <span class="co">// 0x00000000ffffffff</span></span></code></pre></div>
-<p>The reason this happens is because of an operation called “sign extension”. When casting from a smaller to a bigger type (in our case an implicit cast from <code>int32_t</code> to <code>uint64_t</code>) the value will be sign extended to preserve its sign (positive / negative). For example, if eight bits are used to store the number <code>0101 1110</code> (decimal 94) and we extend this number to 16 bits, the resulting value would be stored as <code>0000 0000 0101 1110</code>. If eight bits are used to store the number <code>1110 1010</code> (decimal -22) and we extend this number to 16 bits, the resulting value would be stored as <code>1111 1111 1110 1010</code>. We do not want this to happen so we cast the signed integer value to its unsigned counterpart, removing the sign extension operation completely.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>  VALUE v_int = create_integer(-<span class="dv">25</span>);</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a>  print_value(v_int);</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a>  printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a>  ...</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true"></a>  <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true"></a>}</span></code></pre></div>
-<p>I’ve also changed the methods <code>get_type</code> and <code>print_value</code> to support our newly added integer encoding. Let’s add it to our testing code and see what we get:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a>-<span class="dv">25</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>-<span class="fl">512.123400</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>true</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>null</span></code></pre></div>
-<p>Great! We now have the ability to encode integers, floats, booleans and “null”.</p>
+<p>Encoding integers is the next step in our implementation. It requires
+us to add a new type ID, payload mask and signature.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">// The type of the stored value</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  TYPE_INTEGER<span class="op">,</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> ValueType<span class="op">;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_PAYLOAD_INT  0x00000000ffffffff</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_TYPE_INTEGER 0x0004000000000000</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SIGNATURE_INTEGER (kNaN | MASK_TYPE_INTEGER)</span></span></code></pre></div>
+<p>In order to keep the following code simpler, I’ve opted to only use
+32 bit integers. Because there is no actual native 48 bit integer type,
+you’d have to perform some bound checks to make sure the value you’re
+trying to store wouldn’t get truncated. We’re not going to bother with
+that as it’s not really important to get the core concept across.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>VALUE create_integer<span class="op">(</span><span class="dt">int32_t</span> value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> SIGNATURE_INTEGER <span class="op">|</span> <span class="op">(</span><span class="dt">uint32_t</span><span class="op">)</span>value<span class="op">;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int32_t</span> decode_integer<span class="op">(</span>VALUE value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> value <span class="op">&amp;</span> MASK_PAYLOAD_INT<span class="op">;</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Note how inside of the <code>create_integer</code> function we’re
+casting the <code>int32_t</code> argument to a <code>uint32_t</code>.
+The reason we do this is to prevent negative integers from polluting the
+rest of the value.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bn">0x0000000000000000</span> <span class="op">|</span>  <span class="op">(</span><span class="dt">int32_t</span><span class="op">)(</span> <span class="dv">1</span><span class="op">)</span> <span class="co">// 0x0000000000000001</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bn">0x0000000000000000</span> <span class="op">|</span>  <span class="op">(</span><span class="dt">int32_t</span><span class="op">)(-</span><span class="dv">1</span><span class="op">)</span> <span class="co">// 0xffffffffffffffff</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bn">0x0000000000000000</span> <span class="op">|</span> <span class="op">(</span><span class="dt">uint32_t</span><span class="op">)(-</span><span class="dv">1</span><span class="op">)</span> <span class="co">// 0x00000000ffffffff</span></span></code></pre></div>
+<p>The reason this happens is because of an operation called “sign
+extension”. When casting from a smaller to a bigger type (in our case an
+implicit cast from <code>int32_t</code> to <code>uint64_t</code>) the
+value will be sign extended to preserve its sign (positive / negative).
+For example, if eight bits are used to store the number
+<code>0101 1110</code> (decimal 94) and we extend this number to 16
+bits, the resulting value would be stored as
+<code>0000 0000 0101 1110</code>. If eight bits are used to store the
+number <code>1110 1010</code> (decimal -22) and we extend this number to
+16 bits, the resulting value would be stored as
+<code>1111 1111 1110 1010</code>. We do not want this to happen so we
+cast the signed integer value to its unsigned counterpart, removing the
+sign extension operation completely.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  VALUE v_int <span class="op">=</span> create_integer<span class="op">(-</span><span class="dv">25</span><span class="op">);</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  print_value<span class="op">(</span>v_int<span class="op">);</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>I’ve also changed the methods <code>get_type</code> and
+<code>print_value</code> to support our newly added integer encoding.
+Let’s add it to our testing code and see what we get:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="op">-</span><span class="dv">25</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="op">-</span><span class="fl">512.123400</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>true</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>null</span></code></pre></div>
+<p>Great! We now have the ability to encode integers, floats, booleans
+and “null”.</p>
 <h2 id="heap-containers---arrays">Heap containers - Arrays</h2>
-<p>Let’s implement pointer encoding and the heap allocated array type. For that we’re going to add the new type ID, payload mask and signature.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="co">// The type of the stored value</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">enum</span> {</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>  ...</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>  TYPE_ARRAY</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a>} ValueType;</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a><span class="pp">#define MASK_PAYLOAD_PTR 0x0000ffffffffffff</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true"></a><span class="pp">#define SIGNATURE_POINTER (kNaN | MASK_SIGN)</span></span></code></pre></div>
-<p>To actually store our array in memory we can now reintroduce tagged unions.</p>
+<p>Let’s implement pointer encoding and the heap allocated array type.
+For that we’re going to add the new type ID, payload mask and
+signature.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">// The type of the stored value</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">enum</span> <span class="op">{</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  TYPE_ARRAY</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> ValueType<span class="op">;</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MASK_PAYLOAD_PTR 0x0000ffffffffffff</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#define SIGNATURE_POINTER (kNaN | MASK_SIGN)</span></span></code></pre></div>
+<p>To actually store our array in memory we can now reintroduce tagged
+unions.</p>
 <blockquote>
 <p>Hold on, I thought we were moving away from tagged unions?</p>
 </blockquote>
-<p>We indeed are! In a way… NaN boxing the small types has allowed us to remove them from our tagged union struct. Now, the only types that are still left inside it are types which are relatively big, as compared to small types like integers or booleans.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="co">// Container for arrays</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">struct</span> {</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>  VALUE* data;</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true"></a>  <span class="dt">uint32_t</span> length;</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true"></a>  <span class="dt">uint32_t</span> capacity;</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true"></a>} Array;</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true"></a></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true"></a><span class="co">// Container type for values</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true"></a><span class="kw">typedef</span> <span class="kw">struct</span> {</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true"></a>  ValueType type;</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true"></a></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true"></a>  <span class="kw">union</span> {</span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true"></a>    Array as_array;</span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true"></a>  };</span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true"></a>} HeapValue;</span></code></pre></div>
-<p>We’re re-adding the Array and Value structs from our tagged union example. <code>Value</code> got renamed to <code>HeapValue</code> to prevent confusing it with our new <code>VALUE</code> type.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a>VALUE create_pointer(HeapValue* ptr) {</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>  <span class="cf">return</span> SIGNATURE_POINTER | (<span class="dt">uint64_t</span>)ptr;</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>}</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true"></a>HeapValue* decode_pointer(VALUE value) {</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a>  <span class="cf">return</span> (HeapValue*)(value &amp; MASK_PAYLOAD_PTR);</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true"></a>}</span></code></pre></div>
+<p>We indeed are! In a way… NaN boxing the small types has allowed us to
+remove them from our tagged union struct. Now, the only types that are
+still left inside it are types which are relatively big, as compared to
+small types like integers or booleans.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Container for arrays</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  VALUE<span class="op">*</span> data<span class="op">;</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint32_t</span> length<span class="op">;</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint32_t</span> capacity<span class="op">;</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Array<span class="op">;</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Container type for values</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  ValueType type<span class="op">;</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">union</span> <span class="op">{</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    Array as_array<span class="op">;</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">};</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> HeapValue<span class="op">;</span></span></code></pre></div>
+<p>We’re re-adding the Array and Value structs from our tagged union
+example. <code>Value</code> got renamed to <code>HeapValue</code> to
+prevent confusing it with our new <code>VALUE</code> type.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>VALUE create_pointer<span class="op">(</span>HeapValue<span class="op">*</span> ptr<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> SIGNATURE_POINTER <span class="op">|</span> <span class="op">(</span><span class="dt">uint64_t</span><span class="op">)</span>ptr<span class="op">;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>HeapValue<span class="op">*</span> decode_pointer<span class="op">(</span>VALUE value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="op">(</span>HeapValue<span class="op">*)(</span>value <span class="op">&amp;</span> MASK_PAYLOAD_PTR<span class="op">);</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Encoding and decoding pointers, easy!</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a>VALUE create_array(VALUE* data, <span class="dt">uint32_t</span> count);</span></code></pre></div>
-<p>The <code>create_array</code> function can also be largely reused, only some types need to be changed in order for it to work. Again, the full source code is linked at the end of this article.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a>ValueType get_type(VALUE value) {</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>  <span class="dt">uint64_t</span> signature = value &amp; MASK_SIGNATURE;</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a>  ...</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a>  <span class="cf">if</span> (signature == SIGNATURE_POINTER) {</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true"></a>    HeapValue* ptr = decode_pointer(value);</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true"></a>    <span class="cf">return</span> ptr-&gt;type;</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true"></a>  }</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true"></a>  ...</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true"></a>  <span class="cf">return</span> TYPE_NULL;</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true"></a>}</span></code></pre></div>
-<p>In order to figure out what type a pointer points to, we have to decode it and look up the <code>type</code> field in the <code>HeapValue</code> object.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="dt">void</span> print_value(VALUE value) {</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>  <span class="cf">switch</span> (get_type(value)) {</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a>    ...</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a>    <span class="cf">case</span> TYPE_ARRAY: {</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a>      HeapValue* val = decode_pointer(value);</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true"></a></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true"></a>      printf(<span class="st">&quot;[&quot;</span>);</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true"></a>      <span class="cf">for</span> (<span class="dt">uint32_t</span> i = <span class="dv">0</span>; i &lt; val-&gt;as_array.length; i++) {</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true"></a>        print_value(val-&gt;as_array.data[i]);</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true"></a>        <span class="cf">if</span> (i != val-&gt;as_array.length - <span class="dv">1</span>) printf(<span class="st">&quot;, &quot;</span>);</span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true"></a>      }</span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true"></a>      printf(<span class="st">&quot;]&quot;</span>);</span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true"></a></span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true"></a>      <span class="cf">break</span>;</span>
-<span id="cb33-15"><a href="#cb33-15" aria-hidden="true"></a>    }</span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true"></a>  }</span>
-<span id="cb33-17"><a href="#cb33-17" aria-hidden="true"></a>}</span></code></pre></div>
-<p>Adding the print handling code for the array type turns the <code>print_value</code> function into a recursive function. We iterate over each item stored inside the array and call <code>print_value</code> on it. After every item, except the last one, we emit a comma in order to improve readability at a first glance.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a>  VALUE v_int     = create_integer(-<span class="dv">25</span>);</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>  VALUE v_float   = create_float(-<span class="fl">512.1234</span>);</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a>  VALUE v_bool    = kTrue;</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true"></a>  VALUE v_null    = kNull;</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true"></a></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true"></a>  VALUE values[<span class="dv">4</span>] = { v_int, v_float, v_bool, v_null};</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true"></a>  VALUE v_array   = create_array(values, <span class="dv">4</span>);</span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true"></a></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true"></a>  print_value(v_array);</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true"></a></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true"></a>  <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true"></a>}</span></code></pre></div>
-<p>Let’s wrap all available types into a single array and print it and see what it gives us:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>VALUE create_array<span class="op">(</span>VALUE<span class="op">*</span> data<span class="op">,</span> <span class="dt">uint32_t</span> count<span class="op">);</span></span></code></pre></div>
+<p>The <code>create_array</code> function can also be largely reused,
+only some types need to be changed in order for it to work. Again, the
+full source code is linked at the end of this article.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ValueType get_type<span class="op">(</span>VALUE value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint64_t</span> signature <span class="op">=</span> value <span class="op">&amp;</span> MASK_SIGNATURE<span class="op">;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(</span>signature <span class="op">==</span> SIGNATURE_POINTER<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    HeapValue<span class="op">*</span> ptr <span class="op">=</span> decode_pointer<span class="op">(</span>value<span class="op">);</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ptr<span class="op">-&gt;</span>type<span class="op">;</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> TYPE_NULL<span class="op">;</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>In order to figure out what type a pointer points to, we have to
+decode it and look up the <code>type</code> field in the
+<code>HeapValue</code> object.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> print_value<span class="op">(</span>VALUE value<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">switch</span> <span class="op">(</span>get_type<span class="op">(</span>value<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> TYPE_ARRAY<span class="op">:</span> <span class="op">{</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>      HeapValue<span class="op">*</span> val <span class="op">=</span> decode_pointer<span class="op">(</span>value<span class="op">);</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>      printf<span class="op">(</span><span class="st">&quot;[&quot;</span><span class="op">);</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> <span class="op">(</span><span class="dt">uint32_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> val<span class="op">-&gt;</span>as_array<span class="op">.</span>length<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>        print_value<span class="op">(</span>val<span class="op">-&gt;</span>as_array<span class="op">.</span>data<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>i <span class="op">!=</span> val<span class="op">-&gt;</span>as_array<span class="op">.</span>length <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> printf<span class="op">(</span><span class="st">&quot;, &quot;</span><span class="op">);</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>      printf<span class="op">(</span><span class="st">&quot;]&quot;</span><span class="op">);</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Adding the print handling code for the array type turns the
+<code>print_value</code> function into a recursive function. We iterate
+over each item stored inside the array and call <code>print_value</code>
+on it. After every item, except the last one, we emit a comma in order
+to improve readability at a first glance.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  VALUE v_int     <span class="op">=</span> create_integer<span class="op">(-</span><span class="dv">25</span><span class="op">);</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  VALUE v_float   <span class="op">=</span> create_float<span class="op">(-</span><span class="fl">512.1234</span><span class="op">);</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  VALUE v_bool    <span class="op">=</span> kTrue<span class="op">;</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  VALUE v_null    <span class="op">=</span> kNull<span class="op">;</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  VALUE values<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span> v_int<span class="op">,</span> v_float<span class="op">,</span> v_bool<span class="op">,</span> v_null<span class="op">};</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  VALUE v_array   <span class="op">=</span> create_array<span class="op">(</span>values<span class="op">,</span> <span class="dv">4</span><span class="op">);</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  print_value<span class="op">(</span>v_array<span class="op">);</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Let’s wrap all available types into a single array and print it and
+see what it gives us:</p>
 <pre><code>[-25, -512.123400, true, null]</code></pre>
 <p>Cool! It works!</p>
-<p>Via the same procedure you can now add even more types such as strings or hashmaps.</p>
+<p>Via the same procedure you can now add even more types such as
+strings or hashmaps.</p>
 <h2 id="encoding-strings-of-n-6">Encoding strings of N &lt;= 6</h2>
-<p>Before I end this article I want to quickly explain how you would store strings of up to 6 bytes in length inside the NaN-boxed representation. I hereby distinguish packed (N = 6) from non-packed (N &lt; 6) strings.</p>
+<p>Before I end this article I want to quickly explain how you would
+store strings of up to 6 bytes in length inside the NaN-boxed
+representation. I hereby distinguish packed (N = 6) from non-packed (N
+&lt; 6) strings.</p>
 <pre><code>             +- Type ID = 101 = Packed String
              |
              ---
 0[Exponent-]1101[Char 6][Char 5][Char 4][Char 3][Char 2][Char 1]</code></pre>
-<p>Let’s first talk about the packed string, as its the simpler concept. The packed string is simply a special short encoded string type which refers to strings that are exactly 6 bytes in length.</p>
-<p>You know those 48 bits that we use to store pointers or integers? There is nothing preventing us from splitting these into six one-byte chunks and store a single character in each one of them.</p>
-<p>But why does it look like the bytes are stored in reverse? This has to do with the endianness, or byte-order of the architecture. The gist is, because little-endian machines store their bytes in reverse order (least-significant byte first, most-significant byte last) we have to also store our string in reverse order. On big endian machines the character bytes would be laid out in the correct (non-reversed) order. This allows us to create a <code>char*</code> pointer which points into the NaN-boxed value, treating it as a regular character buffer.</p>
+<p>Let’s first talk about the packed string, as its the simpler concept.
+The packed string is simply a special short encoded string type which
+refers to strings that are exactly 6 bytes in length.</p>
+<p>You know those 48 bits that we use to store pointers or integers?
+There is nothing preventing us from splitting these into six one-byte
+chunks and store a single character in each one of them.</p>
+<p>But why does it look like the bytes are stored in reverse? This has
+to do with the endianness, or byte-order of the architecture. The gist
+is, because little-endian machines store their bytes in reverse order
+(least-significant byte first, most-significant byte last) we have to
+also store our string in reverse order. On big endian machines the
+character bytes would be laid out in the correct (non-reversed) order.
+This allows us to create a <code>char*</code> pointer which points into
+the NaN-boxed value, treating it as a regular character buffer.</p>
 <pre><code>             +- Type ID = 110 = Non-Packed String
              |
              ---
 0[Exponent-]1110[Length][Char 5][Char 4][Char 3][Char 2][Char 1]</code></pre>
-<p>The non-packed string allows us to store strings ranging from 0 up to 5 bytes in length. We replace the sixth byte with the length property, storing how many of the other bytes are actual data.</p>
-<p>I’ll leave the implementation of these two types as an exercise to the reader. If you don’t want to figure this out yourself, you can go check out the source code for my own programming language Charly, the github link is at the end of this article.</p>
+<p>The non-packed string allows us to store strings ranging from 0 up to
+5 bytes in length. We replace the sixth byte with the length property,
+storing how many of the other bytes are actual data.</p>
+<p>I’ll leave the implementation of these two types as an exercise to
+the reader. If you don’t want to figure this out yourself, you can go
+check out the source code for my own programming language Charly, the
+github link is at the end of this article.</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>I hope you found this article interesting and that it provided you with a basic understanding of how NaN boxing works. If you want to see an actual implementation of NaN boxing inside a language runtime, please check out my toy programming language <a href="https://github.com/KCreate/charly-vm">Charly</a>.</p>
+<p>I hope you found this article interesting and that it provided you
+with a basic understanding of how NaN boxing works. If you want to see
+an actual implementation of NaN boxing inside a language runtime, please
+check out my toy programming language <a
+href="https://github.com/KCreate/charly-vm">Charly</a>.</p>
 <h2 id="alternatives">Alternatives</h2>
-<p>An alternative to NaN-boxing that worth mentioning is a technique called pointer tagging. Pointer tagging relies on the fact that all regularly allocated pointers are aligned to 8 bytes. To find out how exactly pointer tagging works, I will kindly redirect you to my friend Max’s blog. He has a great series going on where he implements a Lisp to x86 compiler, from scratch, in C. The following two articles contain his implementation of pointer tagging.</p>
+<p>An alternative to NaN-boxing that worth mentioning is a technique
+called pointer tagging. Pointer tagging relies on the fact that all
+regularly allocated pointers are aligned to 8 bytes. To find out how
+exactly pointer tagging works, I will kindly redirect you to my friend
+Max’s blog. He has a great series going on where he implements a Lisp to
+x86 compiler, from scratch, in C. The following two articles contain his
+implementation of pointer tagging.</p>
 <ul class="incremental">
-<li><a href="https://bernsteinbear.com/blog/compiling-a-lisp-2/">Compiling a Lisp: Integers</a></li>
-<li><a href="https://bernsteinbear.com/blog/compiling-a-lisp-3/">Compiling a Lisp: Booleans, characters, nil</a></li>
+<li><a
+href="https://bernsteinbear.com/blog/compiling-a-lisp-2/">Compiling a
+Lisp: Integers</a></li>
+<li><a
+href="https://bernsteinbear.com/blog/compiling-a-lisp-3/">Compiling a
+Lisp: Booleans, characters, nil</a></li>
 </ul>
 <h2 id="links">Links</h2>
 <ul class="incremental">
-<li><a href="https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/nan-boxing.c">nan-boxing.c</a></li>
-<li><a href="https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/tagged-union.c">tagged-union.c</a></li>
-<li><a href="https://www.instagram.com/mechantecerises">mechantecerises IG (Header Graphic)</a></li>
-<li><a href="https://github.com/KCreate/charly-vm">Charly Programming Language</a></li>
+<li><a
+href="https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/nan-boxing.c">nan-boxing.c</a></li>
+<li><a
+href="https://github.com/KCreate/leonardschuetz.ch/blob/master/server/resources/blog/200908_nanboxing/tagged-union.c">tagged-union.c</a></li>
+<li><a href="https://www.instagram.com/mechantecerises">mechantecerises
+IG (Header Graphic)</a></li>
+<li><a href="https://github.com/KCreate/charly-vm">Charly Programming
+Language</a></li>
 <li><a href="https://bernsteinbear.com">Max Bernstein’s Blog</a></li>
 </ul>
       </main>
@@ -635,7 +857,7 @@ null</code></pre>
           <span>this blog is <a href="https://github.com/KCreate/leonardschuetz.ch" target="_blank">open-source</a></span>
         </div>
       </footer>
-      <span id="copyright">Copyright © 2020 Leonard Schütz | <a href="/attributions">Attributions</a></span>
+      <span id="copyright">Copyright © 2024 Leonard Schütz | <a href="/attributions">Attributions</a></span>
     </div>
   </body>
   <script src="/script.js" async></script>

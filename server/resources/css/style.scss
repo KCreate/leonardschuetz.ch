@@ -211,17 +211,27 @@ footer {
 
     &.card-blue {
       color: white;
-      background: linear-gradient(25deg, #013b73 0%, #046acc 100%);
+      // background: linear-gradient(25deg, #013b73 0%, #046acc 100%);
+      background: $colorTheme1;
+      .repo {
+        color: rgba(white, 80%);
+      }
     }
 
     &.card-green {
       color: white;
       background: linear-gradient(25deg, #018a7b 0%, #01d6a9 100%);
+      .repo {
+        color: rgba(white, 80%);
+      }
     }
 
     &.card-red {
       color: white;
       background: linear-gradient(25deg, #9f1a2e 0%, #da1e37 100%);
+      .repo {
+        color: rgba(white, 80%);
+      }
     }
 
     border-radius: 10px;
