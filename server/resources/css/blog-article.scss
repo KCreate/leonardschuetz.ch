@@ -1,3 +1,5 @@
+@use "constants";
+
 main.blog-article {
   font-size: 12pt;
 
@@ -18,7 +20,7 @@ main.blog-article {
   }
 
   > h1, h2, h3, h4, h5, h6 {
-    border-left: 4px solid $colorTheme2;
+    border-left: 4px solid constants.$colorTheme2;
     padding: 4px 8px;
     font-weight: normal;
   }
@@ -46,7 +48,7 @@ main.blog-article {
     display: block;
     height: 4px;
     border: none;
-    background-color: $colorTheme1;
+    background-color: constants.$colorTheme1;
   }
 
   ol, ul {
@@ -63,7 +65,7 @@ main.blog-article {
       &::before {
         //content: "■";
         content: "#";
-        color: $colorTheme1;
+        color: constants.$colorTheme1;
         padding-right: 7px;
       }
     }
@@ -71,14 +73,14 @@ main.blog-article {
 
   /* Inline code blocks */
   p code {
-    background-color: $colorLight1;
+    background-color: constants.$colorLight1;
     display: inline-block;
     padding: 0 4px;
     margin: 0;
     border-radius: 2px;
 
     font-size: 11pt;
-    font-family: $fontCode;
+    font-family: constants.$fontCode;
   }
 
   strong {
@@ -87,12 +89,12 @@ main.blog-article {
   }
 
   blockquote > p {
-    background-color: $colorLight1;
+    background-color: constants.$colorLight1;
     padding: 10px 8px;
-    border-left: 4px solid $colorLight3;
+    border-left: 4px solid constants.$colorLight3;
 
     > code {
-      background-color: $colorLight3;
+      background-color: constants.$colorLight3;
     }
   }
 
@@ -101,7 +103,7 @@ main.blog-article {
     width: calc(75%);
     margin: 0 auto;
     border-radius: 3px;
-    box-shadow: $shadow2;
+    box-shadow: constants.$shadow2;
 
     &[alt*="noshadow"] {
       box-shadow: none;
@@ -117,18 +119,18 @@ main.blog-article {
     }
 
     &[alt*="rounded"] {
-      border-radius: 25%;
+      border-radius: 10px;
     }
 
     &[alt*="small"] {
       width: calc(50%);
 
-      @include mobile-small {
+      @include constants.mobile-small {
         width: 75%;
       }
     }
 
-    @include mobile-small {
+    @include constants.mobile-small {
       width: 100%;
     }
   }
@@ -156,11 +158,11 @@ main.blog-article {
     border-radius: 3px;
 
     font-size: 10pt;
-    font-family: $fontCode;
+    font-family: constants.$fontCode;
     line-height: 1.45;
     display: block;
 
-    background-color: $colorLight1;
+    background-color: constants.$colorLight1;
 
     > span {
       float: left;
@@ -169,20 +171,20 @@ main.blog-article {
     * {
       font-weight: 400;
       text-decoration: none;
-      font-family: $fontCode;
+      font-family: constants.$fontCode;
     }
   }
 
   table {
     width: 100%;
-    background-color: $colorLight1;
-    box-shadow: $shadow1;
+    background-color: constants.$colorLight1;
+    box-shadow: constants.$shadow1;
     border-collapse: collapse;
     border-radius: 2px;
     overflow: hidden;
 
     tr {
-        border: 2px solid $colorLight2;
+        border: 2px solid constants.$colorLight2;
     }
 
     th, td {
@@ -195,16 +197,16 @@ main.blog-article {
 
     td {
         height: 36px;
-        border: 2px solid $colorLight2;
+        border: 2px solid constants.$colorLight2;
     }
 
     strong {
         padding: 0;
-        color: $colorBlue1;
+        color: constants.$colorBlue1;
     }
 
     thead {
-        background-color: $colorLight2;
+        background-color: constants.$colorLight2;
         tr th {
             text-align: left;
         }

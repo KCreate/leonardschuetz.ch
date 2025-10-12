@@ -1,5 +1,5 @@
-@import 'constants.scss';
-@import 'blog-article.scss';
+@use 'constants.scss';
+@use 'blog-article.scss';
 
 * {
   margin: 0;
@@ -14,29 +14,29 @@
   max-width: 650px;
   margin: 20px auto 40px auto;
   padding: 0 20px;
-  font-family: $fontRegular;
+  font-family: constants.$fontRegular;
 
   hr {
     border: 0;
-    border-top: 3px dotted $colorTheme1;
+    border-top: 3px dotted constants.$colorTheme1;
     margin: 1em 0;
   }
 }
 
 a {
   color: inherit;
-  border-bottom: 3px solid $colorTheme1;
+  border-bottom: 3px solid constants.$colorTheme1;
   text-decoration: none;
 
   &:hover {
     color: white;
-    background-color: $colorTheme1;
+    background-color: constants.$colorTheme1;
   }
 }
 
 header {
   height: 40px;
-  font-family: $fontMono;
+  font-family: constants.$fontMono;
   font-size: 16pt;
 
   #name-container {
@@ -55,7 +55,7 @@ header {
     float: right;
   }
 
-  @include mobile-small {
+  @include constants.mobile-small {
     height: 70px;
     font-size: 14pt;
 
@@ -80,13 +80,13 @@ header {
 }
 
 main {
-  font-family: $fontRegular;
+  font-family: constants.$fontRegular;
   margin: 15px 0;
   padding: 15px 5px;
 
   min-height: 400px;
 
-  @include mobile-small {
+  @include constants.mobile-small {
     min-height: 0;
   }
 
@@ -99,7 +99,7 @@ main {
 $heightFooter: 30px;
 footer {
   height: $heightFooter;
-  font-family: $fontMono;
+  font-family: constants.$fontMono;
   font-size: 0pt;
   margin-bottom: 20px;
 
@@ -121,7 +121,7 @@ footer {
     font-size: 12pt;
   }
 
-  @include mobile {
+  @include constants.mobile {
     height: 60px;
 
     #social-links {
@@ -140,19 +140,19 @@ footer {
 }
 
 #article-listing {
-  @include mobile-small {
+  @include constants.mobile-small {
     font-size: 14px;
   }
 
   li {
     .submission-date {
-      background-color: $colorLight1;
+      background-color: constants.$colorLight1;
       padding: 0 6px;
       border-radius: 2px;
       float: right;
       font-style: italic;
 
-      @include mobile-small {
+      @include constants.mobile-small {
         display: none;
       }
     }
@@ -163,9 +163,9 @@ footer {
   display: block;
   width: 100%;
   text-align: center;
-  color: $colorLight3;
+  color: constants.$colorLight3;
 
-  @include mobile-small {
+  @include constants.mobile-small {
     font-size: 14px;
   }
 }
@@ -190,7 +190,7 @@ footer {
     display: block;
     float: right;
 
-    background-color: $colorLight1;
+    background-color: constants.$colorLight1;
     border-radius: 2px;
     padding: 0 4px;
     font-style: italic;
@@ -212,7 +212,7 @@ footer {
     &.card-blue {
       color: white;
       // background: linear-gradient(25deg, #013b73 0%, #046acc 100%);
-      background: $colorTheme1;
+      background: constants.$colorTheme1;
       .repo {
         color: rgba(white, 80%);
       }
@@ -235,7 +235,7 @@ footer {
     }
 
     border-radius: 10px;
-    box-shadow: $shadow1;
+    box-shadow: constants.$shadow1;
 
     margin: 5px !important;
     padding: 10px 12px 35px 12px;
@@ -251,25 +251,25 @@ footer {
         opacity: 1;
       }
 
-      box-shadow: $shadow2;
+      box-shadow: constants.$shadow2;
       transform: translateY(-3px);
     }
 
-    @include mobile {
+    @include constants.mobile {
       width: calc(100% - 10px);
       min-height: 0;
       margin: 8px 5px !important;
     }
 
     .title {
-      font-family: $fontMono;
+      font-family: constants.$fontMono;
       font-size: 14pt;
       //font-style: italic;
       font-weight: bold;
     }
 
     .languages {
-      font-family: $fontMono;
+      font-family: constants.$fontMono;
       font-weight: bold;
       float: right;
       margin-left: 10px;
@@ -284,7 +284,7 @@ footer {
       bottom: 10px;
       left: 12px;
 
-      font-family: $fontMono;
+      font-family: constants.$fontMono;
       font-style: italic;
       font-size: 10pt;
       color: rgba(black, 80%);

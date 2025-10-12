@@ -1,39 +1,40 @@
+@use "sass:color";
 // Colors
 $colorChangePercentage: 5%;
-$colorLight1: darken(#FAFAFA, $colorChangePercentage);
-$colorLight2: darken($colorLight1, $colorChangePercentage);
-$colorLight3: darken($colorLight2, $colorChangePercentage);
-$colorLight4: darken($colorLight3, $colorChangePercentage);
+$colorLight1: color.adjust(#FAFAFA, $lightness: -$colorChangePercentage);
+$colorLight2: color.adjust($colorLight1, $lightness: -$colorChangePercentage);
+$colorLight3: color.adjust($colorLight2, $lightness: -$colorChangePercentage);
+$colorLight4: color.adjust($colorLight3, $lightness: -$colorChangePercentage);
 
-$colorDark1: darken(#263238, $colorChangePercentage);
-$colorDark2: lighten($colorDark1, $colorChangePercentage);
-$colorDark3: lighten($colorDark2, $colorChangePercentage);
-$colorDark4: lighten($colorDark3, $colorChangePercentage);
+$colorDark1: color.adjust(#263238, $lightness: -$colorChangePercentage);
+$colorDark2: color.adjust($colorDark1, $lightness: $colorChangePercentage);
+$colorDark3: color.adjust($colorDark2, $lightness: $colorChangePercentage);
+$colorDark4: color.adjust($colorDark3, $lightness: $colorChangePercentage);
 
 $colorBlue1:  #3F51B5;
-$colorBlue2:  darken($colorBlue1, $colorChangePercentage);
-$colorBlue3:  darken($colorBlue2, $colorChangePercentage);
-$colorBlue4:  darken($colorBlue3, $colorChangePercentage);
+$colorBlue2:  color.adjust($colorBlue1, $lightness: -$colorChangePercentage);
+$colorBlue3:  color.adjust($colorBlue2, $lightness: -$colorChangePercentage);
+$colorBlue4:  color.adjust($colorBlue3, $lightness: -$colorChangePercentage);
 
 $colorRed1:  #F50057;
-$colorRed2:  darken($colorRed1, $colorChangePercentage);
-$colorRed3:  darken($colorRed2, $colorChangePercentage);
-$colorRed4:  darken($colorRed3, $colorChangePercentage);
+$colorRed2:  color.adjust($colorRed1, $lightness: -$colorChangePercentage);
+$colorRed3:  color.adjust($colorRed2, $lightness: -$colorChangePercentage);
+$colorRed4:  color.adjust($colorRed3, $lightness: -$colorChangePercentage);
 
 $colorGreen1:  #00897B;
-$colorGreen2:  darken($colorGreen1, $colorChangePercentage);
-$colorGreen3:  darken($colorGreen2, $colorChangePercentage);
-$colorGreen4:  darken($colorGreen3, $colorChangePercentage);
+$colorGreen2:  color.adjust($colorGreen1, $lightness: -$colorChangePercentage);
+$colorGreen3:  color.adjust($colorGreen2, $lightness: -$colorChangePercentage);
+$colorGreen4:  color.adjust($colorGreen3, $lightness: -$colorChangePercentage);
 
 $colorYellow1:  #FFBE0B;
-$colorYellow2:  darken($colorYellow1, $colorChangePercentage);
-$colorYellow3:  darken($colorYellow2, $colorChangePercentage);
-$colorYellow4:  darken($colorYellow3, $colorChangePercentage);
+$colorYellow2:  color.adjust($colorYellow1, $lightness: -$colorChangePercentage);
+$colorYellow3:  color.adjust($colorYellow2, $lightness: -$colorChangePercentage);
+$colorYellow4:  color.adjust($colorYellow3, $lightness: -$colorChangePercentage);
 
-$colorTheme1: $colorBlue1;
-$colorTheme2: darken($colorTheme1, $colorChangePercentage);
-$colorTheme3: darken($colorTheme2, $colorChangePercentage);
-$colorTheme4: darken($colorTheme3, $colorChangePercentage);
+$colorTheme1: $colorGreen1;
+$colorTheme2: color.adjust($colorTheme1, $lightness: -$colorChangePercentage);
+$colorTheme3: color.adjust($colorTheme2, $lightness: -$colorChangePercentage);
+$colorTheme4: color.adjust($colorTheme3, $lightness: -$colorChangePercentage);
 
 // Shadows
 $shadow1: 0 1px  3px  rgba(0,0,0,0.12), 0 1px  2px  rgba(0,0,0,0.24);

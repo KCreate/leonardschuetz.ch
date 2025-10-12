@@ -1,6 +1,5 @@
 main.blog-article {
   font-size: 12pt;
-  /* Inline code blocks */
 }
 main.blog-article#index-page > * {
   margin: 0;
@@ -13,7 +12,7 @@ main.blog-article > *:first-child {
   margin-top: 0;
 }
 main.blog-article > h1, main.blog-article h2, main.blog-article h3, main.blog-article h4, main.blog-article h5, main.blog-article h6 {
-  border-left: 4px solid #3849a2;
+  border-left: 4px solid rgb(0, 111.5, 100.1058394161);
   padding: 4px 8px;
   font-weight: normal;
 }
@@ -56,7 +55,7 @@ main.blog-article hr {
   display: block;
   height: 4px;
   border: none;
-  background-color: #3F51B5;
+  background-color: #00897B;
 }
 main.blog-article ol, main.blog-article ul {
   list-style: none;
@@ -70,11 +69,14 @@ main.blog-article ol li::last-child, main.blog-article ul li::last-child {
 }
 main.blog-article ol li::before, main.blog-article ul li::before {
   content: "#";
-  color: #3F51B5;
+  color: #00897B;
   padding-right: 7px;
 }
+main.blog-article {
+  /* Inline code blocks */
+}
 main.blog-article p code {
-  background-color: #ededed;
+  background-color: rgb(237.25, 237.25, 237.25);
   display: inline-block;
   padding: 0 4px;
   margin: 0;
@@ -87,12 +89,12 @@ main.blog-article strong {
   font-size: 11pt;
 }
 main.blog-article blockquote > p {
-  background-color: #ededed;
+  background-color: rgb(237.25, 237.25, 237.25);
   padding: 10px 8px;
-  border-left: 4px solid #d4d4d4;
+  border-left: 4px solid rgb(211.75, 211.75, 211.75);
 }
 main.blog-article blockquote > p > code {
-  background-color: #d4d4d4;
+  background-color: rgb(211.75, 211.75, 211.75);
 }
 main.blog-article figure img, main.blog-article p img, main.blog-article img {
   display: block;
@@ -112,7 +114,7 @@ main.blog-article figure img[alt*=circle], main.blog-article p img[alt*=circle],
   border-radius: 50%;
 }
 main.blog-article figure img[alt*=rounded], main.blog-article p img[alt*=rounded], main.blog-article img[alt*=rounded] {
-  border-radius: 25%;
+  border-radius: 10px;
 }
 main.blog-article figure img[alt*=small], main.blog-article p img[alt*=small], main.blog-article img[alt*=small] {
   width: 50%;
@@ -144,7 +146,7 @@ main.blog-article pre > code, main.blog-article code.sourceCode > pre > code {
   font-family: monospace;
   line-height: 1.45;
   display: block;
-  background-color: #ededed;
+  background-color: rgb(237.25, 237.25, 237.25);
 }
 main.blog-article pre > code > span, main.blog-article code.sourceCode > pre > code > span {
   float: left;
@@ -156,14 +158,14 @@ main.blog-article pre > code *, main.blog-article code.sourceCode > pre > code *
 }
 main.blog-article table {
   width: 100%;
-  background-color: #ededed;
+  background-color: rgb(237.25, 237.25, 237.25);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   border-collapse: collapse;
   border-radius: 2px;
   overflow: hidden;
 }
 main.blog-article table tr {
-  border: 2px solid #e1e1e1;
+  border: 2px solid rgb(224.5, 224.5, 224.5);
 }
 main.blog-article table th, main.blog-article table td {
   padding: 4px 6px;
@@ -173,14 +175,14 @@ main.blog-article table th {
 }
 main.blog-article table td {
   height: 36px;
-  border: 2px solid #e1e1e1;
+  border: 2px solid rgb(224.5, 224.5, 224.5);
 }
 main.blog-article table strong {
   padding: 0;
   color: #3F51B5;
 }
 main.blog-article table thead {
-  background-color: #e1e1e1;
+  background-color: rgb(224.5, 224.5, 224.5);
 }
 main.blog-article table thead tr th {
   text-align: left;
@@ -203,18 +205,18 @@ main.blog-article table thead tr th {
 }
 #content hr {
   border: 0;
-  border-top: 3px dotted #3F51B5;
+  border-top: 3px dotted #00897B;
   margin: 1em 0;
 }
 
 a {
   color: inherit;
-  border-bottom: 3px solid #3F51B5;
+  border-bottom: 3px solid #00897B;
   text-decoration: none;
 }
 a:hover {
   color: white;
-  background-color: #3F51B5;
+  background-color: #00897B;
 }
 
 header {
@@ -316,7 +318,7 @@ footer #open-source-notice {
   }
 }
 #article-listing li .submission-date {
-  background-color: #ededed;
+  background-color: rgb(237.25, 237.25, 237.25);
   padding: 0 6px;
   border-radius: 2px;
   float: right;
@@ -332,7 +334,7 @@ footer #open-source-notice {
   display: block;
   width: 100%;
   text-align: center;
-  color: #d4d4d4;
+  color: rgb(211.75, 211.75, 211.75);
 }
 @media (max-width: 450px) {
   #copyright {
@@ -356,7 +358,7 @@ footer #open-source-notice {
 .list-entry .when {
   display: block;
   float: right;
-  background-color: #ededed;
+  background-color: rgb(237.25, 237.25, 237.25);
   border-radius: 2px;
   padding: 0 4px;
   font-style: italic;
@@ -372,20 +374,10 @@ footer #open-source-notice {
   text-decoration: none;
   color: black;
   background: linear-gradient(25deg, #fdc500 0%, #ffd500 100%);
-  border-radius: 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  margin: 5px !important;
-  padding: 10px 12px 35px 12px;
-  width: calc(50% - 10px);
-  min-height: 200px;
-  display: inline-block;
-  float: left;
-  position: relative;
-  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
 }
 .project-container .project-card.card-blue {
   color: white;
-  background: #3F51B5;
+  background: #00897B;
 }
 .project-container .project-card.card-blue .repo {
   color: rgba(255, 255, 255, 0.8);
@@ -404,12 +396,24 @@ footer #open-source-notice {
 .project-container .project-card.card-red .repo {
   color: rgba(255, 255, 255, 0.8);
 }
-.project-container .project-card:hover {
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  transform: translateY(-3px);
+.project-container .project-card {
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  margin: 5px !important;
+  padding: 10px 12px 35px 12px;
+  width: calc(50% - 10px);
+  min-height: 200px;
+  display: inline-block;
+  float: left;
+  position: relative;
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
 }
 .project-container .project-card:hover::after {
   opacity: 1;
+}
+.project-container .project-card:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  transform: translateY(-3px);
 }
 @media (max-width: 700px) {
   .project-container .project-card {

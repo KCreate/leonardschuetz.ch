@@ -20,7 +20,7 @@ find server/blog -name "*.md" | while read -r file; do
     -i $file \
     -o ${file%/*}/index.html \
     --template resources/blog-template.html \
-    --highlight-style tango; then
+    --syntax-highlighting tango; then
     colorecho "Built ${file%/*}" $GREEN
   else
     colorecho "Failed to build ${file%/*}" $RED
