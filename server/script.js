@@ -14,10 +14,3 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 ga('create', 'UA-89960492-1', 'auto');
 ga('send', 'pageview');
-
-// Surprise
-function surprise() {
-  const image_url = window.location.origin + "/resources/surprise.jpg";
-  console.log('%c ', 'font-size:700px; background:url(' + image_url + ') no-repeat;');
-}
-console.log("call surprise() to be surprised");
