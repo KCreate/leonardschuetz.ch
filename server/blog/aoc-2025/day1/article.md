@@ -38,7 +38,7 @@ The full set of changes can be found in the following commits
 - [`86fec8b`](https://github.com/KCreate/charly-vm/commit/86fec8b49af454420ac61307447c687edd6c77ff) `Implemented mod (%) opcode`
 - [`f0405b7`](https://github.com/KCreate/charly-vm/commit/f0405b7a2f5ce76bac9643c553b28a6d52958d07) `Implemented Number::floor`
 
-My apprentice [@HartoMedia](https://github.com/HartoMedia) implemented a `getenv` builtin method which
+[My apprentice](https://c.tenor.com/BCDXrDUayDAAAAAC/tenor.gif) at work [@HartoMedia](https://github.com/HartoMedia) implemented a `getenv` builtin method which
 allows you to read a value from the process environment variables.
 
 - [`9a3beea`](https://github.com/KCreate/charly-vm/commit/9a3beea141696331b359b90fcd2c154ee9c30d9a) `Implemented getenv builtin function`
