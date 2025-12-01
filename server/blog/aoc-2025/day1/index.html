@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!--
+██   ██ ███████ ██      ██       ██████  ██ 
+██   ██ ██      ██      ██      ██    ██ ██ 
+███████ █████   ██      ██      ██    ██ ██ 
+██   ██ ██      ██      ██      ██    ██    
+██   ██ ███████ ███████ ███████  ██████  ██ 
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Day 1 of Advent of Code 2025 in Charly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Leonard Schütz">
+    <meta name="description" content="Day 1 of Advent of Code 2025 in
+Charly">
+    <meta name="keywords" content="leonard schütz, programming, compilers, ">
+    <meta name="language" content="English">
+    <meta name="contact" content="hello@leonard.swiss">
+    <meta name="date" content="Mon, 01 Dec 2025 23:00:00 +0100">
+
+    <meta property="og:url" content="https://leonard.swiss/">
+    <meta property="og:title" content="Day 1 of Advent of Code 2025 in Charly">
+    <meta property="og:description" content="Day 1 of Advent of Code
+2025 in Charly">
+    <meta property="og:site_name" content="Leonard Schütz">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@leni4838">
+    <meta name="twitter:title" content="Day 1 of Advent of Code 2025 in Charly">
+    <meta name="twitter:description" content="Day 1 of Advent of Code
+2025 in Charly">
+
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
+    <link rel="alternate" type="application/rss+xml" title="Blog" href="/feed.xml" />
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+
+      </head>
+  <body>
+    <div id="content">
+      <header>
+        <div id="name-container">
+          <a href="/">leonard schütz</a>
+        </div>
+        <nav>
+          <a href="/about">about</a>
+          <a href="/blog/">blog</a>
+        </nav>
+      </header>
+      <main class="blog-article">
+<h1 id="advent-of-code-2025-in-charly">Advent of Code 2025 in
+Charly</h1>
+<h2 id="day-1">Day 1</h2>
+<p>Todays challenge involved determining the final dial position, given
+a series of turn descriptions. The second part had me modify the
+solution, to instead determine how many times the dial clicked past the
+<code>0</code> position.</p>
+<div>
+<iframe frameborder="0" scrolling="no" style="width:100%; height:554px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday1%2Fday1.ch&amp;style=github-dark&amp;type=code&amp;showLineNumbers=on&amp;showFileMeta=on&amp;showCopy=on&amp;maxHeight=500">
+</iframe>
+</div>
+<h2 id="changes-to-the-stdlib-vm">Changes to the stdlib / VM</h2>
+<p>Todays challenge exposed a lot of shortcomings, notably the lack of
+any string processing capabilities. Additionally, <a
+href="https://c.tenor.com/7v_rJ1xrFJ4AAAAC/tenor.gif">for some
+reason</a>, the remainder (<code>%</code>) operator wasn’t implemented
+yet. I stumbled over this fact while experimenting with the REPL
+interface of the language. Computing the remainder of two constants
+worked just fine, but threw an exception when actual variables were
+involved.</p>
+<p><img src="./missing-mod.png" /></p>
+<p>It turned out that my AST optimizing pass understands how to
+constant-fold remainder-operations, but the actual VM didn’t. I quickly
+added the missing opcode and the error went away.</p>
+<p>The full set of changes can be found in the following commits</p>
+<ul class="incremental">
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/264a8e2b72f05839d3a2d08125afe6912756f7cc"><code>264a8e2</code></a>
+<code>Implemented a readfile function</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/640313a5250668ab55b2474ed9287229278b36a6"><code>640313a</code></a>
+<code>Shebang support</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/617020b397f37c30dacc61ecb5d0a5bc73e5d825"><code>617020b</code></a>
+<code>String::split, String::substring, String::index_of</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/5f412a424b3fbd58d7f8bb42764f9b519a1b549c"><code>5f412a4</code></a>
+<code>Added String::to_number</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/86fec8b49af454420ac61307447c687edd6c77ff"><code>86fec8b</code></a>
+<code>Implemented mod (%) opcode</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/f0405b7a2f5ce76bac9643c553b28a6d52958d07"><code>f0405b7</code></a>
+<code>Implemented Number::floor</code></li>
+</ul>
+<p>My apprentice <a href="https://github.com/HartoMedia"><span
+class="citation" data-cites="HartoMedia">@HartoMedia</span></a>
+implemented a <code>getenv</code> builtin method which allows you to
+read a value from the process environment variables.</p>
+<ul class="incremental">
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/9a3beea141696331b359b90fcd2c154ee9c30d9a"><code>9a3beea</code></a>
+<code>Implemented getenv builtin function</code></li>
+</ul>
+<h2 id="links">Links</h2>
+<ul class="incremental">
+<li><a href="https://github.com/KCreate/charly-vm">Charly Programming
+Language</a></li>
+<li><a
+href="https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day1/day1.ch">Source
+code for todays challenge</a></li>
+<li><a href="https://github.com/HartoMedia">Matthias Hartwig - <span
+class="citation" data-cites="HartoMedia">@HartoMedia</span></a></li>
+<li><a
+href="https://www.swissinfo.ch/eng/politics/apprenticeship-system/43796482">Switzerlands
+Apprenticeship System</a></li>
+</ul>
+      </main>
+      <hr/>
+      <footer>
+        <div id="social-links">
+          <a href="https://github.com/KCreate" target="_blank">
+            <img height="20" width="20" src="/resources/github.svg" alt="GitHub Link"/>
+          </a>
+          <a href="https://linkedin.com/in/leonardschuetz" target="_blank">
+            <img height="20" width="20" src="/resources/linkedin.svg" alt="LinkedIn Link"/>
+          </a>
+          <a href="mailto:hello@leonard.swiss?subject=Hello%20Leonard!">
+            <img height="20" width="20" src="/resources/mail.svg" alt="Email Link"/>
+          </a>
+          <a href="/rss.xml" target="_blank">
+            <img height="20" width="20" src="/resources/rss.svg" alt="RSS Link"/>
+          </a>
+        </div>
+        <div id="open-source-notice">
+          <span>this blog is <a href="https://github.com/KCreate/leonardschuetz.ch" target="_blank">open-source</a></span>
+        </div>
+      </footer>
+      <span id="copyright">Copyright © 2024 - 2025 Leonard Schütz | <a href="/attributions">Attributions</a></span>
+    </div>
+  </body>
+  <script src="/script.js" async></script>
+</html>

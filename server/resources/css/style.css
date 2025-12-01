@@ -187,6 +187,9 @@ main.blog-article table thead {
 main.blog-article table thead tr th {
   text-align: left;
 }
+main.blog-article iframe {
+  margin-bottom: -16px;
+}
 
 * {
   margin: 0;

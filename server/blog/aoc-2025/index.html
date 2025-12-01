@@ -9,32 +9,36 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Blog</title>
+    <title>Advent of Code 2025 in Charly</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Leonard Schütz">
-    <meta name="description" content="Leonard Schütz personal website">
-    <meta name="keywords" content="leonard schütz, programming, compilers">
+    <meta name="description" content="Advent of Code 2025 in Charly">
+    <meta name="keywords" content="leonard schütz, programming, compilers, ">
     <meta name="language" content="English">
-    <meta name="contact" content="leni.schuetz@me.com">
+    <meta name="contact" content="hello@leonard.swiss">
+    <meta name="date" content="Mon, 01 Dec 2025 23:00:00 +0100">
 
     <meta property="og:url" content="https://leonard.swiss/">
-    <meta property="og:title" content="Leonard Schütz">
-    <meta property="og:description" content="Leonard Schütz personal website">
+    <meta property="og:title" content="Advent of Code 2025 in Charly">
+    <meta property="og:description" content="Advent of Code 2025 in
+Charly">
     <meta property="og:site_name" content="Leonard Schütz">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@leni4838">
-    <meta name="twitter:title" content="Leonard Schütz">
-    <meta name="twitter:description" content="Leonard Schütz personal website">
+    <meta name="twitter:title" content="Advent of Code 2025 in Charly">
+    <meta name="twitter:description" content="Advent of Code 2025 in
+Charly">
 
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
     <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
     <link rel="alternate" type="application/rss+xml" title="Blog" href="/feed.xml" />
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
-  </head>
+
+      </head>
   <body>
     <div id="content">
       <header>
@@ -47,25 +51,35 @@
         </nav>
       </header>
       <main class="blog-article">
-        <h2>Blog</h2>
-        <ul id="article-listing">
-          <li>
-            <span class="submission-date">1. December 2025</span>
-            <a href="/blog/aoc-2025/">Advent of Code 2025 in Charly</a>
-          </li>
-          <li>
-            <span class="submission-date">8. September 2020</span>
-            <a href="/blog/nan-boxing/">Dynamic Typing and NaN Boxing</a>
-          </li>
-          <li>
-            <span class="submission-date">23. April 2017</span>
-            <a href="/blog/stackvm/">Writing a virtual machine</a>
-          </li>
-          <li>
-            <span class="submission-date">20. November 2016</span>
-            <a href="/blog/charly-lang-interpreter/">The Charly Programming Language Interpreter</a>
-          </li>
-        </ul>
+<h1 id="advent-of-code-2025-in-charly">Advent of Code 2025 in
+Charly</h1>
+<h2 id="december-2025">1. December 2025</h2>
+<p>This year I’m semi-comitting to implementing each <a
+href="https://adventofcode.com/">Advent of Code</a> challenge in my <a
+href="https://github.com/KCreate/charly-vm">programming language
+Charly</a>.</p>
+<p>If you take a look at the <a
+href="https://github.com/KCreate/charly-vm/tree/rewrite/src/charly/stdlib">Charly
+standard library</a>, you will notice the following:</p>
+<blockquote>
+<p><em>It is barren</em></p>
+</blockquote>
+<p>The stdlib lacks the vast majority of features that a modern language
+would normally provide. Adding all the necessary building blocks to
+solve the daily puzzles thus becomes part of the challenge.</p>
+<p>Because of the compounding effect of this, there might be days where
+no changes are required, and days where I’ll have to reinvent the wheel
+to get things running. I might not post every day, only on days where
+something interesting has been built.</p>
+<p>Each article contains a short summary of how I solved the puzzle and
+what changes I had to make to the stdlib or the VM itself.</p>
+<h2 id="days">Days</h2>
+<ul class="incremental">
+<li><a href="./day1">Day 1</a></li>
+</ul>
+<p>You can find the source-code for each daily challenge <a
+href="https://github.com/KCreate/advent-of-code-2025-charly">on my
+GitHub</a>.</p>
       </main>
       <hr/>
       <footer>

@@ -7,6 +7,20 @@
     <atom:link href="https://leonardschuetz.com/rss.xml" rel="self" type="application/rss+xml"/>
 
     <item>
+      <title>Day 1 of Advent of Code 2025 in Charly</title>
+      <link>https://leonardschuetz.ch/blog/aoc-2025/day1</link>
+      <description>Day 1 of Advent of Code 2025 in Charly</description>
+      <pubDate>Mon, 01 Dec 2025 23:00:00 +0100</pubDate>
+    </item>
+
+    <item>
+      <title>Advent of Code 2025 in Charly</title>
+      <link>https://leonardschuetz.ch/blog/aoc-2025</link>
+      <description>Advent of Code 2025 in Charly</description>
+      <pubDate>Mon, 01 Dec 2025 23:00:00 +0100</pubDate>
+    </item>
+
+    <item>
       <title>Dynamic Typing and NaN Boxing</title>
       <link>https://leonardschuetz.ch/blog/nan-boxing</link>
       <description>Introduction to NaN boxing</description>
