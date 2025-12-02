@@ -29,6 +29,7 @@ to the stdlib or the VM itself.
 ## Days
 
 - [Day 1](./day1)
+- [Day 2](./day2)
 
 You can find the source-code for each daily challenge
 [on my GitHub](https://github.com/KCreate/advent-of-code-2025-charly).
