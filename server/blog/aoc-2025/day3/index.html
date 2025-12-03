@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--
+██   ██ ███████ ██      ██       ██████  ██ 
+██   ██ ██      ██      ██      ██    ██ ██ 
+███████ █████   ██      ██      ██    ██ ██ 
+██   ██ ██      ██      ██      ██    ██    
+██   ██ ███████ ███████ ███████  ██████  ██ 
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Day 3 of Advent of Code 2025 in Charly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Leonard Schütz">
+    <meta name="description" content="Day 3 of Advent of Code 2025 in
+Charly">
+    <meta name="keywords" content="leonard schütz, programming, compilers, ">
+    <meta name="language" content="English">
+    <meta name="contact" content="hello@leonard.swiss">
+    <meta name="date" content="Mon, 03 Dec 2025 12:00:00 +0100">
+
+    <meta property="og:url" content="https://leonard.swiss/">
+    <meta property="og:title" content="Day 3 of Advent of Code 2025 in Charly">
+    <meta property="og:description" content="Day 3 of Advent of Code
+2025 in Charly">
+    <meta property="og:site_name" content="Leonard Schütz">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@leni4838">
+    <meta name="twitter:title" content="Day 3 of Advent of Code 2025 in Charly">
+    <meta name="twitter:description" content="Day 3 of Advent of Code
+2025 in Charly">
+
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
+    <link rel="alternate" type="application/rss+xml" title="Blog" href="/feed.xml" />
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+
+      </head>
+  <body>
+    <div id="content">
+      <header>
+        <div id="name-container">
+          <a href="/">leonard schütz</a>
+        </div>
+        <nav>
+          <a href="/about">about</a>
+          <a href="/blog/">blog</a>
+        </nav>
+      </header>
+      <main class="blog-article">
+<h1 id="advent-of-code-2025-in-charly">Advent of Code 2025 in
+Charly</h1>
+<h2 id="day-3">Day 3</h2>
+<p><a href="../">Back to the main article</a></p>
+<p>Today’s task was determining which batteries to turn on to reach the
+highest possible <code>joltage</code>. Batteries were grouped together
+into a bank. For example:</p>
+<p><code>987654321111111</code> is a battery bank that consists of
+<code>15</code> batteries, each with a lower <code>joltage</code> rating
+than the one before it. The total output <code>joltage</code> of a bank
+is equal to the number formed by the <code>joltage</code> ratings of
+each battery that is turned on.</p>
+<p>For example, if you have a bank like <code>12345</code> and you turn
+on battery <code>2</code> and <code>4</code>, you get a total of
+<code>24</code> <code>jolts</code>.</p>
+<p>Part 1 of the puzzle required finding the largest possible
+<code>joltage</code> achievable by turning on exactly two batteries.
+Part 2 modified the task by instead requiring <code>12</code> batteries
+to be turned on.</p>
+<p>I solved the task by determining which battery, when turned on, would
+result in the largest possible <code>joltage</code> for the entire bank,
+and then repeating this as many times as required.</p>
+<p>Interestingly, parallelizing the computation via the
+<code>List::parallelMap</code> method I added yesterday actually
+resulted in a noticeable speedup of around <code>4x</code>. 😁</p>
+<div>
+<iframe frameborder="0" scrolling="no" style="width:100%; height:554px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday3%2Fday3.ch&amp;style=github-dark&amp;type=code&amp;showLineNumbers=on&amp;showFileMeta=on&amp;showCopy=on&amp;maxHeight=500">
+</iframe>
+</div>
+<h2 id="changes-to-the-stdlib-vm">Changes to the stdlib / VM</h2>
+<p>No changes to the VM itself had to be made, but I did add a good
+amount of new functionality to the standard library.</p>
+<ul class="incremental">
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/9fd4ac30e43634d2fd8d9b2b6112802791660a4c"><code>9fd4ac3</code></a>
+<code>Add Number::max and Number::min</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/165d6fdc5eb63792c5165c53b2b9cdc7e86138fb"><code>165d6fd</code></a>
+<code>Add default callback for Int::collectUpTo</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/c486987f2333fa7c5cc6fa406af2e3614ce5db18"><code>c486987</code></a>
+<code>Add List::mapNotNull</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/e464b51b3a1af156736a0c9e355ba5081c7f43d8"><code>e464b51</code></a>
+<code>Add List::sublist</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/9dfd78e8c36b494dc13b0c399b2ee5361940ab3b"><code>9dfd78e</code></a>
+<code>Add List::sum</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/c8acbf588f9e2324f0f472ad4d5d8134e705eaf4"><code>c8acbf5</code></a>
+<code>Add List::join</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/7de6f7ec116c2399ffa6f95c65e8b4a54765c137"><code>7de6f7e</code></a>
+<code>Add List::findMax and List::findMaxBy</code></li>
+</ul>
+<h2 id="links">Links</h2>
+<ul class="incremental">
+<li><a href="https://github.com/KCreate/charly-vm">Charly Programming
+Language</a></li>
+<li><a
+href="https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day3/day3.ch">Source
+code for today’s challenge</a></li>
+</ul>
+      </main>
+      <hr/>
+      <footer>
+        <div id="social-links">
+          <a href="https://github.com/KCreate" target="_blank">
+            <img height="20" width="20" src="/resources/github.svg" alt="GitHub Link"/>
+          </a>
+          <a href="https://linkedin.com/in/leonardschuetz" target="_blank">
+            <img height="20" width="20" src="/resources/linkedin.svg" alt="LinkedIn Link"/>
+          </a>
+          <a href="mailto:hello@leonard.swiss?subject=Hello%20Leonard!">
+            <img height="20" width="20" src="/resources/mail.svg" alt="Email Link"/>
+          </a>
+          <a href="/rss.xml" target="_blank">
+            <img height="20" width="20" src="/resources/rss.svg" alt="RSS Link"/>
+          </a>
+        </div>
+        <div id="open-source-notice">
+          <span>this blog is <a href="https://github.com/KCreate/leonardschuetz.ch" target="_blank">open-source</a></span>
+        </div>
+      </footer>
+      <span id="copyright">Copyright © 2024 - 2025 Leonard Schütz | <a href="/attributions">Attributions</a></span>
+    </div>
+  </body>
+  <script src="/script.js" async></script>
+</html>

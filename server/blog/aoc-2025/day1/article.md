@@ -10,7 +10,7 @@ description: Day 1 of Advent of Code 2025 in Charly
 
 [Back to the main article](../)
 
-Todays challenge involved determining the final dial position, given a series of turn descriptions.
+Today's challenge involved determining the final dial position, given a series of turn descriptions.
 The second part had me modify the solution, to instead determine how many times the dial clicked past the
 `0` position.
 
@@ -20,7 +20,7 @@ The second part had me modify the solution, to instead determine how many times 
 
 ## Changes to the stdlib / VM
 
-Todays challenge exposed a lot of shortcomings, notably the lack of any string processing capabilities.
+Today's challenge exposed a lot of shortcomings, notably the lack of any string processing capabilities.
 Additionally, [for some reason](https://c.tenor.com/7v_rJ1xrFJ4AAAAC/tenor.gif),
 the remainder (`%`) operator wasn't implemented yet.
 I stumbled over this fact while experimenting with the REPL interface of the language.
@@ -48,6 +48,6 @@ allows you to read a value from the process environment variables.
 ## Links
 
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
-- [Source code for todays challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day1/day1.ch)
+- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day1/day1.ch)
 - [Matthias Hartwig - @HartoMedia](https://github.com/HartoMedia)
 - [Switzerlands Apprenticeship System](https://www.swissinfo.ch/eng/politics/apprenticeship-system/43796482)

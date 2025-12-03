@@ -10,7 +10,7 @@ description: Day 2 of Advent of Code 2025 in Charly
 
 [Back to the main article](../)
 
-Todays task involved determining the set of invalid IDs from a list of ID-ranges.
+Today's task involved determining the set of invalid IDs from a list of ID-ranges.
 An ID was invalid if its string representation consisted of two repeated substrings of equal length.
 
 E.g. `55`, `123123`, `827827` are all invalid IDs.
@@ -61,7 +61,7 @@ These changes, alongside some minor tweaks to the implementation of the puzzle s
 time by around **`60%`**.
 Multi-threading the execution also resulted in a measurable performance improvement, altough not as much as I would've liked.
 
-Below you can see the updated implementation of todays puzzle:
+Below you can see the updated implementation of today's puzzle:
 
 <div>
 <iframe frameborder="0" scrolling="no" style="width:100%; height:554px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday2%2Fday2-parallel.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
@@ -90,5 +90,5 @@ I shall revisit this at a later time.
 ## Links
 
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
-- [Source code for todays challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day2/day2.ch)
-- [Source code for todays challenge (parallel)](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day2/day2-parallel.ch)
+- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day2/day2.ch)
+- [Source code for today's challenge (parallel)](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day2/day2-parallel.ch)
