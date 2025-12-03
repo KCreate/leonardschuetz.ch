@@ -23,8 +23,8 @@ that could form the entire ID and then checking if that ID actually consists onl
 Charly does support concurrent and parallel execution of code, which I attempted at first, but the overhead of that
 implementation almost doubled the execution time, so I left it at a single-threaded implementation.
 
-<div>
-<iframe frameborder="0" scrolling="no" style="width:100%; height:554px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday2%2Fday2.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
+<div class="emgithub-wrapper">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:536px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday2%2Fday2.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
 </div>
 
 ## Changes to the stdlib / VM
@@ -32,12 +32,12 @@ implementation almost doubled the execution time, so I left it at a single-threa
 The only additions to the standard library today were the `Int::upTo` and `List::notEmpty` methods.
 You can see the implementations of those methods below:
 
-<div>
-<iframe frameborder="0" scrolling="no" style="width:100%; height:412px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fcharly-vm%2Fblob%2F6f940e22b405433ba47063359ecf0f07307fdbfc%2Fsrc%2Fcharly%2Fstdlib%2Fboot.ch%23L162-L177&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
+<div class="emgithub-wrapper">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:392px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fcharly-vm%2Fblob%2F6f940e22b405433ba47063359ecf0f07307fdbfc%2Fsrc%2Fcharly%2Fstdlib%2Fboot.ch%23L162-L177&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
 </div>
 
-<div>
-<iframe frameborder="0" scrolling="no" style="width:100%; height:97px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fcharly-vm%2Fblob%2Fbc4080d66c110a5cc463b759930aa470e72e60fe%2Fsrc%2Fcharly%2Fstdlib%2Fboot.ch%23L388&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
+<div class="emgithub-wrapper">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:77px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fcharly-vm%2Fblob%2Fbc4080d66c110a5cc463b759930aa470e72e60fe%2Fsrc%2Fcharly%2Fstdlib%2Fboot.ch%23L388&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
 </div>
 
 The individual commits can be found here:
@@ -63,8 +63,8 @@ Multi-threading the execution also resulted in a measurable performance improvem
 
 Below you can see the updated implementation of today's puzzle:
 
-<div>
-<iframe frameborder="0" scrolling="no" style="width:100%; height:554px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday2%2Fday2-parallel.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
+<div class="emgithub-wrapper">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:536px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday2%2Fday2-parallel.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
 </div>
 
 And all the commits that made up tonights late-night hacking session:

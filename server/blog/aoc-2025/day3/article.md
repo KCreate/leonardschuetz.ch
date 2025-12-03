@@ -17,7 +17,7 @@ For example: `987654321111111` is a battery bank that consists of `15` batteries
 than the one before it. The total output `joltage` of a bank is equal to the number formed by the `joltage` ratings
 of each battery that is turned on.
 
-For example, if you have a bank like `12345` and you turn on battery `2` and `4`, you get a total of `24` `jolts`.
+For example, if you have a bank like `12345` and you turn on battery `2` and `4`, you get a total of `24 jolts`.
 
 Part 1 of the puzzle required finding the largest possible `joltage` achievable by turning on exactly two batteries.
 Part 2 modified the task by instead requiring `12` batteries to be turned on.
@@ -28,8 +28,8 @@ for the entire bank, and then repeating this as many times as required.
 Interestingly, parallelizing the computation via the `List::parallelMap` method I added yesterday actually
 resulted in a noticeable speedup of around `4x`. 😁
 
-<div>
-<iframe frameborder="0" scrolling="no" style="width:100%; height:554px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday3%2Fday3.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
+<div class="emgithub-wrapper">
+<iframe frameborder="0" scrolling="no" style="width:100%; height: 536px" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday3%2Fday3.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
 </div>
 
 ## Changes to the stdlib / VM

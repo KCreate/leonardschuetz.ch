@@ -1,4 +1,5 @@
 @use "constants";
+@use "sass:color";
 
 main.blog-article {
   font-size: 12pt;
@@ -21,7 +22,7 @@ main.blog-article {
 
   > h1, h2, h3, h4, h5, h6 {
     border-left: 4px solid constants.$colorTheme2;
-    padding: 4px 8px;
+    padding: 2px 12px;
     font-weight: normal;
   }
 
@@ -73,7 +74,7 @@ main.blog-article {
 
   /* Inline code blocks */
   p code {
-    background-color: constants.$colorLight1;
+    background-color: light-dark(constants.$colorLight1, constants.$colorDark3);
     display: inline-block;
     padding: 0 4px;
     margin: 0;
@@ -89,9 +90,11 @@ main.blog-article {
   }
 
   blockquote > p {
-    background-color: constants.$colorLight1;
+    background-color: constants.$colorNoteBackground1;
     padding: 10px 8px;
-    border-left: 4px solid constants.$colorLight3;
+    border-left: 4px solid constants.$colorNoteBackground4;
+    color: black;
+    border-radius: 2px;
 
     > code {
       background-color: constants.$colorLight3;
@@ -116,6 +119,10 @@ main.blog-article {
 
     &[alt*="circle"] {
       border-radius: 50%;
+    }
+
+    &[alt*="app-icon-ish"] {
+      border-radius: 35%;
     }
 
     &[alt*="rounded"] {
@@ -145,14 +152,11 @@ main.blog-article {
     word-break: break-all;
   }
 
-  // Non-inline code blocks
-  //
-  // Pandoc generates highlighted and non-highlighted blocks differently
-  // so we have to accomodate both styles
   div.sourceCode {
-    background-color: white;
+    background-color: inherit;
   }
-  pre > code, code.sourceCode > pre > code {
+
+  pre > code {
     padding: 10px 10px;
     overflow-x: auto;
     border-radius: 3px;
@@ -163,6 +167,11 @@ main.blog-article {
     display: block;
 
     background-color: constants.$colorLight1;
+    color: black;
+
+    @media (prefers-color-scheme: dark) {
+      filter: invert(1);
+    }
 
     > span {
       float: left;
@@ -213,7 +222,9 @@ main.blog-article {
     }
   }
 
-  iframe {
-    margin-bottom: -16px;
+  .emgithub-wrapper > iframe {
+    border-radius: 6px;
+    // max-height: 536px !important;
+    overflow: hidden;
   }
 }

@@ -6,10 +6,18 @@ $colorLight2: color.adjust($colorLight1, $lightness: -$colorChangePercentage);
 $colorLight3: color.adjust($colorLight2, $lightness: -$colorChangePercentage);
 $colorLight4: color.adjust($colorLight3, $lightness: -$colorChangePercentage);
 
-$colorDark1: color.adjust(#263238, $lightness: -$colorChangePercentage);
+$colorDark1: color.adjust(#242030, $lightness: -$colorChangePercentage);
 $colorDark2: color.adjust($colorDark1, $lightness: $colorChangePercentage);
 $colorDark3: color.adjust($colorDark2, $lightness: $colorChangePercentage);
 $colorDark4: color.adjust($colorDark3, $lightness: $colorChangePercentage);
+
+$colorBackgroundLight: #FFFFFF;
+$colorBackgroundDark: $colorDark1;
+
+$colorNoteBackground1: #FFEB7D;
+$colorNoteBackground2: color.adjust($colorNoteBackground1, $lightness: -$colorChangePercentage);
+$colorNoteBackground3: color.adjust($colorNoteBackground2, $lightness: -$colorChangePercentage);
+$colorNoteBackground4: color.adjust($colorNoteBackground3, $lightness: -$colorChangePercentage);
 
 $colorBlue1:  #3F51B5;
 $colorBlue2:  color.adjust($colorBlue1, $lightness: -$colorChangePercentage);

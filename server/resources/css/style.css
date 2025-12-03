@@ -13,7 +13,7 @@ main.blog-article > *:first-child {
 }
 main.blog-article > h1, main.blog-article h2, main.blog-article h3, main.blog-article h4, main.blog-article h5, main.blog-article h6 {
   border-left: 4px solid rgb(0, 111.5, 100.1058394161);
-  padding: 4px 8px;
+  padding: 2px 12px;
   font-weight: normal;
 }
 main.blog-article > h1 {
@@ -76,7 +76,7 @@ main.blog-article {
   /* Inline code blocks */
 }
 main.blog-article p code {
-  background-color: rgb(237.25, 237.25, 237.25);
+  background-color: light-dark(rgb(237.25, 237.25, 237.25), rgb(47.475, 42.2, 63.3));
   display: inline-block;
   padding: 0 4px;
   margin: 0;
@@ -89,9 +89,11 @@ main.blog-article strong {
   font-size: 11pt;
 }
 main.blog-article blockquote > p {
-  background-color: rgb(237.25, 237.25, 237.25);
+  background-color: #FFEB7D;
   padding: 10px 8px;
-  border-left: 4px solid rgb(211.75, 211.75, 211.75);
+  border-left: 4px solid rgb(255, 223.2307692308, 48.5);
+  color: black;
+  border-radius: 2px;
 }
 main.blog-article blockquote > p > code {
   background-color: rgb(211.75, 211.75, 211.75);
@@ -112,6 +114,9 @@ main.blog-article figure img[alt*=no-smooth], main.blog-article p img[alt*=no-sm
 }
 main.blog-article figure img[alt*=circle], main.blog-article p img[alt*=circle], main.blog-article img[alt*=circle] {
   border-radius: 50%;
+}
+main.blog-article figure img[alt*=app-icon-ish], main.blog-article p img[alt*=app-icon-ish], main.blog-article img[alt*=app-icon-ish] {
+  border-radius: 35%;
 }
 main.blog-article figure img[alt*=rounded], main.blog-article p img[alt*=rounded], main.blog-article img[alt*=rounded] {
   border-radius: 10px;
@@ -136,9 +141,9 @@ main.blog-article pre {
   word-break: break-all;
 }
 main.blog-article div.sourceCode {
-  background-color: white;
+  background-color: inherit;
 }
-main.blog-article pre > code, main.blog-article code.sourceCode > pre > code {
+main.blog-article pre > code {
   padding: 10px 10px;
   overflow-x: auto;
   border-radius: 3px;
@@ -147,11 +152,17 @@ main.blog-article pre > code, main.blog-article code.sourceCode > pre > code {
   line-height: 1.45;
   display: block;
   background-color: rgb(237.25, 237.25, 237.25);
+  color: black;
 }
-main.blog-article pre > code > span, main.blog-article code.sourceCode > pre > code > span {
+@media (prefers-color-scheme: dark) {
+  main.blog-article pre > code {
+    filter: invert(1);
+  }
+}
+main.blog-article pre > code > span {
   float: left;
 }
-main.blog-article pre > code *, main.blog-article code.sourceCode > pre > code * {
+main.blog-article pre > code * {
   font-weight: 400;
   text-decoration: none;
   font-family: monospace;
@@ -187,8 +198,9 @@ main.blog-article table thead {
 main.blog-article table thead tr th {
   text-align: left;
 }
-main.blog-article iframe {
-  margin-bottom: -16px;
+main.blog-article .emgithub-wrapper > iframe {
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 * {
@@ -198,6 +210,14 @@ main.blog-article iframe {
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  background-color: light-dark(#FFFFFF, rgb(24.525, 21.8, 32.7));
 }
 
 #content {
@@ -214,12 +234,14 @@ main.blog-article iframe {
 
 a {
   color: inherit;
-  border-bottom: 3px solid #00897B;
+  border-bottom: 1px solid #00897B;
+  box-shadow: inset 0px -2px 0px #00897B;
   text-decoration: none;
+  transition: color 100ms linear, box-shadow 100ms ease-out;
 }
 a:hover {
   color: white;
-  background-color: #00897B;
+  box-shadow: inset 0px -30px 0px #00897B;
 }
 
 header {
@@ -235,7 +257,7 @@ header a {
   vertical-align: middle;
   height: 100%;
   padding: 0 4px;
-  color: black;
+  color: light-dark(black, white);
 }
 header nav {
   float: right;
@@ -290,13 +312,20 @@ footer #social-links {
 footer #social-links a {
   display: inline-block;
   margin: 0 5px;
-  padding-bottom: 3px;
+  padding: 8px 6px 6px 6px;
+  border-radius: 4px 4px 0px 0px;
+}
+@media (prefers-color-scheme: dark) {
+  footer #social-links a img {
+    filter: invert(1);
+  }
 }
 footer #open-source-notice {
   display: inline-block;
   height: 30px;
   float: right;
   font-size: 12pt;
+  padding-top: 8px;
 }
 @media (max-width: 700px) {
   footer {
@@ -322,27 +351,15 @@ footer #open-source-notice {
 }
 #article-listing li .submission-date {
   background-color: rgb(237.25, 237.25, 237.25);
-  padding: 0 6px;
-  border-radius: 2px;
+  padding: 1px 6px;
+  border-radius: 3px;
   float: right;
   font-style: italic;
+  color: black;
 }
 @media (max-width: 450px) {
   #article-listing li .submission-date {
     display: none;
-  }
-}
-
-#copyright {
-  display: block;
-  width: 100%;
-  text-align: center;
-  color: rgb(211.75, 211.75, 211.75);
-  margin-bottom: 10px;
-}
-@media (max-width: 450px) {
-  #copyright {
-    font-size: 14px;
   }
 }
 
@@ -363,9 +380,22 @@ footer #open-source-notice {
   display: block;
   float: right;
   background-color: rgb(237.25, 237.25, 237.25);
-  border-radius: 2px;
-  padding: 0 4px;
-  font-style: italic;
+  color: black;
+  border-radius: 3px;
+  padding: 1px 6px;
+}
+
+#copyright {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: rgb(211.75, 211.75, 211.75);
+  margin-bottom: 10px;
+}
+@media (max-width: 450px) {
+  #copyright {
+    font-size: 14px;
+  }
 }
 
 .project-container {
@@ -377,31 +407,8 @@ footer #open-source-notice {
 .project-container .project-card {
   border-bottom: none;
   text-decoration: none;
-  color: black;
-  background: linear-gradient(25deg, #fdc500 0%, #ffd500 100%);
-}
-.project-container .project-card.card-blue {
   color: white;
-  background: #00897B;
-}
-.project-container .project-card.card-blue .repo {
-  color: rgba(255, 255, 255, 0.8);
-}
-.project-container .project-card.card-green {
-  color: white;
-  background: linear-gradient(25deg, #018a7b 0%, #01d6a9 100%);
-}
-.project-container .project-card.card-green .repo {
-  color: rgba(255, 255, 255, 0.8);
-}
-.project-container .project-card.card-red {
-  color: white;
-  background: linear-gradient(25deg, #9f1a2e 0%, #da1e37 100%);
-}
-.project-container .project-card.card-red .repo {
-  color: rgba(255, 255, 255, 0.8);
-}
-.project-container .project-card {
+  background: linear-gradient(25deg, rgb(0, 111.5, 100.1058394161) 0%, #00897B 100%);
   border-radius: 10px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   margin: 5px !important;
@@ -418,10 +425,10 @@ footer #open-source-notice {
 }
 .project-container .project-card:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  transform: translateY(0px) rotate(-0.5deg) scale(1.01);
+  transform: rotate(-0.3deg) scale(1.01);
 }
 .project-container .project-card:hover:nth-child(2n) {
-  transform: translateY(0px) rotate(0.5deg) scale(1.01);
+  transform: rotate(0.3deg) scale(1.01);
 }
 @media (max-width: 700px) {
   .project-container .project-card {
@@ -451,7 +458,7 @@ footer #open-source-notice {
   font-family: "Roboto Mono";
   font-style: italic;
   font-size: 10pt;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /*# sourceMappingURL=style.css.map */

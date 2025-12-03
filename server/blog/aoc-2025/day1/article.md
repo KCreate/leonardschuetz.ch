@@ -14,8 +14,8 @@ Today's challenge involved determining the final dial position, given a series o
 The second part had me modify the solution, to instead determine how many times the dial clicked past the
 `0` position.
 
-<div>
-<iframe frameborder="0" scrolling="no" style="width:100%; height:554px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday1%2Fday1.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
+<div class="emgithub-wrapper">
+<iframe frameborder="0" scrolling="no" style="width:100%; height:536px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday1%2Fday1.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
 </div>
 
 ## Changes to the stdlib / VM
