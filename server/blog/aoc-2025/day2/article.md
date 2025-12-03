@@ -77,6 +77,16 @@ And all the commits that made up tonights late-night hacking session:
 - [`387dea6`](https://github.com/KCreate/charly-vm/commit/387dea62a9f8954a9083f52ed162a76e3d874b6c) `Add Int::parallelTimes`
 - [`2059053`](https://github.com/KCreate/charly-vm/commit/20590534828981282ad1731455fd429cdfecc092) `Add Int::collectUpTo`
 
+## Even later late-night Addendum
+
+I had to revert some previous changes, because my previous commits caused some crazy unpredictable segfaults to happen.
+While I don't believe the locking I added back in again truly solved the issue, they're merely masking it, I do kind of
+need a semi-working language to solve the upcoming puzzles.
+
+I shall revisit this at a later time.
+
+- [`908f02c`](https://github.com/KCreate/charly-vm/commit/908f02c7bfd4add1cf9cc9e16cbcb9d0603a4cc5) `Added locks around builtin class logic again`
+
 ## Links
 
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
