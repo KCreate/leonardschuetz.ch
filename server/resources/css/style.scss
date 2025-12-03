@@ -37,7 +37,9 @@ a {
   box-shadow: inset 0px -2px 0px constants.$colorTheme1;
   text-decoration: none;
 
-  transition: color 100ms linear, box-shadow 100ms ease-out;
+  @include constants.desktop {
+    transition: color 100ms linear, box-shadow 100ms ease-out;
+  }
 
   &:hover {
     color: white;

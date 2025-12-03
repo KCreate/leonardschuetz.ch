@@ -237,7 +237,11 @@ a {
   border-bottom: 1px solid #00897B;
   box-shadow: inset 0px -2px 0px #00897B;
   text-decoration: none;
-  transition: color 100ms linear, box-shadow 100ms ease-out;
+}
+@media (min-width: 701px) {
+  a {
+    transition: color 100ms linear, box-shadow 100ms ease-out;
+  }
 }
 a:hover {
   color: white;
