@@ -11,9 +11,9 @@ description: Day 3 of Advent of Code 2025 in Charly
 [Back to the main article](../)
 
 Today's task was determining which batteries to turn on to reach the highest possible `joltage`.
-Batteries were grouped together into a bank. For example:
+Batteries were grouped together into a bank.
 
-`987654321111111` is a battery bank that consists of `15` batteries, each with a lower `joltage` rating
+For example: `987654321111111` is a battery bank that consists of `15` batteries, each with a lower `joltage` rating
 than the one before it. The total output `joltage` of a bank is equal to the number formed by the `joltage` ratings
 of each battery that is turned on.
 

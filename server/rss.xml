@@ -2,55 +2,55 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Leonard Schütz's Blog</title>
-    <link>https://leonardschuetz.ch</link>
+    <link>https://leonard.swiss</link>
     <description>Leonard Schütz's personal website and blog</description>
-    <atom:link href="https://leonardschuetz.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="https://leonard.swiss/rss.xml" rel="self" type="application/rss+xml"/>
 
     <item>
       <title>Day 3 of Advent of Code 2025 in Charly</title>
-      <link>https://leonardschuetz.ch/blog/aoc-2025/day3</link>
+      <link>https://leonard.swiss/blog/aoc-2025/day3</link>
       <description>Day 3 of Advent of Code 2025 in Charly</description>
       <pubDate>Mon, 03 Dec 2025 13:15:00 +0100</pubDate>
     </item>
 
     <item>
       <title>Day 2 of Advent of Code 2025 in Charly</title>
-      <link>https://leonardschuetz.ch/blog/aoc-2025/day2</link>
+      <link>https://leonard.swiss/blog/aoc-2025/day2</link>
       <description>Day 2 of Advent of Code 2025 in Charly</description>
       <pubDate>Mon, 02 Dec 2025 13:15:00 +0100</pubDate>
     </item>
 
     <item>
       <title>Day 1 of Advent of Code 2025 in Charly</title>
-      <link>https://leonardschuetz.ch/blog/aoc-2025/day1</link>
+      <link>https://leonard.swiss/blog/aoc-2025/day1</link>
       <description>Day 1 of Advent of Code 2025 in Charly</description>
       <pubDate>Mon, 01 Dec 2025 23:00:00 +0100</pubDate>
     </item>
 
     <item>
       <title>Advent of Code 2025 in Charly</title>
-      <link>https://leonardschuetz.ch/blog/aoc-2025</link>
+      <link>https://leonard.swiss/blog/aoc-2025</link>
       <description>Advent of Code 2025 in Charly</description>
       <pubDate>Mon, 01 Dec 2025 23:00:00 +0100</pubDate>
     </item>
 
     <item>
       <title>Dynamic Typing and NaN Boxing</title>
-      <link>https://leonardschuetz.ch/blog/nan-boxing</link>
+      <link>https://leonard.swiss/blog/nan-boxing</link>
       <description>Introduction to NaN boxing</description>
       <pubDate>Tue, 08 Sep 2020 16:00:00 +0100</pubDate>
     </item>
 
     <item>
       <title>Writing a virtual machine</title>
-      <link>https://leonardschuetz.ch/blog/stackvm</link>
+      <link>https://leonard.swiss/blog/stackvm</link>
       <description>Writing a stack based virtual machine</description>
       <pubDate>Sun, 23 Apr 2017 16:00:00 +0100</pubDate>
     </item>
 
     <item>
       <title>The Charly Programming Language Interpreter</title>
-      <link>https://leonardschuetz.ch/blog/charly-lang-interpreter</link>
+      <link>https://leonard.swiss/blog/charly-lang-interpreter</link>
       <description>Interpreter for the Charly Programming Language written in Crystal</description>
       <pubDate>Sun, 20 Nov 2016 16:00:00 +0100</pubDate>
     </item>
