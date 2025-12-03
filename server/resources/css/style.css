@@ -338,6 +338,7 @@ footer #open-source-notice {
   width: 100%;
   text-align: center;
   color: rgb(211.75, 211.75, 211.75);
+  margin-bottom: 10px;
 }
 @media (max-width: 450px) {
   #copyright {

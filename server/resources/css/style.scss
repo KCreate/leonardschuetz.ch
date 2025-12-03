@@ -164,6 +164,7 @@ footer {
   width: 100%;
   text-align: center;
   color: constants.$colorLight3;
+  margin-bottom: 10px;
 
   @include constants.mobile-small {
     font-size: 14px;
