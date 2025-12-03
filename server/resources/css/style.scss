@@ -200,8 +200,9 @@ footer {
 
 .project-container {
   margin: 0 !important;
+  padding-bottom: 10px;
   height: auto;
-  overflow: hidden;
+  overflow: overlay;
 
   .project-card {
     border-bottom: none;
@@ -253,7 +254,11 @@ footer {
       }
 
       box-shadow: constants.$shadow2;
-      transform: translateY(-3px);
+      transform: translateY(0px) rotate(-0.5deg) scale(1.01);
+
+      &:nth-child(2n) {
+        transform: translateY(0px) rotate(0.5deg) scale(1.01);
+      }
     }
 
     @include constants.mobile {

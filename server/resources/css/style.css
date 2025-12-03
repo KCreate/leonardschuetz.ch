@@ -370,8 +370,9 @@ footer #open-source-notice {
 
 .project-container {
   margin: 0 !important;
+  padding-bottom: 10px;
   height: auto;
-  overflow: hidden;
+  overflow: overlay;
 }
 .project-container .project-card {
   border-bottom: none;
@@ -417,7 +418,10 @@ footer #open-source-notice {
 }
 .project-container .project-card:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  transform: translateY(-3px);
+  transform: translateY(0px) rotate(-0.5deg) scale(1.01);
+}
+.project-container .project-card:hover:nth-child(2n) {
+  transform: translateY(0px) rotate(0.5deg) scale(1.01);
 }
 @media (max-width: 700px) {
   .project-container .project-card {
