@@ -1,7 +1,7 @@
 ---
 article-id: aoc-2025/day3
 title: Day 3 of Advent of Code 2025 in Charly
-date: Mon, 03 Dec 2025 12:00:00 +0100
+date: Mon, 03 Dec 2025 13:15:00 +0100
 description: Day 3 of Advent of Code 2025 in Charly
 ---
 
