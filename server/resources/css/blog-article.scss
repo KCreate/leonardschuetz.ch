@@ -158,7 +158,8 @@ main.blog-article {
 
   pre > code {
     padding: 10px 10px;
-    overflow-x: auto;
+    overflow-x: scroll;
+    max-height: 600px;
     border-radius: 3px;
 
     font-size: 10pt;
