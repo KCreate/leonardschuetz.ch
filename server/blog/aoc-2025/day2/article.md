@@ -8,7 +8,8 @@ description: Day 2 of Advent of Code 2025 in Charly
 # Advent of Code 2025 in Charly
 ## Day 2
 
-[Back to the main article](../)
+- [Back to the main article](../)
+- [Previous day](../day1) - [Next day](../day3)
 
 Today's task involved determining the set of invalid IDs from a list of ID-ranges.
 An ID was invalid if its string representation consisted of two repeated substrings of equal length.

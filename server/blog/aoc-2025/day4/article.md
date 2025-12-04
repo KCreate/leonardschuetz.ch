@@ -8,7 +8,8 @@ description: Day 4 of Advent of Code 2025 in Charly
 # Advent of Code 2025 in Charly
 ## Day 4
 
-[Back to the main article](../)
+- [Back to the main article](../)
+- [Previous day](../day3)
 
 Today's task involved helping the elfes determine which rolls of paper they can access within their warehouse.
 Their warehouse looked something like this:

@@ -8,7 +8,8 @@ description: Day 1 of Advent of Code 2025 in Charly
 # Advent of Code 2025 in Charly
 ## Day 1
 
-[Back to the main article](../)
+- [Back to the main article](../)
+- [Next day](../day2)
 
 Today's challenge involved determining the final dial position, given a series of turn descriptions.
 The second part had me modify the solution, to instead determine how many times the dial clicked past the

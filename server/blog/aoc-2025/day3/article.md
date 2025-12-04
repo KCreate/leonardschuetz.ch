@@ -8,7 +8,8 @@ description: Day 3 of Advent of Code 2025 in Charly
 # Advent of Code 2025 in Charly
 ## Day 3
 
-[Back to the main article](../)
+- [Back to the main article](../)
+- [Previous day](../day2) - [Next day](../day4)
 
 Today's task was determining which batteries to turn on to reach the highest possible `joltage`.
 Batteries were grouped together into a bank.
