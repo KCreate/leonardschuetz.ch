@@ -11,7 +11,7 @@ description: Day 4 of Advent of Code 2025 in Charly
 - [Back to the main article](../)
 - [Previous day](../day3)
 
-Today's task involved helping the elfes determine which rolls of paper they can access within their warehouse.
+Today's task was to determine which rolls of paper the elves can access in their warehouse.
 Their warehouse looked something like this:
 
 ```
@@ -28,7 +28,7 @@ Their warehouse looked something like this:
 ```
 
 Each `@` represents a roll of paper, while `.` are empty spots.
-A roll of paper can be acessed and removed if it has less than four rolls of paper surrounding it.
+A roll of paper can be accessed and removed if it has fewer than four other rolls surrounding it.
 The first task was determining how many rolls of paper can be immediately accessed.
 Task two had me repeat this procedure until no more rolls of paper could be removed.
 
@@ -118,7 +118,7 @@ loop {
 
 ## Changes to the stdlib / VM
 
-No changes to either VM or stdlib had to be done today! Phew!
+No changes to either VM or stdlib had to be done today!
 
 ## Links
 
