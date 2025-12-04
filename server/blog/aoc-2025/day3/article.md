@@ -29,9 +29,57 @@ for the entire bank, and then repeating this as many times as required.
 Interestingly, parallelizing the computation via the `List::parallelMap` method I added yesterday actually
 resulted in a noticeable speedup of around `4x`. 😁
 
-<div class="emgithub-wrapper">
-<iframe frameborder="0" scrolling="no" style="width:100%; height: 536px" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday3%2Fday3.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
-</div>
+```javascript
+#!/usr/local/bin/charly
+
+if ARGV.length < 2 {
+  print("Missing filepath")
+  exit(1)
+}
+
+const input_path = ARGV[1]
+const input = readfile(input_path)
+
+const amountOfBatteriesToTurnOn = 12
+
+func applyActivationRecord(bank, record) {
+    assert bank.length == record.length
+
+    const activatedBatteries = bank.filter(->(e, i) record[i])
+    const finalNumber = activatedBatteries.join("").to_number()
+
+    return finalNumber
+}
+
+const banks = input
+    .split("\n")
+    .map(->(bank) {
+        bank.split("").map(->(battery) battery.to_number())
+    })
+    .parallelMap(->(bank) {
+        const activationRecord = List.create(bank.length, false)
+
+        amountOfBatteriesToTurnOn.times(->{
+            const potentialFlips = activationRecord.mapNotNull(->(s, i) {
+                if s return null
+
+                const newRecord = activationRecord.copy()
+                newRecord[i] = true
+
+                const newNumber = applyActivationRecord(bank, newRecord)
+                return (newNumber, i)
+            })
+
+            const (newNumber, flipIndex) = potentialFlips.findMaxBy(->(e) e[0])
+            activationRecord[flipIndex] = true
+        })
+
+        applyActivationRecord(bank, activationRecord)
+    })
+
+const finalJoltage = banks.sum()
+print(finalJoltage)
+```
 
 ## Changes to the stdlib / VM
 

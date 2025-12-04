@@ -24,22 +24,88 @@ that could form the entire ID and then checking if that ID actually consists onl
 Charly does support concurrent and parallel execution of code, which I attempted at first, but the overhead of that
 implementation almost doubled the execution time, so I left it at a single-threaded implementation.
 
-<div class="emgithub-wrapper">
-<iframe frameborder="0" scrolling="no" style="width:100%; height:536px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday2%2Fday2.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
-</div>
+```javascript
+#!/usr/local/bin/charly
+
+if ARGV.length < 2 {
+  print("Missing filepath")
+  exit(1)
+}
+
+const input_path = ARGV[1]
+const input = readfile(input_path)
+
+const ranges = input
+    .split(",")
+    .map(->(entry) {
+        const (first, last) = entry.split("-")
+        (first.to_number(), last.to_number())
+    })
+
+const allIds = []
+ranges.each(->(range) {
+    const (first, last) = range
+    first.upTo(last, ->(idx) {
+        allIds.push(idx)
+    })
+})
+
+func checkIsInvalid(entry) {
+    const length = entry.length
+    const possibleParts = 1.collectUpTo(length / 2, ->(partLength) {
+        entry.substring(0, partLength)
+    })
+        .filter(->(part) {
+            // filter out parts that cannot possibly form the entire pattern
+            entry.length % part.length == 0
+        })
+
+    possibleParts.filter(->(part) {
+        const multiplier = entry.length / part.length
+        const check = part * multiplier
+        check == entry
+    }).notEmpty()
+}
+
+const invalidIds = allIds
+    .map(->(id) "{id}")
+    .filter(->(entry) {
+        checkIsInvalid(entry)
+    })
+    .map(->(entry) entry.to_number())
+
+const totalSum = invalidIds.reduce(0, ->(p, c) p + c)
+
+print(totalSum)
+```
 
 ## Changes to the stdlib / VM
 
 The only additions to the standard library today were the `Int::upTo` and `List::notEmpty` methods.
 You can see the implementations of those methods below:
 
-<div class="emgithub-wrapper">
-<iframe frameborder="0" scrolling="no" style="width:100%; height:392px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fcharly-vm%2Fblob%2F6f940e22b405433ba47063359ecf0f07307fdbfc%2Fsrc%2Fcharly%2Fstdlib%2Fboot.ch%23L162-L177&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
-</div>
+```javascript
+func upTo(other, callback) {
+    assert other instanceof Number
+    if other < self {
+        return []
+    }
 
-<div class="emgithub-wrapper">
-<iframe frameborder="0" scrolling="no" style="width:100%; height:77px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fcharly-vm%2Fblob%2Fbc4080d66c110a5cc463b759930aa470e72e60fe%2Fsrc%2Fcharly%2Fstdlib%2Fboot.ch%23L388&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
-</div>
+    const result = []
+    let i = self
+    while i <= other {
+        const r = callback(i)
+        result.push(r)
+        i += 1
+    }
+
+    result
+}
+```
+
+```javascript
+func notEmpty = @length > 0
+```
 
 The individual commits can be found here:
 
@@ -64,9 +130,58 @@ Multi-threading the execution also resulted in a measurable performance improvem
 
 Below you can see the updated implementation of today's puzzle:
 
-<div class="emgithub-wrapper">
-<iframe frameborder="0" scrolling="no" style="width:100%; height:536px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday2%2Fday2-parallel.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
-</div>
+```javascript
+#!/usr/local/bin/charly
+
+if ARGV.length < 2 {
+  print("Missing filepath")
+  exit(1)
+}
+
+const input_path = ARGV[1]
+const input = readfile(input_path)
+
+const ranges = input
+    .split(",")
+    .map(->(entry) {
+        const (first, last) = entry.split("-")
+        (first.to_number(), last.to_number())
+    })
+
+const invalidIdsPerRange = ranges
+    .parallelMap(->(range) {
+        const (first, last) = range
+
+        const invalidIds = []
+
+        first.upTo(last, ->(i) {
+            const entry = "{i}"
+
+            const length = entry.length
+            const parts = 1.collectUpTo(length / 2, ->(partlength) entry.substring(0, partlength))
+            const possibleParts = parts.filter(->(part) {
+                entry.length % part.length == 0
+            })
+
+            const isInvalid = possibleParts.any(->(part) {
+                const multiplier = entry.length / part.length
+                const check = part * multiplier
+                check == entry
+            })
+
+            if isInvalid {
+                invalidIds.push(i)
+            }
+        })
+
+        invalidIds
+    })
+    .flatten()
+
+const totalSum = invalidIdsPerRange.reduce(0, ->(p, c) p + c)
+
+print(totalSum)
+```
 
 And all the commits that made up tonights late-night hacking session:
 

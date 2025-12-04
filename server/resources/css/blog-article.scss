@@ -154,18 +154,19 @@ main.blog-article {
 
   div.sourceCode {
     background-color: inherit;
+    max-height: 600px;
+    overflow-x: scroll;
   }
 
   pre > code {
     padding: 10px 10px;
-    overflow-x: scroll;
-    max-height: 600px;
     border-radius: 3px;
+    width: 100%;
 
     font-size: 10pt;
     font-family: constants.$fontCode;
     line-height: 1.45;
-    display: block;
+    display: inline-block;
 
     background-color: constants.$colorLight1;
     color: black;
@@ -221,11 +222,5 @@ main.blog-article {
             text-align: left;
         }
     }
-  }
-
-  .emgithub-wrapper > iframe {
-    border-radius: 6px;
-    // max-height: 536px !important;
-    overflow: hidden;
   }
 }

@@ -15,9 +15,69 @@ Today's challenge involved determining the final dial position, given a series o
 The second part had me modify the solution, to instead determine how many times the dial clicked past the
 `0` position.
 
-<div class="emgithub-wrapper">
-<iframe frameborder="0" scrolling="no" style="width:100%; height:536px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2FKCreate%2Fadvent-of-code-2025-charly%2Fblob%2Fmain%2Fdays%2Fday1%2Fday1.ch&style=github-dark&type=code&showLineNumbers=on&showFileMeta=on&showCopy=on&maxHeight=500"></iframe>
-</div>
+```javascript
+#!/usr/local/bin/charly
+
+if ARGV.length < 2 {
+  print("Missing filepath")
+  exit(1)
+}
+
+const input_file_path = ARGV[1]
+
+const input = readfile(input_file_path)
+
+class Dial {
+  property limit = 100
+  property dial = 50
+  property total_zeroes = 0
+
+  func turn(dir, count) {
+    count.times(->@click(dir))
+  }
+
+  func click(dir) {
+    switch dir {
+      case "L" {
+        @dial -= 1
+      }
+      case "R" {
+        @dial += 1
+      }
+    }
+
+    if @dial == @limit {
+      @dial = 0
+    }
+
+    if @dial < 0 {
+      @dial += @limit
+    }
+
+    if @dial == 0 {
+      @total_zeroes += 1
+    }
+  }
+}
+
+const dial = Dial()
+
+const operations = input
+  .split("\n")
+  .map(->(line) {
+    const dir = line.substring(0, 1)
+    const count = line.substring(1).to_number()
+    return (dir, count)
+  })
+
+operations.each(->(op) {
+  const (dir, count) = op
+  dial.turn(dir, count)
+})
+
+print("dial: {dial.dial}")
+print("total_zeroes: {dial.total_zeroes}")
+```
 
 ## Changes to the stdlib / VM
 

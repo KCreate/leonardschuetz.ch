@@ -142,16 +142,17 @@ main.blog-article pre {
 }
 main.blog-article div.sourceCode {
   background-color: inherit;
+  max-height: 600px;
+  overflow-x: scroll;
 }
 main.blog-article pre > code {
   padding: 10px 10px;
-  overflow-x: scroll;
-  max-height: 600px;
   border-radius: 3px;
+  width: 100%;
   font-size: 10pt;
   font-family: monospace;
   line-height: 1.45;
-  display: block;
+  display: inline-block;
   background-color: rgb(237.25, 237.25, 237.25);
   color: black;
 }
@@ -198,10 +199,6 @@ main.blog-article table thead {
 }
 main.blog-article table thead tr th {
   text-align: left;
-}
-main.blog-article .emgithub-wrapper > iframe {
-  border-radius: 6px;
-  overflow: hidden;
 }
 
 * {
