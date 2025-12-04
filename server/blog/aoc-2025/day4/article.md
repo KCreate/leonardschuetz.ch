@@ -9,7 +9,7 @@ description: Day 4 of Advent of Code 2025 in Charly
 ## Day 4
 
 - [Back to the main article](../)
-- [Previous day](../day3)
+- [Previous day](../day3) - [Next day](../day5)
 
 Today's task was to determine which rolls of paper the elves can access in their warehouse.
 Their warehouse looked something like this:
