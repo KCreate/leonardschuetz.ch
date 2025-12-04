@@ -89,10 +89,10 @@ main.blog-article strong {
   font-size: 11pt;
 }
 main.blog-article blockquote > p {
-  background-color: #FFEB7D;
+  background-color: light-dark(#F0F0F0, rgb(51.7783505155, 41.675257732, 80.824742268));
   padding: 10px 8px;
-  border-left: 4px solid rgb(255, 223.2307692308, 48.5);
-  color: black;
+  border-left: 4px solid light-dark(rgb(227.25, 227.25, 227.25), rgb(73.3350515464, 59.0257731959, 114.4742268041));
+  color: light-dark(black, white);
   border-radius: 2px;
 }
 main.blog-article blockquote > p > code {

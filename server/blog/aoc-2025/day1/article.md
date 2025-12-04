@@ -11,6 +11,9 @@ description: Day 1 of Advent of Code 2025 in Charly
 - [Back to the main article](../)
 - [Next day](../day2)
 
+> This article is part of of my series on implementing each Advent of Code 2025 challenge in my own
+> programming language Charly.
+
 Today's challenge involved determining the final dial position, given a series of turn descriptions.
 The second part had me modify the solution, to instead determine how many times the dial clicked past the
 `0` position.
@@ -108,6 +111,7 @@ allows you to read a value from the process environment variables.
 
 ## Links
 
+- [Advent of Code](https://adventofcode.com/)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
 - [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day1/day1.ch)
 - [Matthias Hartwig - @HartoMedia](https://github.com/HartoMedia)

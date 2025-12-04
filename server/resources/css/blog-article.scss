@@ -90,10 +90,10 @@ main.blog-article {
   }
 
   blockquote > p {
-    background-color: constants.$colorNoteBackground1;
+    background-color: light-dark(constants.$colorNoteBackgroundLight1, constants.$colorNoteBackgroundDark2);
     padding: 10px 8px;
-    border-left: 4px solid constants.$colorNoteBackground4;
-    color: black;
+    border-left: 4px solid light-dark(constants.$colorNoteBackgroundLight2, constants.$colorNoteBackgroundDark4);
+    color: light-dark(black, white);
     border-radius: 2px;
 
     > code {

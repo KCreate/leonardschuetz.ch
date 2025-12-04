@@ -11,6 +11,9 @@ description: Day 5 of Advent of Code 2025 in Charly
 - [Back to the main article](../)
 - [Previous day](../day4)
 
+> This article is part of of my series on implementing each Advent of Code 2025 challenge in my own
+> programming language Charly.
+
 > TODO task description
 
 Find my solution below:
@@ -26,5 +29,6 @@ Find my solution below:
 
 ## Links
 
+- [Advent of Code](https://adventofcode.com/)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
 - [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day5/day5.ch)

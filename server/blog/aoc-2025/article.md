@@ -8,13 +8,31 @@ description: Advent of Code 2025 in Charly
 # Advent of Code 2025 in Charly
 ## 1. December 2025
 
-This year I'm semi-comitting to implementing each [Advent of Code](https://adventofcode.com/) challenge
+This year I'm semi-committing to implementing each [Advent of Code](https://adventofcode.com/) challenge
 in my [programming language Charly](https://github.com/KCreate/charly-vm).
 
-If you take a look at the [Charly standard library](https://github.com/KCreate/charly-vm/tree/rewrite/src/charly/stdlib),
+Charly is a dynamically typed,
+fully parallel programming language that I've been developing off and on since 2016.
+
+From a programming language development perspective, the current iteration of Charly
+contains some really neat things (my biased opinion), most notably:
+
+- Bytecode compiler and virtual machine
+- Parallel fiber scheduler and runtime (aka green threads, goroutines-ish)
+- Generational and compacting garbage collector
+- Small-value representation via pointer-tagging
+- Object-shape system to improve performance of attribute access
+- Native code implementations of some standard-library methods
+- A tiny one-byte lock implementation used to synchronize per-object operations
+- A custom per-processor bump allocator
+- Written fully from scratch in C++ (except `fcontext` from the Boost library, used for user-space context-switches)
+
+While the compiler, virtual machine, and general runtime are somewhat mature (for a hobby side-project), the same
+can't be said for the standard library.
+If you take a look at the [standard library](https://github.com/KCreate/charly-vm/tree/rewrite/src/charly/stdlib),
 you will notice the following:
 
-> _It is barren_
+> _It is barren._
 
 The stdlib lacks the vast majority of features that a modern language would normally provide.
 Adding all the necessary building blocks to solve the daily puzzles thus becomes part of the challenge.
@@ -26,6 +44,9 @@ something interesting has been built.
 Each article contains a short summary of how I solved the puzzle and what changes I had to make
 to the stdlib or the VM itself.
 
+> Huge thanks to my employer [Zürcher Kantonalbank](https://www.zkb.ch/en/home.html) for giving us an hour
+> of time each day to work on these puzzles!
+
 ## Days
 
 - [Day 1](./day1)
@@ -34,5 +55,5 @@ to the stdlib or the VM itself.
 - [Day 4](./day4)
 - [Day 5](./day5)
 
-You can find the source-code for each daily challenge
+You can find the source code for each daily challenge
 [on my GitHub](https://github.com/KCreate/advent-of-code-2025-charly).

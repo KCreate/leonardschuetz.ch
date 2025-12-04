@@ -11,6 +11,9 @@ description: Day 2 of Advent of Code 2025 in Charly
 - [Back to the main article](../)
 - [Previous day](../day1) - [Next day](../day3)
 
+> This article is part of of my series on implementing each Advent of Code 2025 challenge in my own
+> programming language Charly.
+
 Today's task involved determining the set of invalid IDs from a list of ID-ranges.
 An ID was invalid if its string representation consisted of two repeated substrings of equal length.
 
@@ -205,6 +208,7 @@ I shall revisit this at a later time.
 
 ## Links
 
+- [Advent of Code](https://adventofcode.com/)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
 - [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day2/day2.ch)
 - [Source code for today's challenge (parallel)](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day2/day2-parallel.ch)

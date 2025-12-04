@@ -11,6 +11,9 @@ description: Day 3 of Advent of Code 2025 in Charly
 - [Back to the main article](../)
 - [Previous day](../day2) - [Next day](../day4)
 
+> This article is part of of my series on implementing each Advent of Code 2025 challenge in my own
+> programming language Charly.
+
 Today's task was determining which batteries to turn on to reach the highest possible `joltage`.
 Batteries were grouped together into a bank.
 
@@ -95,5 +98,6 @@ No changes to the VM itself had to be made, but I did add a good amount of new f
 
 ## Links
 
+- [Advent of Code](https://adventofcode.com/)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
 - [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day3/day3.ch)

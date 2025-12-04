@@ -54,15 +54,36 @@ Charly">
 <h1 id="advent-of-code-2025-in-charly">Advent of Code 2025 in
 Charly</h1>
 <h2 id="december-2025">1. December 2025</h2>
-<p>This year I’m semi-comitting to implementing each <a
+<p>This year I’m semi-committing to implementing each <a
 href="https://adventofcode.com/">Advent of Code</a> challenge in my <a
 href="https://github.com/KCreate/charly-vm">programming language
 Charly</a>.</p>
-<p>If you take a look at the <a
-href="https://github.com/KCreate/charly-vm/tree/rewrite/src/charly/stdlib">Charly
-standard library</a>, you will notice the following:</p>
+<p>Charly is a dynamically typed, fully parallel programming language
+that I’ve been developing off and on since 2016.</p>
+<p>From a programming language development perspective, the current
+iteration of Charly contains some really neat things (my biased
+opinion), most notably:</p>
+<ul class="incremental">
+<li>Bytecode compiler and virtual machine</li>
+<li>Parallel fiber scheduler and runtime (aka green threads,
+goroutines-ish)</li>
+<li>Generational and compacting garbage collector</li>
+<li>Small-value representation via pointer-tagging</li>
+<li>Object-shape system to improve performance of attribute access</li>
+<li>Native code implementations of some standard-library methods</li>
+<li>A tiny one-byte lock implementation used to synchronize per-object
+operations</li>
+<li>A custom per-processor bump allocator</li>
+<li>Written fully from scratch in C++ (except <code>fcontext</code> from
+the Boost library, used for user-space context-switches)</li>
+</ul>
+<p>While the compiler, virtual machine, and general runtime are somewhat
+mature (for a hobby side-project), the same can’t be said for the
+standard library. If you take a look at the <a
+href="https://github.com/KCreate/charly-vm/tree/rewrite/src/charly/stdlib">standard
+library</a>, you will notice the following:</p>
 <blockquote>
-<p><em>It is barren</em></p>
+<p><em>It is barren.</em></p>
 </blockquote>
 <p>The stdlib lacks the vast majority of features that a modern language
 would normally provide. Adding all the necessary building blocks to
@@ -73,14 +94,20 @@ to get things running. I might not post every day, only on days where
 something interesting has been built.</p>
 <p>Each article contains a short summary of how I solved the puzzle and
 what changes I had to make to the stdlib or the VM itself.</p>
+<blockquote>
+<p>Huge thanks to my employer <a
+href="https://www.zkb.ch/en/home.html">Zürcher Kantonalbank</a> for
+giving us an hour of time each day to work on these puzzles!</p>
+</blockquote>
 <h2 id="days">Days</h2>
 <ul class="incremental">
 <li><a href="./day1">Day 1</a></li>
 <li><a href="./day2">Day 2</a></li>
 <li><a href="./day3">Day 3</a></li>
 <li><a href="./day4">Day 4</a></li>
+<li><a href="./day5">Day 5</a></li>
 </ul>
-<p>You can find the source-code for each daily challenge <a
+<p>You can find the source code for each daily challenge <a
 href="https://github.com/KCreate/advent-of-code-2025-charly">on my
 GitHub</a>.</p>
       </main>
