@@ -54,10 +54,11 @@ main.blog-article {
 
   ol, ul {
     list-style: none;
-    padding-left: 1em;
+    padding-left: 2em;
 
     li {
       margin-bottom: 5px;
+      text-indent: -1em;
 
       &::last-child {
         margin-bottom: 0px;
@@ -72,16 +73,24 @@ main.blog-article {
     }
   }
 
+  code {
+    white-space: collapse;
+  }
+
   /* Inline code blocks */
-  p code {
+  p code, ol code, ul code {
     background-color: light-dark(constants.$colorLight1, constants.$colorDark3);
-    display: inline-block;
     padding: 0 4px;
     margin: 0;
     border-radius: 2px;
+    word-wrap: break-word;
 
     font-size: 11pt;
     font-family: constants.$fontCode;
+  }
+
+  a code {
+    background-color: inherit;
   }
 
   strong {
@@ -93,7 +102,7 @@ main.blog-article {
     background-color: light-dark(constants.$colorNoteBackgroundLight1, constants.$colorNoteBackgroundDark2);
     padding: 10px 8px;
     border-left: 4px solid light-dark(constants.$colorNoteBackgroundLight2, constants.$colorNoteBackgroundDark4);
-    color: light-dark(black, white);
+    color: black;
     border-radius: 2px;
 
     > code {
@@ -153,15 +162,21 @@ main.blog-article {
   }
 
   div.sourceCode {
-    background-color: inherit;
+    background-color: constants.$colorLight1;
     max-height: 600px;
-    overflow-x: scroll;
+    overflow: scroll;
+    border-radius: 3px;
+  }
+
+  pre > code:not([class]) {
+    overflow: scroll;
   }
 
   pre > code {
     padding: 10px 10px;
     border-radius: 3px;
     width: 100%;
+    white-space: pre;
 
     font-size: 10pt;
     font-family: constants.$fontCode;

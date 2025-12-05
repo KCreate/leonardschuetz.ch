@@ -59,10 +59,11 @@ main.blog-article hr {
 }
 main.blog-article ol, main.blog-article ul {
   list-style: none;
-  padding-left: 1em;
+  padding-left: 2em;
 }
 main.blog-article ol li, main.blog-article ul li {
   margin-bottom: 5px;
+  text-indent: -1em;
 }
 main.blog-article ol li::last-child, main.blog-article ul li::last-child {
   margin-bottom: 0px;
@@ -72,27 +73,33 @@ main.blog-article ol li::before, main.blog-article ul li::before {
   color: #00897B;
   padding-right: 7px;
 }
+main.blog-article code {
+  white-space: collapse;
+}
 main.blog-article {
   /* Inline code blocks */
 }
-main.blog-article p code {
+main.blog-article p code, main.blog-article ol code, main.blog-article ul code {
   background-color: light-dark(rgb(237.25, 237.25, 237.25), rgb(47.475, 42.2, 63.3));
-  display: inline-block;
   padding: 0 4px;
   margin: 0;
   border-radius: 2px;
+  word-wrap: break-word;
   font-size: 11pt;
   font-family: monospace;
+}
+main.blog-article a code {
+  background-color: inherit;
 }
 main.blog-article strong {
   font-weight: bold;
   font-size: 11pt;
 }
 main.blog-article blockquote > p {
-  background-color: light-dark(#F0F0F0, rgb(51.7783505155, 41.675257732, 80.824742268));
+  background-color: light-dark(#FFEF98, rgb(255, 229.1041666667, 85.5));
   padding: 10px 8px;
-  border-left: 4px solid light-dark(rgb(227.25, 227.25, 227.25), rgb(73.3350515464, 59.0257731959, 114.4742268041));
-  color: light-dark(black, white);
+  border-left: 4px solid light-dark(rgb(255, 235.0388349515, 126.5), rgb(255, 221.3125, 34.5));
+  color: black;
   border-radius: 2px;
 }
 main.blog-article blockquote > p > code {
@@ -141,14 +148,19 @@ main.blog-article pre {
   word-break: break-all;
 }
 main.blog-article div.sourceCode {
-  background-color: inherit;
+  background-color: rgb(237.25, 237.25, 237.25);
   max-height: 600px;
-  overflow-x: scroll;
+  overflow: scroll;
+  border-radius: 3px;
+}
+main.blog-article pre > code:not([class]) {
+  overflow: scroll;
 }
 main.blog-article pre > code {
   padding: 10px 10px;
   border-radius: 3px;
   width: 100%;
+  white-space: pre;
   font-size: 10pt;
   font-family: monospace;
   line-height: 1.45;

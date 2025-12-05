@@ -14,15 +14,15 @@ $colorDark4: color.adjust($colorDark3, $lightness: $colorChangePercentage);
 $colorBackgroundLight: #FFFFFF;
 $colorBackgroundDark: $colorDark1;
 
-$colorNoteBackgroundLight1: #F0F0F0;
+$colorNoteBackgroundLight1: #FFEF98;
 $colorNoteBackgroundLight2: color.adjust($colorNoteBackgroundLight1, $lightness: -$colorChangePercentage);
 $colorNoteBackgroundLight3: color.adjust($colorNoteBackgroundLight2, $lightness: -$colorChangePercentage);
 $colorNoteBackgroundLight4: color.adjust($colorNoteBackgroundLight3, $lightness: -$colorChangePercentage);
 
-$colorNoteBackgroundDark1: rgb(41 33 64);
-$colorNoteBackgroundDark2: color.adjust($colorNoteBackgroundDark1, $lightness: $colorChangePercentage);
-$colorNoteBackgroundDark3: color.adjust($colorNoteBackgroundDark2, $lightness: $colorChangePercentage);
-$colorNoteBackgroundDark4: color.adjust($colorNoteBackgroundDark3, $lightness: $colorChangePercentage);
+$colorNoteBackgroundDark1: #FFE96F;
+$colorNoteBackgroundDark2: color.adjust($colorNoteBackgroundDark1, $lightness: -$colorChangePercentage);
+$colorNoteBackgroundDark3: color.adjust($colorNoteBackgroundDark2, $lightness: -$colorChangePercentage);
+$colorNoteBackgroundDark4: color.adjust($colorNoteBackgroundDark3, $lightness: -$colorChangePercentage);
 
 $colorBlue1:  #3F51B5;
 $colorBlue2:  color.adjust($colorBlue1, $lightness: -$colorChangePercentage);
