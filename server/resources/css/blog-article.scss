@@ -102,6 +102,10 @@ main.blog-article {
     border-left: 4px solid light-dark(constants.$colorNoteBackgroundLight4, constants.$colorNoteBackgroundDark4);
     color: black;
     border-radius: 2px;
+    box-shadow: constants.$shadow1;
+    @media (prefers-color-scheme: dark) {
+      box-shadow: none;
+    }
   }
 
   figure img, p img, img {
@@ -109,7 +113,10 @@ main.blog-article {
     width: calc(75%);
     margin: 0 auto;
     border-radius: 3px;
-    box-shadow: constants.$shadow2;
+    box-shadow: constants.$shadow1;
+    @media (prefers-color-scheme: dark) {
+      box-shadow: none;
+    }
 
     &[alt*="noshadow"] {
       box-shadow: none;
@@ -161,10 +168,16 @@ main.blog-article {
 
     background-color: light-dark(constants.$colorLight1, constants.$colorDark2);
     box-shadow: constants.$shadow1;
+    @media (prefers-color-scheme: dark) {
+      box-shadow: none;
+    }
     padding: 4px 12px !important;
     border: none;
     color: light-dark(black, white);
     border-radius: 0 0 2px 2px;
+
+    position: relative;
+    z-index: 1000;
 
     @include constants.mobile-small {
       width: 100%;
@@ -229,6 +242,10 @@ main.blog-article {
     padding-right: 20px;
     border-radius: 3px;
     color: black;
+    box-shadow: constants.$shadow1;
+    @media (prefers-color-scheme: dark) {
+      box-shadow: none;
+    }
 
     max-height: 600px;
 
@@ -275,6 +292,9 @@ main.blog-article {
     width: 100%;
     background-color: constants.$colorLight1;
     box-shadow: constants.$shadow1;
+    @media (prefers-color-scheme: dark) {
+      box-shadow: none;
+    }
     border-collapse: collapse;
     border-radius: 2px;
     overflow: hidden;
