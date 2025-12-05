@@ -169,6 +169,11 @@ main.blog-article {
     @include constants.mobile-small {
       width: 100%;
     }
+
+    code {
+      background-color: light-dark(constants.$colorLight3, constants.$colorDark4);
+      color: light-dark(black, white);
+    }
   }
 
   figure, p {

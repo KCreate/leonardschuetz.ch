@@ -11,7 +11,7 @@ description: Day 1 of Advent of Code 2025 in Charly
 - [Back to the main article](../)
 - [Next day](../day2)
 
-> This article is part of of my series on implementing each Advent of Code 2025 challenge in my own
+> This article is part of my series on implementing each Advent of Code 2025 challenge in my own
 > programming language Charly.
 
 Today's challenge involved determining the final dial position, given a series of turn descriptions.

@@ -11,7 +11,7 @@ description: Day 3 of Advent of Code 2025 in Charly
 - [Back to the main article](../)
 - [Previous day](../day2) - [Next day](../day4)
 
-> This article is part of of my series on implementing each Advent of Code 2025 challenge in my own
+> This article is part of my series on implementing each Advent of Code 2025 challenge in my own
 > programming language Charly.
 
 Today's task was determining which batteries to turn on to reach the highest possible `joltage`.

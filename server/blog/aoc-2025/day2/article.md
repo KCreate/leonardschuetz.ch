@@ -11,7 +11,7 @@ description: Day 2 of Advent of Code 2025 in Charly
 - [Back to the main article](../)
 - [Previous day](../day1) - [Next day](../day3)
 
-> This article is part of of my series on implementing each Advent of Code 2025 challenge in my own
+> This article is part of my series on implementing each Advent of Code 2025 challenge in my own
 > programming language Charly.
 
 Today's task involved determining the set of invalid IDs from a list of ID-ranges.

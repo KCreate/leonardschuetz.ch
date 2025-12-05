@@ -11,7 +11,7 @@ description: Day 4 of Advent of Code 2025 in Charly
 - [Back to the main article](../)
 - [Previous day](../day3) - [Next day](../day5)
 
-> This article is part of of my series on implementing each Advent of Code 2025 challenge in my own
+> This article is part of my series on implementing each Advent of Code 2025 challenge in my own
 > programming language Charly.
 
 Today's task was to determine which rolls of paper the elves can access in their warehouse.

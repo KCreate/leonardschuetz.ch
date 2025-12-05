@@ -17,7 +17,7 @@ Charly">
     <meta name="keywords" content="leonard schütz, programming, compilers, ">
     <meta name="language" content="English">
     <meta name="contact" content="hello@leonard.swiss">
-    <meta name="date" content="Mon, 05 Dec 2025 12:00:00 +0100">
+    <meta name="date" content="Mon, 05 Dec 2025 14:30:00 +0100">
 
     <meta property="og:url" content="https://leonard.swiss/">
     <meta property="og:title" content="Day 5 of Advent of Code 2025 in Charly">
@@ -130,22 +130,202 @@ Charly</h1>
 <li><a href="../day4">Previous day</a></li>
 </ul>
 <blockquote>
-<p>This article is part of of my series on implementing each Advent of
-Code 2025 challenge in my own programming language Charly.</p>
+<p>This article is part of my series on implementing each Advent of Code
+2025 challenge in my own programming language Charly.</p>
 </blockquote>
+<p>Today’s challenge asked to determine how many fresh ingredients the
+elves had in their warehouse. Their inventory management system stores
+its data in the following format:</p>
+<pre><code>3-5
+10-14
+16-20
+12-18
+
+1
+5
+8
+11
+17
+32</code></pre>
+<p>The file is split into two sections, separated by an empty line. The
+first section stores the inclusive ranges of ingredient IDs that are
+considered fresh. The second section stores which ingredient IDs are
+actually in the warehouse. The fresh ranges can overlap, but an
+ingredient ID is considered fresh if it falls into <em>any</em> fresh
+range.</p>
+<p>For example, given the above information, ingredient ID
+<code>1</code> is <em>spoiled</em> since it does not fall into any
+range. Ingredient ID <code>5</code> is <em>fresh</em> beacuse it falls
+into range <code>3-5</code>. Ingredient ID <code>17</code> is
+<em>fresh</em> because it falls into range <code>16-20</code> as well as
+range <code>12-18</code>.</p>
+<p>The first part of the challenge asked how many of the available
+ingredient IDs are fresh. I solved this by checking if the ID was
+contained in at least one fresh range. Simple.</p>
+<p>The second part of the challenge was more complicated. It asked to
+determine, based on the fresh ranges provided, how many ingredient IDs
+<em>in total</em> could be considered fresh, no matter if they’re
+actually present in the warehouse or not.</p>
+<p>My first naive attempt was to just sum up the length of all ranges,
+which obviously failed, since the ranges can overlap. My second idea was
+to store a list, with enough capacity to store a single item for each
+possible ingredient ID. For the above example this would’ve worked well,
+but the actual validation dataset had numbers in the trillions, which
+would’ve required <code>petabytes</code> of memory. I do not have
+<code>petabytes</code> of memory in my machine. So that option was
+out.</p>
+<p>I finally converged on the idea of preprocessing the ranges first,
+eliminating any overlaps. I kept a queue of ranges that I still had to
+process, and a list of processed non-overlapping ranges. For each
+unprocessed range, I determined if it overlapped an already processed
+one. If it did, I would discard the overlapping parts and re-queue the
+non-overlapping ones.</p>
+<p>I then processed the range queue entries until there were no more
+overlapping ranges. After that I could simply sum up the lengths of the
+individual non-overlapping ranges to get the final answer.</p>
+<p><img src="./time-screenshot.png" /></p>
 <blockquote>
-<p>TODO task description</p>
+<p>On my machine, Charly took about <code>48</code> milliseconds to
+compute the solutions for today’s challenge.</p>
 </blockquote>
 <p>Find my solution below:</p>
-<blockquote>
-<p>TODO task solution code</p>
-</blockquote>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode javascript"><code class="sourceCode javascript"></code></pre></div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/local/bin/charly</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> ARGV<span class="op">.</span><span class="at">length</span> <span class="op">&lt;</span> <span class="dv">2</span> {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;Missing filepath&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exit</span>(<span class="dv">1</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> input_path <span class="op">=</span> ARGV[<span class="dv">1</span>]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> input <span class="op">=</span> <span class="fu">readfile</span>(input_path)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> lines <span class="op">=</span> input<span class="op">.</span><span class="fu">lines</span>()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> emptyLineIndex <span class="op">=</span> lines<span class="op">.</span><span class="fu">find</span>(<span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> freshIdRanges <span class="op">=</span> lines</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">sublist</span>(<span class="dv">0</span><span class="op">,</span> emptyLineIndex)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(range) {</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        range</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">split</span>(<span class="st">&quot;-&quot;</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(num) num<span class="op">.</span><span class="fu">to_number</span>())</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> availableIds <span class="op">=</span> lines</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">sublist</span>(emptyLineIndex <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(num) num<span class="op">.</span><span class="fu">to_number</span>())</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>func <span class="fu">isFresh</span>(id) {</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> freshIdRanges<span class="op">.</span><span class="fu">any</span>(<span class="op">-&gt;</span>(range) {</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (start<span class="op">,</span> end) <span class="op">=</span> range</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> id <span class="op">&gt;=</span> start <span class="op">&amp;&amp;</span> id <span class="op">&lt;=</span> end</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> freshIds <span class="op">=</span> availableIds<span class="op">.</span><span class="fu">filter</span>(<span class="op">-&gt;</span>(id) <span class="fu">isFresh</span>(id))</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;fresh ids: {freshIds.length}&quot;</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> rangesToProcess <span class="op">=</span> freshIdRanges<span class="op">.</span><span class="fu">copy</span>()</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> trimmedRanges <span class="op">=</span> []</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (rangesToProcess<span class="op">.</span><span class="fu">notEmpty</span>()) {</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> newRange <span class="op">=</span> rangesToProcess<span class="op">.</span><span class="fu">pop</span>()</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (start<span class="op">,</span> end) <span class="op">=</span> newRange</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ignore invalid ranges</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">!</span>(start <span class="op">&lt;=</span> end) {</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">// case: new range fully encompasses existing range</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> trimmedRanges<span class="op">.</span><span class="fu">any</span>(<span class="op">-&gt;</span>(existing) {</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (otherStart<span class="op">,</span> otherEnd) <span class="op">=</span> existing</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> otherStart <span class="op">&gt;=</span> start <span class="op">&amp;&amp;</span> otherEnd <span class="op">&lt;=</span> end {</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> (leftStart<span class="op">,</span> leftEnd) <span class="op">=</span> (start<span class="op">,</span> otherStart <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> (rightStart<span class="op">,</span> rightEnd) <span class="op">=</span> (otherEnd <span class="op">+</span> <span class="dv">1</span><span class="op">,</span> end)</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>            <span class="co">// queue the new subranges</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>            rangesToProcess<span class="op">.</span><span class="fu">push</span>((leftStart<span class="op">,</span> leftEnd))</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>            rangesToProcess<span class="op">.</span><span class="fu">push</span>((rightStart<span class="op">,</span> rightEnd))</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">true</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">false</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    }) {</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>    <span class="co">// new range overlaps existing range</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> trimmedRanges<span class="op">.</span><span class="fu">any</span>(<span class="op">-&gt;</span>(existing) {</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (otherStart<span class="op">,</span> otherEnd) <span class="op">=</span> existing</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> startOverlap <span class="op">=</span> start <span class="op">&gt;=</span> otherStart <span class="op">&amp;&amp;</span> start <span class="op">&lt;=</span> otherEnd</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> endOverlap <span class="op">=</span> end <span class="op">&gt;=</span> otherStart <span class="op">&amp;&amp;</span> end <span class="op">&lt;=</span> otherEnd</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> startOverlap <span class="op">||</span> endOverlap {</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>            rangesToProcess<span class="op">.</span><span class="fu">push</span>((start<span class="op">,</span> otherStart <span class="op">-</span> <span class="dv">1</span>))</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>            rangesToProcess<span class="op">.</span><span class="fu">push</span>((otherEnd <span class="op">+</span> <span class="dv">1</span><span class="op">,</span> end))</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">true</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">false</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>    }) {</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>    <span class="co">// new range does not overlap any existing range, can add to trimmed set</span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>    trimmedRanges<span class="op">.</span><span class="fu">push</span>(newRange)</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> totalFreshIds <span class="op">=</span> trimmedRanges<span class="op">.</span><span class="fu">reduce</span>(<span class="dv">0</span><span class="op">,</span> <span class="op">-&gt;</span>(acc<span class="op">,</span> range) {</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (start<span class="op">,</span> end) <span class="op">=</span> range</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> rangeLength <span class="op">=</span> end <span class="op">-</span> start <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>    acc <span class="op">+</span> rangeLength</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;totalFreshIds: {totalFreshIds}&quot;</span>)</span></code></pre></div>
 <h2 id="changes-to-the-stdlib-vm">Changes to the stdlib / VM</h2>
-<blockquote>
-<p>TODO changes to vm / stdlib</p>
-</blockquote>
+<p>Standard library methods I added:</p>
+<ul class="incremental">
+<li><code>String::lines</code>: Returns all lines of the string as a
+list. This is a convenience method that just calls <code>split</code>
+with a newline separator</li>
+<li><code>List::find</code>: Returns the index of the first list entry
+that matches the argument</li>
+<li><code>List::findBy</code>: Returns the index of the first list entry
+for which the provided callback returns true</li>
+<li><code>List::first</code>: Returns the first element of the list, or
+null if the list is empty</li>
+<li><code>List::last</code>: Returns the last element of the list, or
+null if the list is empty</li>
+</ul>
+<p>Methods I had to modify:</p>
+<ul class="incremental">
+<li><code>String::split</code>: Now also includes empty elements in
+between separators. Since this method was implemented in native code,
+this involved modifying and recompiling the <code>charly</code>
+binary.</li>
+</ul>
+<p>You can find the individual commits below:</p>
+<ul class="incremental">
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/b800a1cded25d66689d9df39ffcd24474ce12ae3"><code>b800a1c</code></a>
+<code>String::split include empty parts</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/c63c1838a869ba4f6eafeb5b892cea3ef7c887bb"><code>c63c183</code></a>
+<code>Add String::lines</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/030b065363480a42fe203d9839a71b3a3c846794"><code>030b065</code></a>
+<code>Trim empty last line in String::lines</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/bac6344262ca360e21ab49c6c6a3a7eaedd2cd86"><code>bac6344</code></a>
+<code>Add List::findBy and List::find</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/b79de83629186f61844bf62c8f4d6fd34ab2608c"><code>b79de83</code></a>
+<code>Add List::first and List::last</code></li>
+</ul>
 <h2 id="links">Links</h2>
 <ul class="incremental">
 <li><a href="https://adventofcode.com/">Advent of Code</a></li>

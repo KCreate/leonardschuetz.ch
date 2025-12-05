@@ -161,6 +161,10 @@ main.blog-article p:has(img) + blockquote {
     width: 100%;
   }
 }
+main.blog-article p:has(img) + blockquote code {
+  background-color: light-dark(rgb(211.75, 211.75, 211.75), rgb(58.95, 52.4, 78.6));
+  color: light-dark(black, white);
+}
 main.blog-article figure figcaption, main.blog-article p figcaption {
   display: none;
 }
