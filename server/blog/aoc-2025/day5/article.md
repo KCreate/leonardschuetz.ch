@@ -185,6 +185,45 @@ You can find the individual commits below:
 - [`bac6344`](https://github.com/KCreate/charly-vm/commit/bac6344262ca360e21ab49c6c6a3a7eaedd2cd86) `Add List::findBy and List::find`
 - [`b79de83`](https://github.com/KCreate/charly-vm/commit/b79de83629186f61844bf62c8f4d6fd34ab2608c) `Add List::first and List::last`
 
+## Addendum
+
+After discussing my solution with some of my colleagues and friends,
+I realized there’s a much simpler way to solve today’s puzzle.
+My original approach had unnecessary complexity because I didn’t sort the list of ranges before processing them.
+If you do sort them, you can simply iterate over the ranges from
+left to right and merge adjacent ranges if they overlap.
+
+I’ve implemented this approach in Charly as well, you can find the code below:
+
+```javascript
+// ... previous code same as above ...
+
+const (firstRange, ...remainingRanges) = freshIdRanges
+    .sort(->(left, right) left[0] <=> right[0])
+
+const mergedRanges = [firstRange]
+
+remainingRanges.each(->(range) {
+    const (newStart, newEnd) = range
+    const (lastStart, lastEnd) = mergedRanges.last()
+
+    if newStart <= lastEnd + 1 {
+        const merged = (lastStart, newEnd.max(lastEnd))
+        mergedRanges[mergedRanges.length - 1] = merged
+    } else {
+        mergedRanges.push(range)
+    }
+})
+
+const totalFreshIds = mergedRanges.reduce(0, ->(acc, c) {
+    const (start, end) = c
+    const length = end - start + 1
+    acc + length
+})
+
+print("total fresh ids: {totalFreshIds}")
+```
+
 ## Links
 
 - [Advent of Code](https://adventofcode.com/)

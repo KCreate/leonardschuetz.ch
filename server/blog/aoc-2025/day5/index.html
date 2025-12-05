@@ -326,6 +326,42 @@ href="https://github.com/KCreate/charly-vm/commit/bac6344262ca360e21ab49c6c6a3a7
 href="https://github.com/KCreate/charly-vm/commit/b79de83629186f61844bf62c8f4d6fd34ab2608c"><code>b79de83</code></a>
 <code>Add List::first and List::last</code></li>
 </ul>
+<h2 id="addendum">Addendum</h2>
+<p>After discussing my solution with some of my colleagues and friends,
+I realized there’s a much simpler way to solve today’s puzzle. My
+original approach had unnecessary complexity because I didn’t sort the
+list of ranges before processing them. If you do sort them, you can
+simply iterate over the ranges from left to right and merge adjacent
+ranges if they overlap.</p>
+<p>I’ve implemented this approach in Charly as well, you can find the
+code below:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ... previous code same as above ...</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> (firstRange<span class="op">,</span> <span class="op">...</span>remainingRanges) <span class="op">=</span> freshIdRanges</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">sort</span>(<span class="op">-&gt;</span>(left<span class="op">,</span> right) left[<span class="dv">0</span>] <span class="op">&lt;</span><span class="kw">=&gt;</span> right[<span class="dv">0</span>])</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> mergedRanges <span class="op">=</span> [firstRange]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>remainingRanges<span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(range) {</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (newStart<span class="op">,</span> newEnd) <span class="op">=</span> range</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (lastStart<span class="op">,</span> lastEnd) <span class="op">=</span> mergedRanges<span class="op">.</span><span class="fu">last</span>()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> newStart <span class="op">&lt;=</span> lastEnd <span class="op">+</span> <span class="dv">1</span> {</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> merged <span class="op">=</span> (lastStart<span class="op">,</span> newEnd<span class="op">.</span><span class="fu">max</span>(lastEnd))</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        mergedRanges[mergedRanges<span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span>] <span class="op">=</span> merged</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        mergedRanges<span class="op">.</span><span class="fu">push</span>(range)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> totalFreshIds <span class="op">=</span> mergedRanges<span class="op">.</span><span class="fu">reduce</span>(<span class="dv">0</span><span class="op">,</span> <span class="op">-&gt;</span>(acc<span class="op">,</span> c) {</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (start<span class="op">,</span> end) <span class="op">=</span> c</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> length <span class="op">=</span> end <span class="op">-</span> start <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    acc <span class="op">+</span> length</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;total fresh ids: {totalFreshIds}&quot;</span>)</span></code></pre></div>
 <h2 id="links">Links</h2>
 <ul class="incremental">
 <li><a href="https://adventofcode.com/">Advent of Code</a></li>
