@@ -44,6 +44,7 @@ a {
   &:hover {
     color: white;
     box-shadow: inset 0px -30px 0px constants.$colorTheme1;
+    border-radius: 2px;
   }
 }
 
@@ -173,6 +174,7 @@ footer {
       float: right;
       font-style: italic;
       color: black;
+      text-indent: 0;
 
       @include constants.mobile-small {
         display: none;

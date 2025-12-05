@@ -8,13 +8,16 @@ description: Day 5 of Advent of Code 2025 in Charly
 # Advent of Code 2025 in Charly
 ## Day 5
 
-# Todos
+## Todos
+
 - Update meta information
 - Update main article.md to include this day
 - Update the next day link in the previous day article
 - Update the link to the current days source code
 - Update RSS feed
 - Write the article
+
+---
 
 - [Back to the main article](../)
 - [Previous day](../day4)
@@ -26,9 +29,8 @@ description: Day 5 of Advent of Code 2025 in Charly
 
 Find my solution below:
 
-> TODO task solution code
-
 ```javascript
+TODO task solution code
 ```
 
 ## Changes to the stdlib / VM

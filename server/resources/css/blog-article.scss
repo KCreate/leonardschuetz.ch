@@ -52,62 +52,56 @@ main.blog-article {
     background-color: constants.$colorTheme1;
   }
 
-  ol, ul {
-    list-style: none;
+  ul {
     padding-left: 2em;
-
     li {
-      margin-bottom: 5px;
       text-indent: -1em;
-
-      &::last-child {
-        margin-bottom: 0px;
-      }
-
       &::before {
-        //content: "■";
         content: "#";
-        color: constants.$colorTheme1;
-        padding-right: 7px;
       }
     }
   }
 
-  code {
-    white-space: collapse;
+  ol {
+    counter-reset: item;
+    padding-left: 2.6em;
+    li {
+      text-indent: -1.7em;
+      &:before {
+        content: counter(item) ".";
+        counter-increment: item;
+
+      }
+    }
   }
 
-  /* Inline code blocks */
-  p code, ol code, ul code {
-    background-color: light-dark(constants.$colorLight1, constants.$colorDark3);
-    padding: 0 4px;
-    margin: 0;
-    border-radius: 2px;
-    word-wrap: break-word;
+  ol, ul {
+    list-style: none;
 
-    font-size: 11pt;
-    font-family: constants.$fontCode;
-  }
-
-  a code {
-    background-color: inherit;
+    li {
+      margin-bottom: 5px;
+      &::last-child {
+        margin-bottom: 0px;
+      }
+      &::before {
+        color: constants.$colorTheme1;
+        padding-right: 7px;
+        font-weight: 400;
+        font-family: constants.$fontCode;
+      }
+    }
   }
 
   strong {
     font-weight: bold;
-    font-size: 11pt;
   }
 
-  blockquote > p {
+  blockquote {
     background-color: light-dark(constants.$colorNoteBackgroundLight1, constants.$colorNoteBackgroundDark2);
-    padding: 10px 8px;
-    border-left: 4px solid light-dark(constants.$colorNoteBackgroundLight2, constants.$colorNoteBackgroundDark4);
+    padding: 5px 8px;
+    border-left: 4px solid light-dark(constants.$colorNoteBackgroundLight4, constants.$colorNoteBackgroundDark4);
     color: black;
     border-radius: 2px;
-
-    > code {
-      background-color: constants.$colorLight3;
-    }
   }
 
   figure img, p img, img {
@@ -151,6 +145,32 @@ main.blog-article {
     }
   }
 
+  p:has(img):has(+ blockquote) {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+
+    img {
+      border-radius: 3px 3px 0 0;
+    }
+  }
+
+  p:has(img) + blockquote {
+    width: 75%;
+    margin: 0 auto;
+    border-radius: 0px 0px 2px 2px;
+
+    background-color: light-dark(constants.$colorLight1, constants.$colorDark2);
+    box-shadow: constants.$shadow1;
+    padding: 4px 12px !important;
+    border: none;
+    color: light-dark(black, white);
+    border-radius: 0 0 2px 2px;
+
+    @include constants.mobile-small {
+      width: 100%;
+    }
+  }
+
   figure, p {
     figcaption {
       display: none;
@@ -161,43 +181,88 @@ main.blog-article {
     word-break: break-all;
   }
 
-  div.sourceCode {
-    background-color: constants.$colorLight1;
-    max-height: 600px;
-    overflow: scroll;
-    border-radius: 3px;
-  }
 
-  pre > code:not([class]) {
-    overflow: scroll;
-  }
-
-  pre > code {
-    padding: 10px 10px;
-    border-radius: 3px;
-    width: 100%;
-    white-space: pre;
-
-    font-size: 10pt;
+  // inline text, general
+  code {
+    margin: 0;
+    padding: 3px 6px;
+    background-color: light-dark(constants.$colorLight1, constants.$colorDark4);
+    border-radius: 2px;
+    font-size: 11pt;
+    font-weight: 400;
     font-family: constants.$fontCode;
-    line-height: 1.45;
-    display: inline-block;
+    word-wrap: break-word;
+    white-space: collapse;
+  }
 
-    background-color: constants.$colorLight1;
+  // inline text, as child of a link
+  a > code {
+    background-color: inherit;
+    padding: 0;
+  }
+
+  a + code {
+    margin-left: 6px;
+  }
+
+  // inline text, inside a blockquote
+  blockquote p > code {
+    background-color: light-dark(constants.$colorNoteBackgroundLight5, constants.$colorNoteBackgroundDark6);
     color: black;
+  }
+
+  // inline text, inside a link, inside a blockquote
+  blockquote p > a > code {
+    background-color: inherit;
+    color: inherit;
+  }
+
+  // code block, no syntax highlighting
+  pre:has(code) {
+    background-color: constants.$colorLight1;
+    padding: 10px;
+    padding-right: 20px;
+    border-radius: 3px;
+    color: black;
+
+    max-height: 600px;
+
+    border: 2px solid constants.$colorLight2;
 
     @media (prefers-color-scheme: dark) {
       filter: invert(1);
+      border: 2px solid constants.$colorLight4;
     }
 
-    > span {
-      float: left;
-    }
+    > code {
+      white-space: pre;
+      background-color: inherit;
+      padding: 0px;
+      display: block;
+      overflow: scroll;
 
-    * {
-      font-weight: 400;
-      text-decoration: none;
-      font-family: constants.$fontCode;
+      * {
+        font-weight: 400;
+        text-decoration: none;
+        font-family: constants.$fontCode;
+      }
+    }
+  }
+
+  // code block, with syntax highlighting
+  div.sourceCode {
+    margin: inherit;
+    background-color: inherit;
+    overflow: inherit;
+    margin: 20px 0;
+
+    > pre.sourceCode:has(code.sourceCode) {
+      overflow: scroll;
+      > code.sourceCode {
+        > span > a {
+          display: none;
+        }
+      }
     }
   }
 
