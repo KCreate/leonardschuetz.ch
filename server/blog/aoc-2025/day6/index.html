@@ -17,7 +17,7 @@ Charly">
     <meta name="keywords" content="leonard schütz, programming, compilers, ">
     <meta name="language" content="English">
     <meta name="contact" content="hello@leonard.swiss">
-    <meta name="date" content="Mon, 06 Dec 2025 12:00:00 +0100">
+    <meta name="date" content="Mon, 06 Dec 2025 15:45:00 +0100">
 
     <meta property="og:url" content="https://leonard.swiss/">
     <meta property="og:title" content="Day 6 of Advent of Code 2025 in Charly">
@@ -125,42 +125,215 @@ Charly">
 <h1 id="advent-of-code-2025-in-charly">Advent of Code 2025 in
 Charly</h1>
 <h2 id="day-6">Day 6</h2>
-<h2 id="todos">Todos</h2>
-<ul class="incremental">
-<li>Update meta information</li>
-<li>Update main article.md to include this day</li>
-<li>Update the next day link in the previous day article</li>
-<li>Update the link to the current days source code</li>
-<li>Update RSS feed</li>
-<li>Write the article</li>
-</ul>
-<hr />
 <ul class="incremental">
 <li><a href="../">Back to the main article</a></li>
 <li><a href="../day5">Previous day</a></li>
 </ul>
 <blockquote>
-<p>This article is part of of my series on implementing each Advent of
-Code 2025 challenge in my own programming language Charly.</p>
+<p>This article is part of my series on implementing each Advent of Code
+2025 challenge in my own programming language Charly.</p>
 </blockquote>
+<h2 id="part-1">Part 1</h2>
+<p>The first part of today’s puzzle asked us to solve the math homework
+for the friendly cephalopods I encountered in the garbage disposal unit.
+Their homework came in a file that looked like this:</p>
+<pre><code>123 328  51 64
+ 45 64  387 23
+  6 98  215 314
+*   +   *   +</code></pre>
+<p>Each column contained a list of input numbers and an operator to
+apply to those numbers. The above worksheet contains four such
+problems:</p>
+<ul class="incremental">
+<li><code>123</code> * <code>45</code> * <code>6</code> =
+<code>33210</code></li>
+<li><code>328</code> + <code>64</code> + <code>98</code> =
+<code>490</code></li>
+<li><code>51</code> * <code>387</code> * <code>215</code> =
+<code>4243455</code></li>
+<li><code>64</code> + <code>23</code> + <code>314</code> =
+<code>401</code></li>
+</ul>
+<p>To verify your work, you had to provide the sum of all the individual
+problems’ solutions.</p>
+<p>My solution to part 1 of the puzzle:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> input_path <span class="op">=</span> ARGV[<span class="dv">1</span>]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> lines <span class="op">=</span> <span class="fu">readfile</span>(input_path)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">lines</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line<span class="op">,</span> i<span class="op">,</span> lines) {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> line <span class="op">=</span> line</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">split</span>(<span class="st">&quot; &quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span><span class="fu">filterEmpty</span>()</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i <span class="op">&lt;</span> lines<span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span> {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            line <span class="op">=</span> line<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(l) l<span class="op">.</span><span class="fu">to_number</span>())</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        line</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> (<span class="op">...</span>data<span class="op">,</span> operators) <span class="op">=</span> lines</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> problems <span class="op">=</span> operators</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(op<span class="op">,</span> index) {</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> operands <span class="op">=</span> data<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(row) row[index])</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        (op<span class="op">,</span> operands)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> results <span class="op">=</span> problems<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(problem) {</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (operand<span class="op">,</span> inputs) <span class="op">=</span> problem</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> result <span class="op">=</span> operand <span class="op">==</span> <span class="st">&quot;+&quot;</span> <span class="op">?</span> inputs<span class="op">.</span><span class="fu">sum</span>() <span class="op">:</span> inputs<span class="op">.</span><span class="fu">product</span>()</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    result</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> totalSum <span class="op">=</span> results<span class="op">.</span><span class="fu">sum</span>()</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;totalSum = {totalSum}&quot;</span>)</span></code></pre></div>
+<h2 id="part-2">Part 2</h2>
+<p>The second part of today’s puzzle was a bit more complicated. As a
+quick reminder, here’s the example worksheet again:</p>
+<pre><code>123 328  51 64
+ 45 64  387 23
+  6 98  215 314
+*   +   *   +</code></pre>
+<p>The cephalopods have a different way of writing down their math
+problems than we humans do. I’m not going to attempt to explain this
+myself, so instead I’ll just reference the problem description:</p>
 <blockquote>
-<p>TODO task description</p>
+<p><code>Cephalopod Math</code></p>
+<p>Cephalopod math is written right-to-left in columns. Each number is
+given in its own column, with the most significant digit at the top and
+the least significant digit at the bottom. (Problems are still separated
+with a column consisting only of spaces, and the symbol at the bottom of
+the problem is still the operator to use.)</p>
 </blockquote>
-<p>Find my solution below:</p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>TODO task solution code</span></code></pre></div>
+<p>This changed the problem significantly. The worksheet now consisted
+of these problems:</p>
+<ul class="incremental">
+<li><code>356</code> * <code>24</code> * <code>1</code> =
+<code>8544</code></li>
+<li><code>8</code> + <code>248</code> + <code>369</code> =
+<code>625</code></li>
+<li><code>175</code> * <code>581</code> * <code>32</code> =
+<code>3253600</code></li>
+<li><code>4</code> + <code>431</code> + <code>623</code> =
+<code>1058</code></li>
+</ul>
+<p>I now had to consume all input lines <em>right-to-left</em> and
+construct the input numbers myself. Additionally, in the example
+worksheet provided, all the data columns had a width of exactly
+<code>3</code>. This wasn’t the case in the actual worksheet I had to
+process. Each column could be anywhere from <code>2</code> to
+<code>4</code> characters wide.</p>
+<p>I solved this by repeatedly popping off characters from the end of
+all input lines. If all characters were whitespace, that meant I had
+reached the end of a problem and could move on to the next one.</p>
+<p>The rest of the puzzle remained unchanged: solve each problem by
+performing either a <code>+</code> or <code>*</code> operation, and then
+sum up the results to get the final solution.</p>
+<p>My solution to part 2 of the puzzle:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> input_path <span class="op">=</span> ARGV[<span class="dv">1</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> lines <span class="op">=</span> <span class="fu">readfile</span>(input_path)<span class="op">.</span><span class="fu">lines</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> maxLineLength <span class="op">=</span> lines<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(l) l<span class="op">.</span><span class="at">length</span>)<span class="op">.</span><span class="fu">findMax</span>()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>lines <span class="op">=</span> lines<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line) {</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> line<span class="op">.</span><span class="at">length</span> <span class="op">&lt;</span> maxLineLength {</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        line <span class="op">=</span> <span class="st">&quot;{line} &quot;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    line</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> (<span class="op">...</span>inputLines<span class="op">,</span> operandLine) <span class="op">=</span> lines</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> (inputs<span class="op">,</span> operands) <span class="op">=</span> (</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    inputLines<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line) line<span class="op">.</span><span class="fu">chars</span>())<span class="op">,</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    operandLine<span class="op">.</span><span class="fu">split</span>(<span class="st">&quot; &quot;</span>)<span class="op">.</span><span class="fu">filterEmpty</span>()<span class="op">.</span><span class="fu">reverse</span>()</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> readerOffset <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> problems <span class="op">=</span> operands</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(operand) {</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> inputData <span class="op">=</span> []</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        loop {</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> inputs<span class="op">.</span><span class="fu">first</span>()<span class="op">.</span><span class="fu">empty</span>() {</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> charsRead <span class="op">=</span> inputs<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(chars) {</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>                chars<span class="op">.</span><span class="fu">pop</span>()</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>            })</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> charsRead<span class="op">.</span><span class="fu">all</span>(<span class="op">-&gt;</span>(c) c <span class="op">==</span> <span class="st">&quot; &quot;</span>) {</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> number <span class="op">=</span> charsRead</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">filter</span>(<span class="op">-&gt;</span>(c) c <span class="op">!=</span> <span class="st">&quot; &quot;</span>)</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">join</span>(<span class="st">&quot;&quot;</span>)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">to_number</span>()</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>            inputData<span class="op">.</span><span class="fu">push</span>(number)</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        (operand<span class="op">,</span> inputData)</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> solutions <span class="op">=</span> problems<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(problem) {</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (operand<span class="op">,</span> inputs) <span class="op">=</span> problem</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> result <span class="op">=</span> operand <span class="op">==</span> <span class="st">&quot;+&quot;</span> <span class="op">?</span> inputs<span class="op">.</span><span class="fu">sum</span>() <span class="op">:</span> inputs<span class="op">.</span><span class="fu">product</span>()</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    result</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> totalSum <span class="op">=</span> solutions<span class="op">.</span><span class="fu">sum</span>()</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;totalSum = {totalSum}&quot;</span>)</span></code></pre></div>
 <h2 id="changes-to-the-stdlib-vm">Changes to the stdlib / VM</h2>
-<blockquote>
-<p>TODO changes to vm / stdlib</p>
-</blockquote>
+<p>Standard library methods I added:</p>
+<ul class="incremental">
+<li><code>List::all</code>: Checks whether the provided callback returns
+<code>true</code> for all entries in the list</li>
+<li><code>List::product</code>: Returns the product of all numbers in
+the list</li>
+<li><code>List::reverse</code>: Returns a copy of the list in reverse
+order</li>
+<li><code>List::filterEmpty</code>: Filters out all elements with
+<code>length == 0</code></li>
+</ul>
+<p>Methods I had to modify:</p>
+<ul class="incremental">
+<li><code>Tuple::map</code>: Now returns a <code>List</code> instead of
+a <code>Tuple</code></li>
+</ul>
+<p>You can find the individual commits below:</p>
+<ul class="incremental">
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/8abec0b7ef2e7fdaea38b0ca35b6cbea975e48ed"><code>8abec0b</code></a>
+<code>Add List::all</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/279726eb608dddee42e2a5b03038b2c5b01d6521"><code>279726e</code></a>
+<code>Add List::product</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/d967d7a27090a7a548590fe94d2522de09a97373"><code>d967d7a</code></a>
+<code>Add List::reverse</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/4cba80b63965a5261c99a6cea791265e9f6921b4"><code>4cba80b</code></a>
+<code>Add List::filterEmpty</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/9eb9e54a963378e254e9a878ec6835aea93fae27"><code>9eb9e54</code></a>
+<code>Modify Tuple::map to return a List, not Tuple</code></li>
+</ul>
 <h2 id="links">Links</h2>
 <ul class="incremental">
 <li><a href="https://adventofcode.com/">Advent of Code</a></li>
 <li><a href="https://github.com/KCreate/charly-vm">Charly Programming
 Language</a></li>
 <li><a
-href="https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day6/day6.ch">Source
-code for today’s challenge</a></li>
+href="https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day6/day6-part1.ch">Source
+code for today’s challenge (Part 1)</a></li>
+<li><a
+href="https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day6/day6-part2.ch">Source
+code for today’s challenge (Part 2)</a></li>
 </ul>
       </main>
       <hr/>
