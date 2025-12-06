@@ -210,5 +210,4 @@ I shall revisit this at a later time.
 
 - [Advent of Code](https://adventofcode.com/)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
-- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day2/day2.ch)
-- [Source code for today's challenge (parallel)](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day2/day2-parallel.ch)
+- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day2)

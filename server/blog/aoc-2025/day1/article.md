@@ -113,6 +113,6 @@ allows you to read a value from the process environment variables.
 
 - [Advent of Code](https://adventofcode.com/)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
-- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day1/day1.ch)
+- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day1)
 - [Matthias Hartwig - @HartoMedia](https://github.com/HartoMedia)
 - [Switzerlands Apprenticeship System](https://www.swissinfo.ch/eng/politics/apprenticeship-system/43796482)

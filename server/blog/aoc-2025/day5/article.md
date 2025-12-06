@@ -228,4 +228,4 @@ print("total fresh ids: {totalFreshIds}")
 
 - [Advent of Code](https://adventofcode.com/)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
-- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day5/day5.ch)
+- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day5)

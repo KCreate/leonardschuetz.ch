@@ -100,4 +100,4 @@ No changes to the VM itself had to be made, but I did add a good amount of new f
 
 - [Advent of Code](https://adventofcode.com/)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
-- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day3/day3.ch)
+- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day3)

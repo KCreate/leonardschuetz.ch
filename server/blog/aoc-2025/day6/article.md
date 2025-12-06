@@ -198,5 +198,4 @@ You can find the individual commits below:
 
 - [Advent of Code](https://adventofcode.com/)
 - [Charly Programming Language](https://github.com/KCreate/charly-vm)
-- [Source code for today's challenge (Part 1)](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day6/day6-part1.ch)
-- [Source code for today's challenge (Part 2)](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day6/day6-part2.ch)
+- [Source code for today's challenge](https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day6)
