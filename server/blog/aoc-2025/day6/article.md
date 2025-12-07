@@ -194,6 +194,73 @@ You can find the individual commits below:
 - [`4cba80b`](https://github.com/KCreate/charly-vm/commit/4cba80b63965a5261c99a6cea791265e9f6921b4) `Add List::filterEmpty`
 - [`9eb9e54`](https://github.com/KCreate/charly-vm/commit/9eb9e54a963378e254e9a878ec6835aea93fae27) `Modify Tuple::map to return a List, not Tuple`
 
+## Late-night addendum
+
+I was really inspired by the solution that [Lukas Lebovitz](https://github.com/lukaslebo/AdventOfCode/blob/3fc3f5ef8843e10921c085820dff97835f17e94f/year2025/src/day06/Day06.kt#L38-L58) came up with, so I decided to port it to Charly.
+Since his code relies heavily on Kotlin standard library functions, I first had to implement those in the
+Charly standard library as well. My final version looks like this:
+
+```javascript
+const input_path = ARGV[1]
+
+// ensure all lines have the same length, as the IDE will remove trailing spaces
+const lines = readfile(input_path).lines().apply(->(lines) {
+    const maxLength = lines.findMaxBy(->(it) it.length).length
+    lines.map(->(line) line.padRight(maxLength, " "))
+}).map(->(line) line.chars())
+
+// originally implemented in Kotlin by @lukaslebo
+let totalSum = 0
+const currentProblemOperands = []
+lines.first().indices().reverse().each(->(i) {
+    const column = lines.map(->(line) line[i])
+    const digits = column.sublist(0, column.length - 1)
+    const operand = column.last()
+
+    if (digits.all(->(d) d == " ")) {
+        i -= 1
+        return
+    }
+
+    currentProblemOperands.push(digits.join("").to_number())
+
+    switch operand {
+        case "+" totalSum += currentProblemOperands.sum()
+        case "*" totalSum += currentProblemOperands.product()
+        default return
+    }
+    currentProblemOperands.clear()
+})
+
+print("totalSum = {totalSum}")
+```
+
+I added the following methods to the standard library:
+
+- `Value::also`: Runs the provided callback and returns `self`
+- `Value::apply`: Runs the provided callback and returns the callback's result
+- `Number::downTo`: Downwards counting variant of `Number::upTo`
+- `Number::collectDownTo`: Downwards counting variant of `Number::collectUpTo`
+- `String::padLeft`: Pads the beginning of a string to reach a desired minimum length
+- `String::padRight`: Pads the end of a string to reach a desired minimum length
+- `List::clear`: Clears the contents of a list
+- `List::indices`: Returns a list of all valid indices
+
+I modified the following method:
+
+- `List::join`: Added an optional mapping callback to preprocess the list contents before joining
+
+You can find the individual commits below:
+
+- [`aab7c9c`](https://github.com/KCreate/charly-vm/commit/aab7c9c9133afc1adf5d2f56cf7a462a19d37d90) `Add Value::also`
+- [`3a13da5`](https://github.com/KCreate/charly-vm/commit/3a13da521c5850d31eddb339039ec85628476145) `Add Value::apply`
+- [`1c49921`](https://github.com/KCreate/charly-vm/commit/1c49921e4a84428dff27631aa7a694ff21448aeb) `Add Number::downTo`
+- [`f61f990`](https://github.com/KCreate/charly-vm/commit/f61f9903fea0075b791e5b2a8868eaa394aed523) `Add Number::collectDownTo`
+- [`7f76963`](https://github.com/KCreate/charly-vm/commit/7f769637ae6d56c9d8dfc02b03c45a8b6dd0ab5b) `Add String::padLeft and String::padRight`
+- [`fa1c6d1`](https://github.com/KCreate/charly-vm/commit/fa1c6d1355b67edb382b6edbae582042e1ac1357) `Add List::clear`
+- [`0fb468d`](https://github.com/KCreate/charly-vm/commit/0fb468d064f00b1cb2640cef0d5f6657ceb957be) `Add List::indices`
+- [`e89aa67`](https://github.com/KCreate/charly-vm/commit/e89aa67249eb218c17c49f34ddb15666043fd805) `Add map callback to List::join`
+
 ## Links
 
 - [Advent of Code](https://adventofcode.com/)

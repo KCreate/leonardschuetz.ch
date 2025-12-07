@@ -323,6 +323,95 @@ href="https://github.com/KCreate/charly-vm/commit/4cba80b63965a5261c99a6cea79126
 href="https://github.com/KCreate/charly-vm/commit/9eb9e54a963378e254e9a878ec6835aea93fae27"><code>9eb9e54</code></a>
 <code>Modify Tuple::map to return a List, not Tuple</code></li>
 </ul>
+<h2 id="late-night-addendum">Late-night addendum</h2>
+<p>I was really inspired by the solution that <a
+href="https://github.com/lukaslebo/AdventOfCode/blob/3fc3f5ef8843e10921c085820dff97835f17e94f/year2025/src/day06/Day06.kt#L38-L58">Lukas
+Lebovitz</a> came up with, so I decided to port it to Charly. Since his
+code relies heavily on Kotlin standard library functions, I first had to
+implement those in the Charly standard library as well. My final version
+looks like this:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> input_path <span class="op">=</span> ARGV[<span class="dv">1</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">// ensure all lines have the same length, as the IDE will remove trailing spaces</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> lines <span class="op">=</span> <span class="fu">readfile</span>(input_path)<span class="op">.</span><span class="fu">lines</span>()<span class="op">.</span><span class="fu">apply</span>(<span class="op">-&gt;</span>(lines) {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> maxLength <span class="op">=</span> lines<span class="op">.</span><span class="fu">findMaxBy</span>(<span class="op">-&gt;</span>(it) it<span class="op">.</span><span class="at">length</span>)<span class="op">.</span><span class="at">length</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    lines<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line) line<span class="op">.</span><span class="fu">padRight</span>(maxLength<span class="op">,</span> <span class="st">&quot; &quot;</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>})<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line) line<span class="op">.</span><span class="fu">chars</span>())</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">// originally implemented in Kotlin by @lukaslebo</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> totalSum <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> currentProblemOperands <span class="op">=</span> []</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>lines<span class="op">.</span><span class="fu">first</span>()<span class="op">.</span><span class="fu">indices</span>()<span class="op">.</span><span class="fu">reverse</span>()<span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(i) {</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> column <span class="op">=</span> lines<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line) line[i])</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> digits <span class="op">=</span> column<span class="op">.</span><span class="fu">sublist</span>(<span class="dv">0</span><span class="op">,</span> column<span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> operand <span class="op">=</span> column<span class="op">.</span><span class="fu">last</span>()</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (digits<span class="op">.</span><span class="fu">all</span>(<span class="op">-&gt;</span>(d) d <span class="op">==</span> <span class="st">&quot; &quot;</span>)) {</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        i <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    currentProblemOperands<span class="op">.</span><span class="fu">push</span>(digits<span class="op">.</span><span class="fu">join</span>(<span class="st">&quot;&quot;</span>)<span class="op">.</span><span class="fu">to_number</span>())</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> operand {</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">&quot;+&quot;</span> totalSum <span class="op">+=</span> currentProblemOperands<span class="op">.</span><span class="fu">sum</span>()</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">&quot;*&quot;</span> totalSum <span class="op">+=</span> currentProblemOperands<span class="op">.</span><span class="fu">product</span>()</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="im">default</span> <span class="cf">return</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    currentProblemOperands<span class="op">.</span><span class="fu">clear</span>()</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;totalSum = {totalSum}&quot;</span>)</span></code></pre></div>
+<p>I added the following methods to the standard library:</p>
+<ul class="incremental">
+<li><code>Value::also</code>: Runs the provided callback and returns
+<code>self</code></li>
+<li><code>Value::apply</code>: Runs the provided callback and returns
+the callback’s result</li>
+<li><code>Number::downTo</code>: Downwards counting variant of
+<code>Number::upTo</code></li>
+<li><code>Number::collectDownTo</code>: Downwards counting variant of
+<code>Number::collectUpTo</code></li>
+<li><code>String::padLeft</code>: Pads the beginning of a string to
+reach a desired minimum length</li>
+<li><code>String::padRight</code>: Pads the end of a string to reach a
+desired minimum length</li>
+<li><code>List::clear</code>: Clears the contents of a list</li>
+<li><code>List::indices</code>: Returns a list of all valid indices</li>
+</ul>
+<p>I modified the following method:</p>
+<ul class="incremental">
+<li><code>List::join</code>: Added an optional mapping callback to
+preprocess the list contents before joining</li>
+</ul>
+<p>You can find the individual commits below:</p>
+<ul class="incremental">
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/aab7c9c9133afc1adf5d2f56cf7a462a19d37d90"><code>aab7c9c</code></a>
+<code>Add Value::also</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/3a13da521c5850d31eddb339039ec85628476145"><code>3a13da5</code></a>
+<code>Add Value::apply</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/1c49921e4a84428dff27631aa7a694ff21448aeb"><code>1c49921</code></a>
+<code>Add Number::downTo</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/f61f9903fea0075b791e5b2a8868eaa394aed523"><code>f61f990</code></a>
+<code>Add Number::collectDownTo</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/7f769637ae6d56c9d8dfc02b03c45a8b6dd0ab5b"><code>7f76963</code></a>
+<code>Add String::padLeft and String::padRight</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/fa1c6d1355b67edb382b6edbae582042e1ac1357"><code>fa1c6d1</code></a>
+<code>Add List::clear</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/0fb468d064f00b1cb2640cef0d5f6657ceb957be"><code>0fb468d</code></a>
+<code>Add List::indices</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/e89aa67249eb218c17c49f34ddb15666043fd805"><code>e89aa67</code></a>
+<code>Add map callback to List::join</code></li>
+</ul>
 <h2 id="links">Links</h2>
 <ul class="incremental">
 <li><a href="https://adventofcode.com/">Advent of Code</a></li>
