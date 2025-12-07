@@ -218,6 +218,7 @@ main.blog-article blockquote p > a > code {
   color: inherit;
 }
 main.blog-article pre:has(code) {
+  overflow: auto;
   background-color: rgb(237.25, 237.25, 237.25);
   padding: 10px;
   padding-right: 20px;
@@ -245,7 +246,6 @@ main.blog-article pre:has(code) > code {
   background-color: inherit;
   padding: 0px;
   display: block;
-  overflow: scroll;
 }
 main.blog-article pre:has(code) > code * {
   font-weight: 400;
@@ -259,7 +259,7 @@ main.blog-article div.sourceCode {
   margin: 20px 0;
 }
 main.blog-article div.sourceCode > pre.sourceCode:has(code.sourceCode) {
-  overflow: scroll;
+  overflow: auto;
 }
 main.blog-article div.sourceCode > pre.sourceCode:has(code.sourceCode) > code.sourceCode > span > a {
   display: none;

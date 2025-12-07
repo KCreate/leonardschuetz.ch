@@ -237,6 +237,7 @@ main.blog-article {
 
   // code block, no syntax highlighting
   pre:has(code) {
+    overflow: auto;
     background-color: constants.$colorLight1;
     padding: 10px;
     padding-right: 20px;
@@ -261,7 +262,6 @@ main.blog-article {
       background-color: inherit;
       padding: 0px;
       display: block;
-      overflow: scroll;
 
       * {
         font-weight: 400;
@@ -279,7 +279,7 @@ main.blog-article {
     margin: 20px 0;
 
     > pre.sourceCode:has(code.sourceCode) {
-      overflow: scroll;
+      overflow: auto;
       > code.sourceCode {
         > span > a {
           display: none;
