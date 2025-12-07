@@ -8,7 +8,7 @@ description: Advent of Code 2025 in Charly
 # Advent of Code 2025 in Charly
 ## 1. December 2025
 
-This year I'm semi-committing to implementing each [Advent of Code](https://adventofcode.com/) challenge
+This year I'm committing to implementing each [Advent of Code](https://adventofcode.com/) challenge
 in my [programming language Charly](https://github.com/KCreate/charly-vm).
 
 Charly is a dynamically typed,
@@ -40,9 +40,6 @@ Adding all the necessary building blocks to solve the daily puzzles thus becomes
 Because of the compounding effect of this, there might be days where no changes are required, and days
 where I'll have to reinvent the wheel to get things running. I might not post every day, only on days where
 something interesting has been built.
-
-Each article contains a short summary of how I solved the puzzle and what changes I had to make
-to the stdlib or the VM itself.
 
 > Huge thanks to my employer [Zürcher Kantonalbank](https://www.zkb.ch/en/home.html) for giving us an hour
 > of time each day to work on these puzzles!
