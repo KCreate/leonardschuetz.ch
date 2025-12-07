@@ -345,11 +345,19 @@ main.blog-article {
       position: relative;
       anchor-name: --summary;
       user-select: none;
+      -webkit-user-select: none;
       margin: 0;
       font-weight: bold;
+      list-style: none;
 
       &::marker {
-        content: "";
+        content: none;
+        display: none;
+      }
+
+      &::-webkit-details-marker {
+        content: none;
+        display: none;
       }
 
       &:hover {

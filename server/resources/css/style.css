@@ -317,11 +317,18 @@ main.blog-article details summary {
   position: relative;
   anchor-name: --summary;
   user-select: none;
+  -webkit-user-select: none;
   margin: 0;
   font-weight: bold;
+  list-style: none;
 }
 main.blog-article details summary::marker {
-  content: "";
+  content: none;
+  display: none;
+}
+main.blog-article details summary::-webkit-details-marker {
+  content: none;
+  display: none;
 }
 main.blog-article details summary:hover {
   cursor: pointer;
