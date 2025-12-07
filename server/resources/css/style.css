@@ -232,7 +232,7 @@ main.blog-article pre:has(code) {
   }
 }
 main.blog-article pre:has(code) {
-  max-height: 600px;
+  max-height: 610px;
   border: 2px solid rgb(224.5, 224.5, 224.5);
 }
 @media (prefers-color-scheme: dark) {
