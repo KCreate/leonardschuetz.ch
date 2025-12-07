@@ -1,16 +1,8 @@
 #!/bin/sh
-RED=1
-GREEN=2
-colorecho() {
-  tput setaf $2
-  echo $1
-  tput sgr0
-}
-
 if sass server/resources/css/style.scss server/resources/css/style.css; then
-  colorecho "Built css" $GREEN
+  echo "Built css"
 else
-  colorecho "Failed to build css" $RED
+  echo "Failed to build css"
 fi
 
 find server/blog -name "*.md" | while read -r file; do
@@ -21,8 +13,8 @@ find server/blog -name "*.md" | while read -r file; do
     -o ${file%/*}/index.html \
     --template resources/blog-template.html \
     --syntax-highlighting tango; then
-    colorecho "Built ${file%/*}" $GREEN
+    echo "Built ${file%/*}"
   else
-    colorecho "Failed to build ${file%/*}" $RED
+    echo "Failed to build ${file%/*}"
   fi
 done
