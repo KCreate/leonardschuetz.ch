@@ -214,7 +214,7 @@ let totalSum = 0
 const currentProblemOperands = []
 lines.first().indices().reverse().each(->(i) {
     const column = lines.map(->(line) line[i])
-    const digits = column.sublist(0, column.length - 1)
+    const digits = column.dropLast(1)
     const operand = column.last()
 
     if (digits.all(->(d) d == " ")) {
@@ -245,6 +245,10 @@ I added the following methods to the standard library:
 - `String::padRight`: Pads the end of a string to reach a desired minimum length
 - `List::clear`: Clears the contents of a list
 - `List::indices`: Returns a list of all valid indices
+- `List::takeFirst`: Returns a copy of the list with the first `N` elements
+- `List::takeLast`: Returns a copy of the list with the last `N` elements
+- `List::dropFirst`: Returns a copy of the list without the first `N` elements
+- `List::dropLast`: Returns a copy of the list without the last `N` elements
 
 I modified the following method:
 
@@ -260,6 +264,8 @@ You can find the individual commits below:
 - [`fa1c6d1`](https://github.com/KCreate/charly-vm/commit/fa1c6d1355b67edb382b6edbae582042e1ac1357) `Add List::clear`
 - [`0fb468d`](https://github.com/KCreate/charly-vm/commit/0fb468d064f00b1cb2640cef0d5f6657ceb957be) `Add List::indices`
 - [`e89aa67`](https://github.com/KCreate/charly-vm/commit/e89aa67249eb218c17c49f34ddb15666043fd805) `Add map callback to List::join`
+- [`e52e0b5`](https://github.com/KCreate/charly-vm/commit/e52e0b5fa7556fc58788861f4ff88a2662e19f21) `Add List::dropFirst and List::dropLast`
+- [`579df89`](https://github.com/KCreate/charly-vm/commit/579df8937ff08f91660e7e987221fb1339e35d30) `Add List::takeFirst and List::takeLast`
 
 ## Links
 

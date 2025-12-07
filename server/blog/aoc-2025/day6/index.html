@@ -344,7 +344,7 @@ class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> currentProblemOperands <span class="op">=</span> []</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>lines<span class="op">.</span><span class="fu">first</span>()<span class="op">.</span><span class="fu">indices</span>()<span class="op">.</span><span class="fu">reverse</span>()<span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(i) {</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> column <span class="op">=</span> lines<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line) line[i])</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> digits <span class="op">=</span> column<span class="op">.</span><span class="fu">sublist</span>(<span class="dv">0</span><span class="op">,</span> column<span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> digits <span class="op">=</span> column<span class="op">.</span><span class="fu">dropLast</span>(<span class="dv">1</span>)</span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> operand <span class="op">=</span> column<span class="op">.</span><span class="fu">last</span>()</span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (digits<span class="op">.</span><span class="fu">all</span>(<span class="op">-&gt;</span>(d) d <span class="op">==</span> <span class="st">&quot; &quot;</span>)) {</span>
@@ -379,6 +379,14 @@ reach a desired minimum length</li>
 desired minimum length</li>
 <li><code>List::clear</code>: Clears the contents of a list</li>
 <li><code>List::indices</code>: Returns a list of all valid indices</li>
+<li><code>List::takeFirst</code>: Returns a copy of the list with the
+first <code>N</code> elements</li>
+<li><code>List::takeLast</code>: Returns a copy of the list with the
+last <code>N</code> elements</li>
+<li><code>List::dropFirst</code>: Returns a copy of the list without the
+first <code>N</code> elements</li>
+<li><code>List::dropLast</code>: Returns a copy of the list without the
+last <code>N</code> elements</li>
 </ul>
 <p>I modified the following method:</p>
 <ul class="incremental">
@@ -411,6 +419,12 @@ href="https://github.com/KCreate/charly-vm/commit/0fb468d064f00b1cb2640cef0d5f66
 <li><a
 href="https://github.com/KCreate/charly-vm/commit/e89aa67249eb218c17c49f34ddb15666043fd805"><code>e89aa67</code></a>
 <code>Add map callback to List::join</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/e52e0b5fa7556fc58788861f4ff88a2662e19f21"><code>e52e0b5</code></a>
+<code>Add List::dropFirst and List::dropLast</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/579df8937ff08f91660e7e987221fb1339e35d30"><code>579df89</code></a>
+<code>Add List::takeFirst and List::takeLast</code></li>
 </ul>
 <h2 id="links">Links</h2>
 <ul class="incremental">
