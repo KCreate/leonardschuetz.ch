@@ -4,12 +4,15 @@ main.blog-article {
 main.blog-article#index-page > * {
   margin: 0;
 }
-main.blog-article > * {
+main.blog-article > *, main.blog-article details > * {
   margin: 16px 0;
   word-break: break-word;
 }
-main.blog-article > *:first-child {
+main.blog-article > *:first-child, main.blog-article details > *:first-child {
   margin-top: 0;
+}
+main.blog-article > *:last-child, main.blog-article details > *:last-child {
+  margin-bottom: 0;
 }
 main.blog-article > h1, main.blog-article h2, main.blog-article h3, main.blog-article h4, main.blog-article h5, main.blog-article h6 {
   border-left: 4px solid rgb(0, 111.5, 100.1058394161);
@@ -266,7 +269,8 @@ main.blog-article div.sourceCode > pre.sourceCode:has(code.sourceCode) > code.so
 }
 main.blog-article table {
   width: 100%;
-  background-color: rgb(237.25, 237.25, 237.25);
+  background-color: light-dark(rgb(237.25, 237.25, 237.25), #242030);
+  color: light-dark(black, white);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 @media (prefers-color-scheme: dark) {
@@ -280,7 +284,7 @@ main.blog-article table {
   overflow: hidden;
 }
 main.blog-article table tr {
-  border: 2px solid rgb(224.5, 224.5, 224.5);
+  border: 2px solid light-dark(rgb(224.5, 224.5, 224.5), rgb(58.95, 52.4, 78.6));
 }
 main.blog-article table th, main.blog-article table td {
   padding: 4px 6px;
@@ -290,17 +294,59 @@ main.blog-article table th {
 }
 main.blog-article table td {
   height: 36px;
-  border: 2px solid rgb(224.5, 224.5, 224.5);
+  border: 2px solid light-dark(rgb(224.5, 224.5, 224.5), rgb(58.95, 52.4, 78.6));
 }
 main.blog-article table strong {
   padding: 0;
   color: #3F51B5;
 }
 main.blog-article table thead {
-  background-color: rgb(224.5, 224.5, 224.5);
+  background-color: light-dark(rgb(224.5, 224.5, 224.5), rgb(47.475, 42.2, 63.3));
 }
 main.blog-article table thead tr th {
   text-align: left;
+}
+main.blog-article details {
+  background-color: light-dark(rgb(237.25, 237.25, 237.25), #242030);
+  color: light-dark(black, white);
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+main.blog-article details summary {
+  font-size: 1.2em;
+  position: relative;
+  anchor-name: --summary;
+  user-select: none;
+  margin: 0;
+  font-weight: bold;
+}
+main.blog-article details summary::marker {
+  content: "";
+}
+main.blog-article details summary:hover {
+  cursor: pointer;
+}
+main.blog-article details summary::before, main.blog-article details summary::after {
+  content: "";
+  border-block-start: 3px solid #00897B;
+  height: 0;
+  width: 1rem;
+  inset-block-start: 50%;
+  inset-inline-end: 0;
+  position: absolute;
+  position-anchor: --summary;
+  position-area: top end;
+}
+main.blog-article details summary::after {
+  transform: rotate(90deg);
+  transform-origin: 50%;
+  transition: transform 50ms linear;
+}
+main.blog-article details[open] summary::after {
+  transform: rotate(0deg);
+}
+main.blog-article details[open]::details-content {
+  margin: 10px auto;
 }
 
 * {

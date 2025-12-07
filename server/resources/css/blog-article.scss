@@ -11,12 +11,16 @@ main.blog-article {
   }
 
   $elementMargin: 16px;
-  > * {
+  > *, details > * {
     margin: $elementMargin 0;
     word-break: break-word;
 
     &:first-child {
       margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 
@@ -290,7 +294,8 @@ main.blog-article {
 
   table {
     width: 100%;
-    background-color: constants.$colorLight1;
+    background-color: light-dark(constants.$colorLight1, constants.$colorDark2);
+    color: light-dark(black, white);
     box-shadow: constants.$shadow1;
     @media (prefers-color-scheme: dark) {
       box-shadow: none;
@@ -300,7 +305,7 @@ main.blog-article {
     overflow: hidden;
 
     tr {
-        border: 2px solid constants.$colorLight2;
+        border: 2px solid light-dark(constants.$colorLight2, constants.$colorDark4);
     }
 
     th, td {
@@ -313,7 +318,7 @@ main.blog-article {
 
     td {
         height: 36px;
-        border: 2px solid constants.$colorLight2;
+        border: 2px solid light-dark(constants.$colorLight2, constants.$colorDark4);
     }
 
     strong {
@@ -322,10 +327,63 @@ main.blog-article {
     }
 
     thead {
-        background-color: constants.$colorLight2;
+        background-color: light-dark(constants.$colorLight2, constants.$colorDark3);
         tr th {
             text-align: left;
         }
+    }
+  }
+
+  details {
+    background-color: light-dark(constants.$colorLight1, constants.$colorDark2);
+    color: light-dark(black, white);
+    padding: 5px 10px;
+    border-radius: 3px;
+
+    summary {
+      font-size: 1.2em;
+      position: relative;
+      anchor-name: --summary;
+      user-select: none;
+      margin: 0;
+      font-weight: bold;
+
+      &::marker {
+        content: "";
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &::before,
+      &::after {
+        content: "";
+        border-block-start: 3px solid constants.$colorTheme1;
+        height: 0;
+        width: 1rem;
+        inset-block-start: 50%;
+        inset-inline-end: 0;
+        position: absolute;
+        position-anchor: --summary;
+        position-area: top end;
+      }
+
+      &::after {
+        transform: rotate(90deg);
+        transform-origin: 50%;
+        transition: transform 50ms linear;
+      }
+    }
+
+    &[open] {
+      summary::after {
+        transform: rotate(0deg);
+      }
+
+      &::details-content {
+        margin: 10px auto;
+      }
     }
   }
 }
