@@ -14,5 +14,5 @@ Make sure the following tools are installed:
 
 - `npm install`
 - `./watch.sh` (auto-compile scss and markdown files once a second)
-- `./serve.sh` (runs local HTTP server)
+- `./localserve.sh` (runs local HTTP server)
 
