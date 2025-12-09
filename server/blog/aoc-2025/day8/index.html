@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<!--
+██   ██ ███████ ██      ██       ██████  ██ 
+██   ██ ██      ██      ██      ██    ██ ██ 
+███████ █████   ██      ██      ██    ██ ██ 
+██   ██ ██      ██      ██      ██    ██    
+██   ██ ███████ ███████ ███████  ██████  ██ 
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Day 8 of Advent of Code 2025 in Charly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Leonard Schütz">
+    <meta name="description" content="Day 8 of Advent of Code 2025 in
+Charly">
+    <meta name="keywords" content="leonard schütz, programming, compilers, ">
+    <meta name="language" content="English">
+    <meta name="contact" content="hello@leonard.swiss">
+    <meta name="date" content="Mon, 09 Dec 2025 02:00:00 +0100">
+
+    <meta property="og:url" content="https://leonard.swiss/">
+    <meta property="og:title" content="Day 8 of Advent of Code 2025 in Charly">
+    <meta property="og:description" content="Day 8 of Advent of Code
+2025 in Charly">
+    <meta property="og:site_name" content="Leonard Schütz">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@leni4838">
+    <meta name="twitter:title" content="Day 8 of Advent of Code 2025 in Charly">
+    <meta name="twitter:description" content="Day 8 of Advent of Code
+2025 in Charly">
+
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
+    <link rel="alternate" type="application/rss+xml" title="Blog" href="/feed.xml" />
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+
+          <style type="text/css">
+        code {
+          white-space: pre;
+        }
+      </style>
+      <style type="text/css">
+        html { -webkit-text-size-adjust: 100%; }
+        pre > code.sourceCode { white-space: pre; position: relative; }
+        pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+        pre > code.sourceCode > span:empty { height: 1.2em; }
+        .sourceCode { overflow: visible; }
+        code.sourceCode > span { color: inherit; text-decoration: inherit; }
+        div.sourceCode { margin: 1em 0; }
+        pre.sourceCode { margin: 0; }
+        @media screen {
+        div.sourceCode { overflow: auto; }
+        }
+        @media print {
+        pre > code.sourceCode { white-space: pre-wrap; }
+        pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+        }
+        pre.numberSource code
+          { counter-reset: source-line 0; }
+        pre.numberSource code > span
+          { position: relative; left: -4em; counter-increment: source-line; }
+        pre.numberSource code > span > a:first-child::before
+          { content: counter(source-line);
+            position: relative; left: -1em; text-align: right; vertical-align: baseline;
+            border: none; display: inline-block;
+            -webkit-touch-callout: none; -webkit-user-select: none;
+            -khtml-user-select: none; -moz-user-select: none;
+            -ms-user-select: none; user-select: none;
+            padding: 0 4px; width: 4em;
+            color: #aaaaaa;
+          }
+        pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+        div.sourceCode
+          {  background-color: #f8f8f8; }
+        @media screen {
+        pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+        }
+        code span.al { color: #ef2929; } /* Alert */
+        code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+        code span.at { color: #204a87; } /* Attribute */
+        code span.bn { color: #0000cf; } /* BaseN */
+        code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+        code span.ch { color: #4e9a06; } /* Char */
+        code span.cn { color: #8f5902; } /* Constant */
+        code span.co { color: #8f5902; font-style: italic; } /* Comment */
+        code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+        code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+        code span.dt { color: #204a87; } /* DataType */
+        code span.dv { color: #0000cf; } /* DecVal */
+        code span.er { color: #a40000; font-weight: bold; } /* Error */
+        code span.ex { } /* Extension */
+        code span.fl { color: #0000cf; } /* Float */
+        code span.fu { color: #204a87; font-weight: bold; } /* Function */
+        code span.im { } /* Import */
+        code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+        code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+        code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+        code span.ot { color: #8f5902; } /* Other */
+        code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+        code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+        code span.ss { color: #4e9a06; } /* SpecialString */
+        code span.st { color: #4e9a06; } /* String */
+        code span.va { color: #000000; } /* Variable */
+        code span.vs { color: #4e9a06; } /* VerbatimString */
+        code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+      </style>
+            </head>
+  <body>
+    <div id="content">
+      <header>
+        <div id="name-container">
+          <a href="/">leonard schütz</a>
+        </div>
+        <nav>
+          <a href="/about">about</a>
+          <a href="/blog/">blog</a>
+        </nav>
+      </header>
+      <main class="blog-article">
+<h1 id="advent-of-code-2025-in-charly">Advent of Code 2025 in
+Charly</h1>
+<h2 id="day-8">Day 8</h2>
+<ul class="incremental">
+<li><a href="../">Back to the main article</a></li>
+<li><a href="../day7">Previous day</a></li>
+</ul>
+<blockquote>
+<p>This article is part of my series on implementing each Advent of Code
+2025 challenge in my own programming language Charly.</p>
+</blockquote>
+<h2 id="puzzle">Puzzle</h2>
+<blockquote>
+<p>I won’t cover my solution to part 1 of the puzzle today, instead I’ll
+quickly describe the puzzle and then go into more detail about the
+challenges I’ve faced.</p>
+</blockquote>
+<p>Today’s puzzle involved a lot of number crunching! The elves needed
+help decorating their underground playground, which they rigged many
+small electrical junction boxes.</p>
+<p>Their plan is to connect the junction boxes with long strings of
+lights. The elves are trying to figure out which junction boxes to
+connect so that electricity can reach every junction box.</p>
+<p>You are given a list of all the junction boxes’ positions in 3D
+space. For example:</p>
+<pre><code>162,817,812
+57,618,57
+906,360,560
+592,479,940
+352,342,300
+466,668,158
+542,29,236
+431,825,988
+739,650,466
+52,470,668
+216,146,977
+819,987,18
+117,168,530
+805,96,715
+346,949,466
+970,615,88
+941,993,340
+862,61,35
+984,92,344
+425,690,689</code></pre>
+<p>Each line contains the <code>X,Y,Z</code> coordinates of a single
+junction box. To save on string lights, the elves would like to focus on
+connecting pairs of junction boxes that are <strong>as close togther as
+possible</strong>, according to their straight-line euclidian distance.
+Junction boxes connected by a string of lights form a
+<code>circuit</code>. If a junction box is connected to another junction
+box which is already part of a circuit, that circuit grows to now also
+include the newly connected junction box.</p>
+<p>Part 1 asked to connect the <code>1000</code> pairs of junction boxes
+which are closest together, and to then determine the
+<code>product</code> of the three largest circuits’ sizes.</p>
+<p>Part 2 asked how many pairs of junction boxes must be connected
+before all junction boxes form a single circuit.</p>
+<h2 id="implementation---attempt-1">Implementation - Attempt 1</h2>
+<p>Implementing today’s puzzle <em>in Charly</em> was challenging.</p>
+<p>Because Charly lacks any kind of <code>HashTable</code>,
+<code>Set</code> or <code>Graph</code> types, I had to implement
+everything with the only sensible data structure I had available: the
+humble <code>List</code>. This meant a <em>lot</em> of iterating over
+lists.</p>
+<p>Because of some poor algorithm choices and me not sorting the input
+data before processing it, this version ran <em>extremely</em> slow.</p>
+<p><img src="./time-slow.png" /></p>
+<blockquote>
+<p>Calculating the solution took about <strong><code>13</code>
+minutes</strong> on my machine.</p>
+</blockquote>
+<p>While this allowed me to complete the puzzle and submit my solutions,
+it bugged me throughout the day.</p>
+<blockquote>
+<p>Note: My initial version already contained some optimizations, mostly
+caches here and there. While I never actually fully executed the version
+without the caches, I assume it would have run for far longer than
+<em>just</em> <code>13</code> minutes.</p>
+</blockquote>
+<p>Below is my initial solution to the puzzle:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> input_path <span class="op">=</span> ARGV[<span class="dv">1</span>]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> lines <span class="op">=</span> <span class="fu">readfile</span>(input_path)<span class="op">.</span><span class="fu">lines</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> positions <span class="op">=</span> lines<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line) {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    line<span class="op">.</span><span class="fu">split</span>(<span class="st">&quot;,&quot;</span>)<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(n) n<span class="op">.</span><span class="fu">to_number</span>())</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Graph {</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    property nodes <span class="op">=</span> []</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    property edges <span class="op">=</span> []</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    property groups <span class="op">=</span> []</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    property distanceFn <span class="op">=</span> <span class="kw">null</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    property cached_node_distances <span class="op">=</span> []</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    property cached_node_outgoing_edges <span class="op">=</span> []</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">constructor</span>(@distanceFn) {}</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    func cache_distances {</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> permutations <span class="op">=</span> []</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        nodes<span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(n1<span class="op">,</span> i1) {</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>            nodes<span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(n2<span class="op">,</span> i2) {</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> i1 <span class="op">!=</span> i2 {</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                    permutations<span class="op">.</span><span class="fu">push</span>((i1<span class="op">,</span> i2))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>            })</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        @cached_node_distances <span class="op">=</span> List<span class="op">.</span><span class="fu">create_with</span>(@nodes<span class="op">.</span><span class="at">length</span><span class="op">,</span> <span class="op">-&gt;</span>{</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>            List<span class="op">.</span><span class="fu">create</span>(@nodes<span class="op">.</span><span class="at">length</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        permutations<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(permutation) {</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> (i1<span class="op">,</span> i2) <span class="op">=</span> permutation</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> distance <span class="op">=</span> @<span class="fu">distance_between</span>(i1<span class="op">,</span> i2)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>            <span class="co">// [distance, isConnected]</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>            @cached_node_distances[i1][i2] <span class="op">=</span> [distance<span class="op">,</span> <span class="kw">false</span>]</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">add_node</span>(node) {</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        @nodes<span class="op">.</span><span class="fu">push</span>(node)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>        @cached_node_outgoing_edges<span class="op">.</span><span class="fu">push</span>([])</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">add_edge</span>(id1<span class="op">,</span> id2) {</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>        @edges<span class="op">.</span><span class="fu">push</span>((id1<span class="op">,</span> id2))</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>        @edges<span class="op">.</span><span class="fu">push</span>((id2<span class="op">,</span> id1))</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>        @cached_node_distances[id1][id2][<span class="dv">1</span>] <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        @cached_node_distances[id2][id1][<span class="dv">1</span>] <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>        @cached_node_outgoing_edges[id1]<span class="op">.</span><span class="fu">push</span>(id2)</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>        @cached_node_outgoing_edges[id2]<span class="op">.</span><span class="fu">push</span>(id1)</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">in_same_group</span>(i1<span class="op">,</span> i2) {</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> groupOf1 <span class="op">=</span> @groups<span class="op">.</span><span class="fu">find</span>(<span class="op">-&gt;</span>(group) group<span class="op">.</span><span class="fu">contains</span>(i1))</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> groupOf2 <span class="op">=</span> @groups<span class="op">.</span><span class="fu">find</span>(<span class="op">-&gt;</span>(group) group<span class="op">.</span><span class="fu">contains</span>(i2))</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> groupOf1 <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> groupOf2 <span class="op">==</span> <span class="kw">null</span> <span class="cf">return</span> <span class="kw">false</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>        groupOf1 <span class="op">==</span> groupOf2</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">update_groups</span>() {</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>        @groups<span class="op">.</span><span class="fu">clear</span>()</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>        <span class="co">// [ [node, hasBeenVisited] ]</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> workList <span class="op">=</span> @nodes<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(node<span class="op">,</span> index) [node<span class="op">,</span> index<span class="op">,</span> <span class="kw">false</span>])</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>        loop {</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>            <span class="co">// find the first entry that hasn&#39;t been visited yet</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> unvisited <span class="op">=</span> workList</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">filter</span>(<span class="op">-&gt;</span>(entry) {</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">const</span> (node<span class="op">,</span> index<span class="op">,</span> isVisited) <span class="op">=</span> entry</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>                    <span class="op">!</span>isVisited</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>                })</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span><span class="fu">first</span>()</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> unvisited <span class="op">==</span> <span class="kw">null</span> {</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> unvisitedIndex <span class="op">=</span> unvisited[<span class="dv">1</span>]</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>            <span class="co">// find all connected nodes</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> visitQueue <span class="op">=</span> [unvisitedIndex]</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> groupIds <span class="op">=</span> []</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> visitQueue<span class="op">.</span><span class="fu">notEmpty</span>() {</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> id <span class="op">=</span> visitQueue<span class="op">.</span><span class="fu">pop</span>()</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>                <span class="co">// item already visited</span></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (workList[id][<span class="dv">2</span>]) {</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">continue</span></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>                <span class="co">// mark as visited</span></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>                workList[id][<span class="dv">2</span>] <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>                groupIds<span class="op">.</span><span class="fu">push</span>(id)</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>                <span class="co">// collect neighbours</span></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> neighbours <span class="op">=</span> <span class="fu">get_connected_nodes</span>(id)</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>                neighbours<span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(neighbourId) {</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>                    visitQueue<span class="op">.</span><span class="fu">push</span>(neighbourId)</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>                })</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>            @groups<span class="op">.</span><span class="fu">push</span>(groupIds)</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">get_connected_nodes</span>(id) {</span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>        @cached_node_outgoing_edges[id]</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">has_edge</span>(id1<span class="op">,</span> id2) {</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> v1 <span class="op">=</span> id1<span class="op">.</span><span class="fu">min</span>(id2)</span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> v2 <span class="op">=</span> id1<span class="op">.</span><span class="fu">max</span>(id2)</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>        @edges<span class="op">.</span><span class="fu">find</span>((v1<span class="op">,</span> v2)) <span class="op">&gt;=</span> <span class="dv">0</span></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">distance_between</span>(id1<span class="op">,</span> id2) {</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> node1 <span class="op">=</span> @nodes[id1]</span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> node2 <span class="op">=</span> @nodes[id2]</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>        @<span class="fu">distanceFn</span>(node1<span class="op">,</span> node2)</span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">find_shortest_unconnected_edge</span>() {</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> shortestEdge <span class="op">=</span> <span class="kw">null</span></span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> shortestDistance <span class="op">=</span> <span class="kw">null</span></span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>        @cached_node_distances<span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(row<span class="op">,</span> i1) {</span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>            row<span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(entry<span class="op">,</span> i2) {</span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> entry <span class="op">==</span> <span class="kw">null</span> {</span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">return</span></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> (distance<span class="op">,</span> isConnected) <span class="op">=</span> entry</span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> isConnected {</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">return</span></span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> shortestDistance <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> distance <span class="op">&lt;</span> shortestDistance {</span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>                    shortestEdge <span class="op">=</span> (i1<span class="op">,</span> i2)</span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>                    shortestDistance <span class="op">=</span> distance</span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>            })</span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>        shortestEdge</span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>func <span class="fu">vectorDistance</span>(a<span class="op">,</span> b) {</span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x1<span class="op">,</span> y1<span class="op">,</span> z1) <span class="op">=</span> a</span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x2<span class="op">,</span> y2<span class="op">,</span> z2) <span class="op">=</span> b</span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (dx<span class="op">,</span> dy<span class="op">,</span> dz) <span class="op">=</span> (</span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>        (x1 <span class="op">-</span> x2)<span class="op">.</span><span class="fu">abs</span>()<span class="op">,</span></span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>        (y1 <span class="op">-</span> y2)<span class="op">.</span><span class="fu">abs</span>()<span class="op">,</span></span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>        (z1 <span class="op">-</span> z2)<span class="op">.</span><span class="fu">abs</span>()</span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>    (dx <span class="op">*</span> dx <span class="op">+</span> dy <span class="op">*</span> dy <span class="op">+</span> dz <span class="op">*</span> dz)<span class="op">.</span><span class="fu">cbrt</span>()</span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> g <span class="op">=</span> <span class="fu">Graph</span>(vectorDistance)</span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>positions<span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(p) g<span class="op">.</span><span class="fu">add_node</span>(p))</span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;caching distances&quot;</span>)</span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>g<span class="op">.</span><span class="fu">cache_distances</span>()</span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>loop {</span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> shortest_edge <span class="op">=</span> g<span class="op">.</span><span class="fu">find_shortest_unconnected_edge</span>()</span>
+<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> shortest_edge <span class="op">==</span> <span class="kw">null</span> <span class="cf">return</span></span>
+<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (i1<span class="op">,</span> i2) <span class="op">=</span> shortest_edge</span>
+<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> n1 <span class="op">=</span> g<span class="op">.</span><span class="at">nodes</span>[i1]</span>
+<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> n2 <span class="op">=</span> g<span class="op">.</span><span class="at">nodes</span>[i2]</span>
+<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">!</span>g<span class="op">.</span><span class="fu">in_same_group</span>(i1<span class="op">,</span> n2) {</span>
+<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a>        g<span class="op">.</span><span class="fu">add_edge</span>(i1<span class="op">,</span> i2)</span>
+<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a>        g<span class="op">.</span><span class="fu">update_groups</span>()</span>
+<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> g<span class="op">.</span><span class="at">groups</span><span class="op">.</span><span class="at">length</span> <span class="op">==</span> <span class="dv">1</span> {</span>
+<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="st">&quot;productOfXCoordinates = {n1[0] * n2[0]}&quot;</span>)</span>
+<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a>    i <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h2 id="implementation---attempt-2">Implementation - Attempt 2</h2>
+<p>I knew I just had to try again. The key thing I had to improve was
+the algorithm I used to keep track of point edges and the resulting
+groups. Let’s walk through my final implementation together.</p>
+<p>A key problem of my previous solution was the need to recalculate the
+point groups from scratch every time a new edge was added to the graph.
+Instead of keeping track of the edges, I now keep track of the groups
+the points belong to.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PointGraph {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    property groups <span class="op">=</span> []</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">constructor</span>(points) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        @groups <span class="op">=</span> List<span class="op">.</span><span class="fu">create_with</span>(count<span class="op">,</span> <span class="op">-&gt;</span>(i) [i<span class="op">,</span> [i]])</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// returns true if this edge caused two groups to be merged</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// returns false otherwise</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    func <span class="fu">add_edge</span>(i1<span class="op">,</span> i2) {</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="co">// merge the groups for that id</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (g1id<span class="op">,</span> g1list) <span class="op">=</span> self<span class="op">.</span><span class="at">groups</span>[i1]</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (g2id<span class="op">,</span> g2list) <span class="op">=</span> self<span class="op">.</span><span class="at">groups</span>[i2]</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="co">// check if they are already the same group</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> g1id <span class="op">==</span> g2id {</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">false</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> newGroupMemberList <span class="op">=</span> g1list<span class="op">.</span><span class="fu">concat</span>(g2list)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> newGroup <span class="op">=</span> [g1id<span class="op">,</span> newGroupMemberList]</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        <span class="co">// update the group references of all points in this group</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        newGroupMemberList<span class="op">.</span><span class="fu">each</span>(<span class="op">-&gt;</span>(id) {</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>            self<span class="op">.</span><span class="at">groups</span>[id] <span class="op">=</span> newGroup</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="kw">true</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Each entry in the <code>groups</code> list contains the group ID and
+the list of points that are part of that group. Before any edges are
+added each point is in its own group.</p>
+<p>Whenever a new edge is added, there are two options:</p>
+<ul class="incremental">
+<li>The two points are already in the same group</li>
+<li>The two points are in separate groups</li>
+</ul>
+<p>If the two points are already in the same group, nothing has to be
+done!</p>
+<p>If the two points are in separate groups however, I merge those two
+groups together. For each point in the new group, I replace the
+associated entry in the <code>groups</code> list with a new entry,
+containing all points from both groups.</p>
+<p>Let’s walk through how this data structure is used to determine the
+solution.</p>
+<p>The first step is to parse the input file and store the points in a
+list of coordinates.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> points <span class="op">=</span> lines</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        line<span class="op">.</span><span class="fu">split</span>(<span class="st">&quot;,&quot;</span>)<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(s) s<span class="op">.</span><span class="fu">to_number</span>())</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    })</span></code></pre></div>
+<p>I then determine the list of possible edges between all points. This
+is achieved by iterating over all points in two nested loops. The loop
+indexes are chosen so that the edge list does not contain any undirected
+duplicates or self-loops.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> edges <span class="op">=</span> List</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">build</span>(<span class="op">-&gt;</span>(list) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> length <span class="op">=</span> points<span class="op">.</span><span class="at">length</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> j <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> i <span class="op">&lt;</span> length {</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> j <span class="op">&lt;</span> length {</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                list<span class="op">.</span><span class="fu">push</span>((i<span class="op">,</span> j))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                j <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            i <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            j <span class="op">=</span> i <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    })</span></code></pre></div>
+<p>I then calculate the distance of each edge and store them, together
+with the edge, in a new list.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> edgeDistancePairs <span class="op">=</span> edges</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(edge) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (i1<span class="op">,</span> i2) <span class="op">=</span> edge</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (x1<span class="op">,</span> y1<span class="op">,</span> z1) <span class="op">=</span> points[i1]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (x2<span class="op">,</span> y2<span class="op">,</span> z2) <span class="op">=</span> points[i2]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (dx<span class="op">,</span> dy<span class="op">,</span> dz) <span class="op">=</span> (</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            (x1 <span class="op">-</span> x2)<span class="op">.</span><span class="fu">abs</span>()<span class="op">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            (y1 <span class="op">-</span> y2)<span class="op">.</span><span class="fu">abs</span>()<span class="op">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            (z1 <span class="op">-</span> z2)<span class="op">.</span><span class="fu">abs</span>()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> distance <span class="op">=</span> (dx <span class="op">*</span> dx <span class="op">+</span> dy <span class="op">*</span> dy <span class="op">+</span> dz <span class="op">*</span> dz)<span class="op">.</span><span class="fu">sqrt</span>()</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        (edge<span class="op">,</span> distance)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    })</span></code></pre></div>
+<p>That list is then sorted, based on the distance.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> sortedEdges <span class="op">=</span> edgeDistancePairs</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">sort</span>(<span class="op">-&gt;</span>(a<span class="op">,</span> b) {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (e1<span class="op">,</span> d1) <span class="op">=</span> a</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (e2<span class="op">,</span> d2) <span class="op">=</span> b</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        d1 <span class="op">-</span> d2</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(edgeDistancePair) edgeDistancePair[<span class="dv">0</span>])</span></code></pre></div>
+<p>Finally, I construct a <code>PointGraph</code> instance with enough
+space to represent all points parsed from the input file. I then create
+a queue of edges to add by reversing the <code>sortedEdges</code> list.
+That way I can cleanly pop them off from the end. Alternatively I could
+have reversed the sort order above. Because the implementation of
+<code>PointGraph::add_edge</code> tells me whether the edge resulted in
+two groups being merged, I can accurately keep track of the total amount
+of groups in the graph without having to inspect the data structure
+itself.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> graph <span class="op">=</span> <span class="fu">PointGraph</span>(points<span class="op">.</span><span class="at">length</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> queue <span class="op">=</span> sortedEdges<span class="op">.</span><span class="fu">reverse</span>()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> group_count <span class="op">=</span> points<span class="op">.</span><span class="at">length</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>loop {</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> edge <span class="op">=</span> queue<span class="op">.</span><span class="fu">pop</span>()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (i1<span class="op">,</span> i2) <span class="op">=</span> edge</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> did_merge_groups <span class="op">=</span> graph<span class="op">.</span><span class="fu">add_edge</span>(i1<span class="op">,</span> i2)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// update group count if this edge merged two groups</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> did_merge_groups {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        group_count <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// coallesced all groups, print the solution to the puzzle</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> group_count <span class="op">==</span> <span class="dv">1</span> {</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (p1<span class="op">,</span> p2) <span class="op">=</span> (points[i1]<span class="op">,</span> points[i2])</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (x1<span class="op">,</span> x2) <span class="op">=</span> (p1[<span class="dv">0</span>]<span class="op">,</span> p2[<span class="dv">0</span>])</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="st">&quot;x1 * x2 = {x1 * x2}&quot;</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Once a single group containing all the points in the graph has been
+reached I can extract the <code>X</code> components of the points the
+last edge has connected and print the solution to the puzzle.</p>
+<p>This implementation improved performance significantly!</p>
+<p><img src="./time-fast.png" /></p>
+<blockquote>
+<p>The new algorithm only takes about <strong><code>3</code>
+seconds</strong> on my machine.</p>
+</blockquote>
+<blockquote>
+<p>The vast majority of the execution time is spent sorting the list of
+edges. I did attempt to parallelize the merge-sort implementation, but
+the overhead caused by contention and scheduling negated any performance
+benefits. The virtual machine holds a per-object lock whenever it
+modifies an object, or a list, which explains why this didn’t result in
+the performance gains I expected.</p>
+</blockquote>
+<p>Running the script with a profiler attached told me that the virtual
+machine spent most of its’ time looking up functions from class objects.
+I could probably improve performance further by implementing an
+inline-caching system and reusing the result of that expensive
+lookup.</p>
+<p>Maybe another day…</p>
+<h2 id="changes-to-the-stdlib-vm">Changes to the stdlib / VM</h2>
+<p>To further improve performance, I replaced the default sorting
+algorithm in the standard library with a <a
+href="https://github.com/KCreate/charly-vm/commit/dce5b7ae6488ab13971eadbcc7a6f43d58e43845">merge-sort
+implementation</a>. Although I’d like to claim credit for this, I did
+task ChatGPT with generating the implementation for this method.</p>
+<p>Additionally, I extended the builtin <code>Math</code> module with
+the following methods:</p>
+<ul class="incremental">
+<li><code>sqrt</code> Return the square root of a number</li>
+<li><code>cbrt</code> Return the cube root of a number</li>
+<li><code>abs</code> Returns the absolute value of a number</li>
+</ul>
+<p>Some other functionality I added:</p>
+<ul class="incremental">
+<li><code>String::hashcode</code> Implemented <code>hashcode</code> as a
+well-known property of <code>String</code> in the virtual machine It
+returns the CRC32 hash of the string. This value was already getting
+calculated by the virtual machine, which used it to improve performance
+for property or function lookups. This change exposes the hashcode to
+user code. I may use this in the future to implement a proper hash
+table</li>
+<li><code>Stopwatch::section</code> Executes a callback and prints the
+execution time to the console</li>
+<li><code>List::concat</code> Concatenates two lists</li>
+<li><code>List::build</code> Copy of the kotlin <code>buildList</code>
+method. Creates a new list and allows a callback to initialize it</li>
+</ul>
+<p>You can find the individual commits below:</p>
+<ul class="incremental">
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/b025f9b4bb1e76921fd3792a6f5ac11a4b481f0f"><code>b025f9b</code></a>
+<code>Add Math::sqrt, Math::cbrt, Math::abs</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/96f2ac20e9f97b959e1c1ac1df8b66d5be8f71a7"><code>96f2ac2</code></a>
+<code>Add String::hashcode as well-known property</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/554c4df0444993981421ee925c2c8c6c9c7a6a3c"><code>554c4df</code></a>
+<code>Add Stopwatch::section</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/e88c07b26c92f12df5ba6e215c992ece1df88f04"><code>e88c07b</code></a>
+<code>Fix bug in List::clear</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/efd4079c0358d1f3ade51d64c436e135ab421956"><code>efd4079</code></a>
+<code>Add List::concat</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/b957bfe08e0260decfef98e24fc37ccbb6457393"><code>b957bfe</code></a>
+<code>Add List::build</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/dce5b7ae6488ab13971eadbcc7a6f43d58e43845"><code>dce5b7a</code></a>
+<code>Implemented merge sort in List::sort</code></li>
+</ul>
+<h2 id="links">Links</h2>
+<ul class="incremental">
+<li><a href="https://adventofcode.com/">Advent of Code</a></li>
+<li><a href="https://github.com/KCreate/charly-vm">Charly Programming
+Language</a></li>
+<li><a
+href="https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day8">Source
+code for today’s challenge</a></li>
+</ul>
+      </main>
+      <hr/>
+      <footer>
+        <div id="social-links">
+          <a href="https://github.com/KCreate" target="_blank">
+            <img height="20" width="20" src="/resources/github.svg" alt="GitHub Link"/>
+          </a>
+          <a href="https://linkedin.com/in/leonardschuetz" target="_blank">
+            <img height="20" width="20" src="/resources/linkedin.svg" alt="LinkedIn Link"/>
+          </a>
+          <a href="mailto:hello@leonard.swiss?subject=Hello%20Leonard!">
+            <img height="20" width="20" src="/resources/mail.svg" alt="Email Link"/>
+          </a>
+          <a href="/rss.xml" target="_blank">
+            <img height="20" width="20" src="/resources/rss.svg" alt="RSS Link"/>
+          </a>
+        </div>
+        <div id="open-source-notice">
+          <span>this blog is <a href="https://github.com/KCreate/leonardschuetz.ch" target="_blank">open-source</a></span>
+        </div>
+      </footer>
+      <span id="copyright">Copyright © 2024 - 2025 Leonard Schütz | <a href="/attributions">Attributions</a></span>
+      <span id="copyright">This post was written by a human and reviewed and proof-read by LLMs</span>
+    </div>
+  </body>
+  <script src="/script.js" async></script>
+</html>
