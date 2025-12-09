@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<!--
+██   ██ ███████ ██      ██       ██████  ██ 
+██   ██ ██      ██      ██      ██    ██ ██ 
+███████ █████   ██      ██      ██    ██ ██ 
+██   ██ ██      ██      ██      ██    ██    
+██   ██ ███████ ███████ ███████  ██████  ██ 
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Day 9 of Advent of Code 2025 in Charly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Leonard Schütz">
+    <meta name="description" content="Day 9 of Advent of Code 2025 in
+Charly">
+    <meta name="keywords" content="leonard schütz, programming, compilers, ">
+    <meta name="language" content="English">
+    <meta name="contact" content="hello@leonard.swiss">
+    <meta name="date" content="Mon, 09 Dec 2025 21:30:00 +0100">
+
+    <meta property="og:url" content="https://leonard.swiss/">
+    <meta property="og:title" content="Day 9 of Advent of Code 2025 in Charly">
+    <meta property="og:description" content="Day 9 of Advent of Code
+2025 in Charly">
+    <meta property="og:site_name" content="Leonard Schütz">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@leni4838">
+    <meta name="twitter:title" content="Day 9 of Advent of Code 2025 in Charly">
+    <meta name="twitter:description" content="Day 9 of Advent of Code
+2025 in Charly">
+
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
+    <link rel="alternate" type="application/rss+xml" title="Blog" href="/feed.xml" />
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+
+          <style type="text/css">
+        code {
+          white-space: pre;
+        }
+      </style>
+      <style type="text/css">
+        html { -webkit-text-size-adjust: 100%; }
+        pre > code.sourceCode { white-space: pre; position: relative; }
+        pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+        pre > code.sourceCode > span:empty { height: 1.2em; }
+        .sourceCode { overflow: visible; }
+        code.sourceCode > span { color: inherit; text-decoration: inherit; }
+        div.sourceCode { margin: 1em 0; }
+        pre.sourceCode { margin: 0; }
+        @media screen {
+        div.sourceCode { overflow: auto; }
+        }
+        @media print {
+        pre > code.sourceCode { white-space: pre-wrap; }
+        pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+        }
+        pre.numberSource code
+          { counter-reset: source-line 0; }
+        pre.numberSource code > span
+          { position: relative; left: -4em; counter-increment: source-line; }
+        pre.numberSource code > span > a:first-child::before
+          { content: counter(source-line);
+            position: relative; left: -1em; text-align: right; vertical-align: baseline;
+            border: none; display: inline-block;
+            -webkit-touch-callout: none; -webkit-user-select: none;
+            -khtml-user-select: none; -moz-user-select: none;
+            -ms-user-select: none; user-select: none;
+            padding: 0 4px; width: 4em;
+            color: #aaaaaa;
+          }
+        pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+        div.sourceCode
+          {  background-color: #f8f8f8; }
+        @media screen {
+        pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+        }
+        code span.al { color: #ef2929; } /* Alert */
+        code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+        code span.at { color: #204a87; } /* Attribute */
+        code span.bn { color: #0000cf; } /* BaseN */
+        code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+        code span.ch { color: #4e9a06; } /* Char */
+        code span.cn { color: #8f5902; } /* Constant */
+        code span.co { color: #8f5902; font-style: italic; } /* Comment */
+        code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+        code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+        code span.dt { color: #204a87; } /* DataType */
+        code span.dv { color: #0000cf; } /* DecVal */
+        code span.er { color: #a40000; font-weight: bold; } /* Error */
+        code span.ex { } /* Extension */
+        code span.fl { color: #0000cf; } /* Float */
+        code span.fu { color: #204a87; font-weight: bold; } /* Function */
+        code span.im { } /* Import */
+        code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+        code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+        code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+        code span.ot { color: #8f5902; } /* Other */
+        code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+        code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+        code span.ss { color: #4e9a06; } /* SpecialString */
+        code span.st { color: #4e9a06; } /* String */
+        code span.va { color: #000000; } /* Variable */
+        code span.vs { color: #4e9a06; } /* VerbatimString */
+        code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+      </style>
+            </head>
+  <body>
+    <div id="content">
+      <header>
+        <div id="name-container">
+          <a href="/">leonard schütz</a>
+        </div>
+        <nav>
+          <a href="/about">about</a>
+          <a href="/blog/">blog</a>
+        </nav>
+      </header>
+      <main class="blog-article">
+<h1 id="advent-of-code-2025-in-charly">Advent of Code 2025 in
+Charly</h1>
+<h2 id="day-9">Day 9</h2>
+<ul class="incremental">
+<li><a href="../">Back to the main article</a></li>
+<li><a href="../day8">Previous day</a></li>
+</ul>
+<blockquote>
+<p>This article is part of my series on implementing each Advent of Code
+2025 challenge in my own programming language Charly.</p>
+</blockquote>
+<h2 id="part-1">Part 1</h2>
+<p>The first part of today’s puzzle asked you to determine the largest
+possible rectangle given a set of corner points. The input data looked
+something like this:</p>
+<pre><code>7,1
+11,1
+11,7
+9,7
+9,5
+2,5
+2,3
+7,3</code></pre>
+<p>Visualizing those positions on a board would look like this:</p>
+<pre><code>..............
+.......#...#..
+..............
+..#....#......
+..............
+..#......#....
+..............
+.........#.#..
+..............</code></pre>
+<p>I had to search through all possible permutations of corner points to
+find the largest possible rectangle. In the above example, the largest
+rectangle you can make has area <code>50</code>.</p>
+<pre><code>..............
+..OOOOOOOOOO..
+..OOOOOOOOOO..
+..OOOOOOOOOO..
+..OOOOOOOOOO..
+..OOOOOOOOOO..
+..............
+.........#.#..
+..............</code></pre>
+<p>You can find my code for the first part here:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> input_path <span class="op">=</span> ARGV[<span class="dv">1</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> lines <span class="op">=</span> <span class="fu">readfile</span>(input_path)<span class="op">.</span><span class="fu">lines</span>()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> corners <span class="op">=</span> lines<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line) {</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x<span class="op">,</span> y) <span class="op">=</span> line<span class="op">.</span><span class="fu">split</span>(<span class="st">&quot;,&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    (x<span class="op">.</span><span class="fu">to_number</span>()<span class="op">,</span> y<span class="op">.</span><span class="fu">to_number</span>())</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> rectangles <span class="op">=</span> corners<span class="op">.</span><span class="fu">unidirectionalPermutations</span>()</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> areas <span class="op">=</span> rectangles<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(pair) {</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (c1<span class="op">,</span> c2) <span class="op">=</span> pair</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x1<span class="op">,</span> y1) <span class="op">=</span> c1</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x2<span class="op">,</span> y2) <span class="op">=</span> c2</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> lengthX <span class="op">=</span> (x1 <span class="op">-</span> x2)<span class="op">.</span><span class="fu">abs</span>() <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> lengthY <span class="op">=</span> (y1 <span class="op">-</span> y2)<span class="op">.</span><span class="fu">abs</span>() <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    lengthX <span class="op">*</span> lengthY</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> largestArea <span class="op">=</span> areas<span class="op">.</span><span class="fu">findMax</span>()</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;largestArea = {largestArea}&quot;</span>)</span></code></pre></div>
+<h2 id="part-2">Part 2</h2>
+<p>Part 2 modified the problem slightly. Each input coordinate was part
+of a larger polygon.</p>
+<p>Given the above example coordinates, the polygon would look like
+this:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">..............</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="op">.......</span>#<span class="at">XXX</span>#<span class="op">..</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">.......</span><span class="at">X</span><span class="op">...</span>X<span class="op">..</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">..</span>#<span class="at">XXXX</span>#<span class="op">...</span>X<span class="op">..</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">..</span><span class="at">X</span><span class="op">........</span><span class="at">X</span><span class="op">..</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="op">..</span>#<span class="at">XXXXXX</span>#<span class="op">.</span><span class="at">X</span><span class="op">..</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">.........</span>X<span class="op">.</span><span class="at">X</span><span class="op">..</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="op">.........</span>#X#<span class="op">..</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="op">..............</span></span></code></pre></div>
+<p>The premise of the task didn’t change, you still had to find the
+largest possible rectangle. Additionally, the rectangle had to fit into
+the polygon described by the input coordinates.</p>
+<p>You can find my solution to part 2 below:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> input_path <span class="op">=</span> ARGV[<span class="dv">1</span>]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> lines <span class="op">=</span> <span class="fu">readfile</span>(input_path)<span class="op">.</span><span class="fu">lines</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> corners <span class="op">=</span> lines<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(line) {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x<span class="op">,</span> y) <span class="op">=</span> line<span class="op">.</span><span class="fu">split</span>(<span class="st">&quot;,&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    (x<span class="op">.</span><span class="fu">to_number</span>()<span class="op">,</span> y<span class="op">.</span><span class="fu">to_number</span>())</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> polygon_lines <span class="op">=</span> corners<span class="op">.</span><span class="fu">adjacentPairs</span>()<span class="op">.</span><span class="fu">concat</span>([(</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    corners<span class="op">.</span><span class="fu">last</span>()<span class="op">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    corners<span class="op">.</span><span class="fu">first</span>()</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>)])</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>func <span class="fu">polygon_lines_cross</span>(line1<span class="op">,</span> line2) {</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (l1c1<span class="op">,</span> l1c2) <span class="op">=</span> line1</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (l2c1<span class="op">,</span> l2c2) <span class="op">=</span> line2</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> l1_vertical <span class="op">=</span> l1c1[<span class="dv">0</span>] <span class="op">==</span> l1c2[<span class="dv">0</span>]</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> l2_vertical <span class="op">=</span> l2c1[<span class="dv">0</span>] <span class="op">==</span> l2c2[<span class="dv">0</span>]</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> l1_vertical <span class="op">&amp;&amp;</span> l2_vertical <span class="cf">return</span> <span class="kw">false</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">!</span>l1_vertical <span class="op">&amp;&amp;</span> <span class="op">!</span>l2_vertical <span class="cf">return</span> <span class="kw">false</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> l2_vertical {</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fu">polygon_lines_cross</span>(line2<span class="op">,</span> line1)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> own_x <span class="op">=</span> l1c1[<span class="dv">0</span>]</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> own_y_lo <span class="op">=</span> l1c1[<span class="dv">1</span>]<span class="op">.</span><span class="fu">min</span>(l1c2[<span class="dv">1</span>])</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> own_y_hi <span class="op">=</span> l1c1[<span class="dv">1</span>]<span class="op">.</span><span class="fu">max</span>(l1c2[<span class="dv">1</span>])</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> other_y <span class="op">=</span> l2c1[<span class="dv">1</span>]</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> other_x_lo <span class="op">=</span> l2c1[<span class="dv">0</span>]<span class="op">.</span><span class="fu">min</span>(l2c2[<span class="dv">0</span>])</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> other_x_hi <span class="op">=</span> l2c1[<span class="dv">0</span>]<span class="op">.</span><span class="fu">max</span>(l2c2[<span class="dv">0</span>])</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> x_match <span class="op">=</span> own_x <span class="op">&gt;</span> other_x_lo <span class="op">&amp;&amp;</span> own_x <span class="op">&lt;</span> other_x_hi</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> y_match <span class="op">=</span> other_y <span class="op">&gt;</span> own_y_lo <span class="op">&amp;&amp;</span> other_y <span class="op">&lt;</span> own_y_hi</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    x_match <span class="op">&amp;&amp;</span> y_match</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>func <span class="fu">point_is_on_line</span>(point<span class="op">,</span> line) {</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (px<span class="op">,</span> py) <span class="op">=</span> point</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (c1<span class="op">,</span> c2) <span class="op">=</span> line</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x1<span class="op">,</span> y1) <span class="op">=</span> c1</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x2<span class="op">,</span> y2) <span class="op">=</span> c2</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> line_is_vertical <span class="op">=</span> x1 <span class="op">==</span> x2</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> line_is_vertical {</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> px <span class="op">==</span> x1 <span class="op">&amp;&amp;</span> py <span class="op">&gt;=</span> y1<span class="op">.</span><span class="fu">min</span>(y2) <span class="op">&amp;&amp;</span> py <span class="op">&lt;=</span> y1<span class="op">.</span><span class="fu">max</span>(y2)</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> py <span class="op">==</span> y1 <span class="op">&amp;&amp;</span> px <span class="op">&gt;=</span> x1<span class="op">.</span><span class="fu">min</span>(x2) <span class="op">&amp;&amp;</span> px <span class="op">&lt;=</span> x1<span class="op">.</span><span class="fu">max</span>(x2)</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>func <span class="fu">point_is_in_polygon</span>(point<span class="op">,</span> polygon) {</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> inside <span class="op">=</span> <span class="kw">false</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> limit <span class="op">=</span> polygon<span class="op">.</span><span class="at">length</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> i <span class="op">&lt;</span> limit {</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> line <span class="op">=</span> polygon[i]</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (px<span class="op">,</span> py) <span class="op">=</span> point</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (c1<span class="op">,</span> c2) <span class="op">=</span> line</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (x1<span class="op">,</span> y1) <span class="op">=</span> c1</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (x2<span class="op">,</span> y2) <span class="op">=</span> c2</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="fu">point_is_on_line</span>(point<span class="op">,</span> line) {</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">true</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> crosses_scanline <span class="op">=</span> y1 <span class="op">&gt;</span> py <span class="op">!=</span> y2 <span class="op">&gt;</span> py</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> crosses_scanline {</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> dy_total <span class="op">=</span> (y2 <span class="op">-</span> y1)</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> dy_to_point <span class="op">=</span> (py <span class="op">-</span> y1)</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> t <span class="op">=</span> dy_to_point <span class="op">/</span> dy_total</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> x_intersect <span class="op">=</span> x1 <span class="op">+</span> t <span class="op">*</span> (x2 <span class="op">-</span> x1)</span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> px <span class="op">&lt;</span> x_intersect {</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>                inside <span class="op">=</span> <span class="op">!</span>inside</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>        i <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> inside</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>func <span class="fu">get_rectangle_corners</span>(rectangle) {</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (c1<span class="op">,</span> c2) <span class="op">=</span> rectangle</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x1<span class="op">,</span> y1) <span class="op">=</span> c1</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x2<span class="op">,</span> y2) <span class="op">=</span> c2</span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> minX <span class="op">=</span> x1<span class="op">.</span><span class="fu">min</span>(x2)</span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> minY <span class="op">=</span> y1<span class="op">.</span><span class="fu">min</span>(y2)</span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> maxX <span class="op">=</span> x1<span class="op">.</span><span class="fu">max</span>(x2)</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> maxY <span class="op">=</span> y1<span class="op">.</span><span class="fu">max</span>(y2)</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>    (</span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>        (minX<span class="op">,</span> minY)<span class="op">,</span></span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>        (maxX<span class="op">,</span> minY)<span class="op">,</span></span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>        (maxX<span class="op">,</span> maxY)<span class="op">,</span></span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>        (minX<span class="op">,</span> maxY)</span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>func <span class="fu">get_rectangle_lines</span>(rectangle) {</span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (n1<span class="op">,</span> n2<span class="op">,</span> n3<span class="op">,</span> n4) <span class="op">=</span> <span class="fu">get_rectangle_corners</span>(rectangle)</span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [</span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>        ((n1)<span class="op">,</span> (n2))<span class="op">,</span></span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>        ((n2)<span class="op">,</span> (n3))<span class="op">,</span></span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>        ((n3)<span class="op">,</span> (n4))<span class="op">,</span></span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>        ((n4)<span class="op">,</span> (n1))</span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> rectangleAreaPairs <span class="op">=</span> corners</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">unidirectionalPermutations</span>()</span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(corners) {</span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (c1<span class="op">,</span> c2) <span class="op">=</span> corners</span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (x1<span class="op">,</span> y1) <span class="op">=</span> c1</span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (x2<span class="op">,</span> y2) <span class="op">=</span> c2</span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> lengthX <span class="op">=</span> (x1 <span class="op">-</span> x2)<span class="op">.</span><span class="fu">abs</span>() <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> lengthY <span class="op">=</span> (y1 <span class="op">-</span> y2)<span class="op">.</span><span class="fu">abs</span>() <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> area <span class="op">=</span> lengthX <span class="op">*</span> lengthY</span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>        ((c1<span class="op">,</span> c2)<span class="op">,</span> area)</span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">sort</span>(<span class="op">-&gt;</span>(a<span class="op">,</span> b) {</span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>        a[<span class="dv">1</span>] <span class="op">-</span> b[<span class="dv">1</span>]</span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>func find_largest_rectangle {</span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> rectangleAreaPairs<span class="op">.</span><span class="fu">notEmpty</span>() {</span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> pair <span class="op">=</span> rectangleAreaPairs<span class="op">.</span><span class="fu">pop</span>()</span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> (rectangle<span class="op">,</span> area) <span class="op">=</span> pair</span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> rectangle_lines <span class="op">=</span> <span class="fu">get_rectangle_lines</span>(rectangle)</span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> any_check_failed <span class="op">=</span> rectangle_lines<span class="op">.</span><span class="fu">any</span>(<span class="op">-&gt;</span>(line) {</span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> crossed_any_polygon_line <span class="op">=</span> polygon_lines<span class="op">.</span><span class="fu">any</span>(<span class="op">-&gt;</span>(pline) {</span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>                <span class="fu">polygon_lines_cross</span>(line<span class="op">,</span> pline)</span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a>            })</span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> crossed_any_polygon_line <span class="cf">return</span> <span class="kw">true</span></span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> (c1<span class="op">,</span> c2) <span class="op">=</span> line</span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">!</span><span class="fu">point_is_in_polygon</span>(c1<span class="op">,</span> polygon_lines) <span class="cf">return</span> <span class="kw">true</span></span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">false</span></span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> any_check_failed <span class="cf">continue</span></span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pair</span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> (largestRectangle<span class="op">,</span> area) <span class="op">=</span> <span class="fu">find_largest_rectangle</span>()</span>
+<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;largest rectangle =&quot;</span><span class="op">,</span> largestRectangle)</span>
+<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;largest size =&quot;</span><span class="op">,</span> area)</span></code></pre></div>
+<h2 id="changes-to-the-stdlib-vm">Changes to the stdlib / VM</h2>
+<p>Methods I added to the standard library:</p>
+<ul class="incremental">
+<li><code>Int::countTo</code> Invoke the callback with all numbers in
+the range <code>[self, other]</code></li>
+<li><code>Number::inBetween</code> Convenience method for
+<code>a &lt;= self &amp;&amp; self &lt;= b</code></li>
+<li><code>List::findMin</code> Find the smallest entry in a list</li>
+<li><code>List::findMinBy</code> Find the smallest entry in a list,
+based on the return value from a callback</li>
+<li><code>List::adjacentPairs</code> Returns a list of all adjacent
+pairs in a list</li>
+<li><code>List::unidirectionalPermutations</code> Returns a list of all
+unidirectional permutations in a list</li>
+<li><code>List::bidirectionalPermutations</code> Returns a list of all
+bidirectional permutations in a list</li>
+</ul>
+<p>You can find the individual commits below:</p>
+<ul class="incremental">
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/f132f575bc9afa7b27ffc5b41a61bf72fcfcacb3"><code>f132f57</code></a>
+<code>Add Int::countTo</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/c581430990e3747e67eb6b8d42898b346e0972b9"><code>c581430</code></a>
+<code>Add Number::inBetween</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/e0a26ade3d28d3211bc5dff572bf58959e9e2ad5"><code>e0a26ad</code></a>
+<code>Add List::findMin and List::findMinBy</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/d1fda7712e8f680e814a2a995061f5ed81a957c6"><code>d1fda77</code></a>
+<code>Add List::adjacentPairs</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/062a9643b410e8ef481dd64931b9499f457a092e"><code>062a964</code></a>
+<code>Add List::unidirectionalPermutations</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/6405bcdc41e012fd26f603673f2bea28148b68f9"><code>6405bcd</code></a>
+<code>Add List::bidirectionalPermutations</code></li>
+</ul>
+<h2 id="links">Links</h2>
+<ul class="incremental">
+<li><a href="https://adventofcode.com/">Advent of Code</a></li>
+<li><a href="https://github.com/KCreate/charly-vm">Charly Programming
+Language</a></li>
+<li><a
+href="https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day9">Source
+code for today’s challenge</a></li>
+</ul>
+      </main>
+      <hr/>
+      <footer>
+        <div id="social-links">
+          <a href="https://github.com/KCreate" target="_blank">
+            <img height="20" width="20" src="/resources/github.svg" alt="GitHub Link"/>
+          </a>
+          <a href="https://linkedin.com/in/leonardschuetz" target="_blank">
+            <img height="20" width="20" src="/resources/linkedin.svg" alt="LinkedIn Link"/>
+          </a>
+          <a href="mailto:hello@leonard.swiss?subject=Hello%20Leonard!">
+            <img height="20" width="20" src="/resources/mail.svg" alt="Email Link"/>
+          </a>
+          <a href="/rss.xml" target="_blank">
+            <img height="20" width="20" src="/resources/rss.svg" alt="RSS Link"/>
+          </a>
+        </div>
+        <div id="open-source-notice">
+          <span>this blog is <a href="https://github.com/KCreate/leonardschuetz.ch" target="_blank">open-source</a></span>
+        </div>
+      </footer>
+      <span id="copyright">Copyright © 2024 - 2025 Leonard Schütz | <a href="/attributions">Attributions</a></span>
+      <span id="copyright">This post was written by a human and reviewed and proof-read by LLMs</span>
+    </div>
+  </body>
+  <script src="/script.js" async></script>
+</html>

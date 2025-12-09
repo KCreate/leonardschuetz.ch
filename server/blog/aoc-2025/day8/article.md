@@ -9,7 +9,7 @@ description: Day 8 of Advent of Code 2025 in Charly
 ## Day 8
 
 - [Back to the main article](../)
-- [Previous day](../day7)
+- [Previous day](../day7) - [Next day](../day9)
 
 > This article is part of my series on implementing each Advent of Code 2025 challenge in my own
 > programming language Charly.
