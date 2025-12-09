@@ -83,7 +83,11 @@ main.blog-article {
     list-style: none;
 
     li {
-      margin-bottom: 5px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      &::first-child {
+        margin-top: 0px;
+      }
       &::last-child {
         margin-bottom: 0px;
       }

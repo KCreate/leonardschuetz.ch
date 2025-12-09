@@ -84,7 +84,11 @@ main.blog-article ol, main.blog-article ul {
   list-style: none;
 }
 main.blog-article ol li, main.blog-article ul li {
-  margin-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+main.blog-article ol li::first-child, main.blog-article ul li::first-child {
+  margin-top: 0px;
 }
 main.blog-article ol li::last-child, main.blog-article ul li::last-child {
   margin-bottom: 0px;
