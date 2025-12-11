@@ -36,7 +36,7 @@ Each entry gives the name of a device followed by a list of devices to which its
 
 To solve the puzzle, you must determine how many different paths lead from the `you` machine to the `out` machine.
 
-I implemented this as a DFS over all possible paths, counting how many valid ones I found.
+I implemented this as a BFS over all possible paths, counting how many valid ones I found.
 
 ```javascript
 import hashmap as HashMap
@@ -110,15 +110,13 @@ forever.
 
 ![](./brute-force.png)
 
-> Some would disagree
-
 > Addendum:
 >
 > You can dramatically reduce the runtime by caching the set of visited machines per path.
 > I didn't think of this at the time of implementing it, which is why I came up with the
 > following monstrosity.
 
-Instead of doing a DFS over sequence-space, I came up with a different approach.
+Instead of doing a BFS over sequence-space, I came up with a different approach.
 I keep a list of uncollapsed `Waves`, each representing a set of paths that travel through
 the graph concurrently.
 A wave collapses when all of its input waves have collapsed.

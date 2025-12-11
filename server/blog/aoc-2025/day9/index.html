@@ -414,12 +414,12 @@ area <code>24</code>, using corners <code>2,5</code> and
 ..XXXXXXXX.#..
 ..............</code></pre>
 <p>The naive approach of checking if any polygon edges intersect with
-this rectangle would fail, because none do! The algorithm would still
-spit out the correct answer though, because <code>24</code> also just
-happens to be the nice of the <em>actual</em> correct rectangle.</p>
+this rectangle wouldn’t catch this, because none do! The algorithm would
+still spit out the correct answer though, because <code>24</code> just
+happens to be the area of the <em>actual</em> correct rectangle.</p>
 <p>This also seems to be the case in the validation data provided by the
 puzzle. I’ve confirmed this to be the case by comparing the result
-rectangles produced by both the <em>naive</em> and <em>proper</em>
+rectangle areas produced by both the <em>naive</em> and <em>proper</em>
 implementations of the puzzle.</p>
 <p>You can check if your solution is <em>proper</em> by running it
 against the following modified example:</p>

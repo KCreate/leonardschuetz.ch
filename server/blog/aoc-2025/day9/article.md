@@ -325,12 +325,12 @@ It looks like this:
 ..............
 ```
 
-The naive approach of checking if any polygon edges intersect with this rectangle would fail, because none do!
-The algorithm would still spit out the correct answer though, because `24` also just happens to be the nice of
+The naive approach of checking if any polygon edges intersect with this rectangle wouldn't catch this, because none do!
+The algorithm would still spit out the correct answer though, because `24` just happens to be the area of
 the *actual* correct rectangle.
 
 This also seems to be the case in the validation data provided by the puzzle. I've confirmed this to be
-the case by comparing the result rectangles produced by both the *naive* and *proper* implementations of the
+the case by comparing the result rectangle areas produced by both the *naive* and *proper* implementations of the
 puzzle.
 
 You can check if your solution is *proper* by running it against the following modified example:

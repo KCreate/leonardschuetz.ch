@@ -151,7 +151,7 @@ iii: out</code></pre>
 to which its outputs are routed.</p>
 <p>To solve the puzzle, you must determine how many different paths lead
 from the <code>you</code> machine to the <code>out</code> machine.</p>
-<p>I implemented this as a DFS over all possible paths, counting how
+<p>I implemented this as a BFS over all possible paths, counting how
 many valid ones I found.</p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashmap <span class="im">as</span> HashMap</span>
@@ -219,15 +219,12 @@ paths between <code>svr</code> and <code>out</code> are much longer than
 in part 1, this approach would have taken forever.</p>
 <p><img src="./brute-force.png" /></p>
 <blockquote>
-<p>Some would disagree</p>
-</blockquote>
-<blockquote>
 <p>Addendum:</p>
 <p>You can dramatically reduce the runtime by caching the set of visited
 machines per path. I didn’t think of this at the time of implementing
 it, which is why I came up with the following monstrosity.</p>
 </blockquote>
-<p>Instead of doing a DFS over sequence-space, I came up with a
+<p>Instead of doing a BFS over sequence-space, I came up with a
 different approach. I keep a list of uncollapsed <code>Waves</code>,
 each representing a set of paths that travel through the graph
 concurrently. A wave collapses when all of its input waves have
