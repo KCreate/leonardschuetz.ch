@@ -253,6 +253,8 @@ You can find the individual commits below:
 - [`1b0563f`](https://github.com/KCreate/charly-vm/commit/1b0563f4ce608fbfbe45c6c85bb9e96d7c6ea498) `Add super primitive hashmap to stdlib`
 - [`3e52e7e`](https://github.com/KCreate/charly-vm/commit/3e52e7e1ef5bb8218d83556821adb4eb5aad7e7b) `Fix list multiplication returning NaN`
 - [`bfbfb6a`](https://github.com/KCreate/charly-vm/commit/bfbfb6af03d532d5969a81c5bc2c52f3c24a05e6) `Add List::findIndex and List::findIndexBy`
+- [`a008192`](https://github.com/KCreate/charly-vm/commit/a00819252c3650b0715a21b79cb82e0753c7cf10) `HashMap fixes`
+- [`6904f00`](https://github.com/KCreate/charly-vm/commit/6904f00da4b63c25a3ec7eacc046d6cb90dcfeb9) `Make HashMap::size, empty, notEmpty O(1)`
 
 ## Links
 
