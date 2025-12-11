@@ -108,8 +108,6 @@ least once.
 Because the shortest paths between `svr` and `out` are much longer than in part 1, this approach would have taken
 forever.
 
-![](./brute-force.png)
-
 > Addendum:
 >
 > You can dramatically reduce the runtime by caching the set of visited machines per path.
