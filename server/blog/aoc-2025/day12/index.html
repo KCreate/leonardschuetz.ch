@@ -134,10 +134,10 @@ Charly</h1>
 2025 challenge in my own programming language Charly.</p>
 </blockquote>
 <h2 id="task">Task</h2>
-<p>Today’s puzzle dropped us into a large cavern full of Christmas trees
+<p>Today’s puzzle dropped us into a large cavern full of christmas trees
 and a bunch of differently shaped presents. The elves hand me a
 description of how each present is shaped, how much space is available
-below each christmas tree and how many of each type of present must be
+below each christmas tree, and how many of each type of present must be
 placed below that tree.</p>
 <p>For example:</p>
 <pre><code>0:
@@ -192,12 +192,12 @@ other shapes.</p>
 presents can fit. The final answer is how many of the listed regions are
 solvable.</p>
 <h2 id="implementation">Implementation</h2>
-<p>I began my attempt by determinig the minimum total amount of cells
-that each region must contain to be able to accomodate all blocked
+<p>I began my attempt by determining the minimum total number of cells
+that each region must contain to be able to accommodate all occupied
 (<code>#</code>) cells from all required presents. If the region doesn’t
-have enough space in it to accomodate the blocked cells, then that means
-that there is no way we could possibly arrange all the presents to make
-them fit.</p>
+have enough space to accommodate the occupied cells, then that means
+there is no way we could possibly arrange all the presents to make them
+fit.</p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> input_path <span class="op">=</span> ARGV[<span class="dv">1</span>]</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> lines <span class="op">=</span> <span class="fu">readfile</span>(input_path)<span class="op">.</span><span class="fu">lines</span>()</span>
@@ -221,36 +221,35 @@ class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-
 any possible orientation, flipped horizontally and vertically, in any
 possible position on the grid. You then would have to iterate over all
 possible combinations of those factors to figure out if the region is
-solvable or not. This apprach could’ve been implemented as a DFS search
+solvable or not. This approach could’ve been implemented as a DFS search
 over all possible present placements.</p>
 <p>The validation input had regions with areas up to <code>50x50</code>
-with hundreds of presents that had to be placed. I did some
-napkin-calculations and figured out that this would take an astronomical
-amount of time.</p>
+with hundreds of presents that had to be placed. I did some napkin
+calculations and figured out that this would take an astronomical amount
+of time.</p>
 <p>At this point it dawned on me that I must be missing some key part of
 how to solve this problem. There had to be an easier way of solving this
 than to just search the entire space of possible present placements.</p>
-<p>I figured it couldn’t hurt to check if all the regions that
+<p>I figured it couldn’t hurt to check whether all the regions that
 <em>might</em> be solvable are indeed solvable. I copied the count of
 regions that <em>might</em> be solvable, pasted it into the solution
 submission field and clicked <code>Submit</code>.</p>
-<p>My guess turned out to be correct, the site accepted my answer and I
+<p>My guess turned out to be correct. The site accepted my answer and I
 got the star <code>:P</code>. I do realize that I’ve kind of cheesed
-todays’ puzzle, but I’m satisfied with it.</p>
-<p>There was no second part of the puzzle, only a short message
+today’s puzzle, but I’m satisfied with it.</p>
+<p>There was no second part of the puzzle, just a short message
 congratulating you on your success.</p>
 <h2 id="changes-to-the-stdlib-vm">Changes to the stdlib / VM</h2>
 <p>Modifications:</p>
 <ul class="incremental">
-<li><code>hashmap</code> Now allows integer values to be used as
-keys</li>
+<li><code>hashmap</code> Now allows integers to be used as keys</li>
 </ul>
 <p>Methods added to the standard library:</p>
 <ul class="incremental">
 <li><code>List::to_tuple</code> Convenience method for
 <code>(...list)</code></li>
-<li><code>List::distinct</code> Returns a list with no duplicate
-elements</li>
+<li><code>List::distinct</code> Returns a list with duplicate elements
+removed</li>
 </ul>
 <p>You can find the individual commits below:</p>
 <ul class="incremental">

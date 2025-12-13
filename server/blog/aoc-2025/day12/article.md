@@ -16,8 +16,8 @@ description: Day 12 of Advent of Code 2025 in Charly
 
 ## Task
 
-Today's puzzle dropped us into a large cavern full of Christmas trees and a bunch of differently shaped presents.
-The elves hand me a description of how each present is shaped, how much space is available below each christmas tree
+Today's puzzle dropped us into a large cavern full of christmas trees and a bunch of differently shaped presents.
+The elves hand me a description of how each present is shaped, how much space is available below each christmas tree,
 and how many of each type of present must be placed below that tree.
 
 For example:
@@ -76,9 +76,9 @@ The final answer is how many of the listed regions are solvable.
 
 ## Implementation
 
-I began my attempt by determinig the minimum total amount of cells that each region must contain to be able to
-accomodate all blocked (`#`) cells from all required presents.
-If the region doesn't have enough space in it to accomodate the blocked cells, then that means that there is no
+I began my attempt by determining the minimum total number of cells that each region must contain to be able to
+accommodate all occupied (`#`) cells from all required presents.
+If the region doesn't have enough space to accommodate the occupied cells, then that means there is no
 way we could possibly arrange all the presents to make them fit.
 
 ```javascript
@@ -106,33 +106,34 @@ The next step would have been to attempt to place each present, in any possible 
 flipped horizontally and vertically, in any possible position on the grid.
 You then would have to iterate over all possible combinations of those factors to figure out if
 the region is solvable or not.
-This apprach could've been implemented as a DFS search over all possible present placements.
+This approach could've been implemented as a DFS search over all possible present placements.
 
 The validation input had regions with areas up to `50x50` with hundreds of presents that had to be placed.
-I did some napkin-calculations and figured out that this would take an astronomical amount of time.
+I did some napkin calculations and figured out that this would take an astronomical amount of time.
 
 At this point it dawned on me that I must be missing some key part of how to solve this problem.
 There had to be an easier way of solving this than to just search the entire space of possible present placements.
 
-I figured it couldn't hurt to check if all the regions that *might* be solvable are indeed solvable.
+I figured it couldn't hurt to check whether all the regions that *might* be solvable are indeed solvable.
 I copied the count of regions that *might* be solvable, pasted it into the solution submission field and clicked
 `Submit`.
 
-My guess turned out to be correct, the site accepted my answer and I got the star `:P`.
-I do realize that I've kind of cheesed todays' puzzle, but I'm satisfied with it.
+My guess turned out to be correct.
+The site accepted my answer and I got the star `:P`.
+I do realize that I've kind of cheesed today's puzzle, but I'm satisfied with it.
 
-There was no second part of the puzzle, only a short message congratulating you on your success.
+There was no second part of the puzzle, just a short message congratulating you on your success.
 
 ## Changes to the stdlib / VM
 
 Modifications:
 
-- `hashmap` Now allows integer values to be used as keys
+- `hashmap` Now allows integers to be used as keys
 
 Methods added to the standard library:
 
 - `List::to_tuple` Convenience method for `(...list)`
-- `List::distinct` Returns a list with no duplicate elements
+- `List::distinct` Returns a list with duplicate elements removed
 
 You can find the individual commits below:
 
