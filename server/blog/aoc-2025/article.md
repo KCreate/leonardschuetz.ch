@@ -29,7 +29,7 @@ contains some really neat things (my biased opinion), most notably:
 
 While the compiler, virtual machine, and general runtime are somewhat mature (for a hobby side-project), the same
 can't be said for the standard library.
-If you take a look at the [standard library](https://github.com/KCreate/charly-vm/tree/rewrite/src/charly/stdlib),
+If you take a look at the [standard library](https://github.com/KCreate/charly-vm/tree/42ed024b9d3d107afdd11413cc3d626276c7fd30/src/charly/stdlib),
 you will notice the following:
 
 > _It is barren._
