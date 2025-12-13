@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<!--
+██   ██ ███████ ██      ██       ██████  ██ 
+██   ██ ██      ██      ██      ██    ██ ██ 
+███████ █████   ██      ██      ██    ██ ██ 
+██   ██ ██      ██      ██      ██    ██    
+██   ██ ███████ ███████ ███████  ██████  ██ 
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Day 12 of Advent of Code 2025 in Charly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Leonard Schütz">
+    <meta name="description" content="Day 12 of Advent of Code 2025 in
+Charly">
+    <meta name="keywords" content="leonard schütz, programming, compilers, ">
+    <meta name="language" content="English">
+    <meta name="contact" content="hello@leonard.swiss">
+    <meta name="date" content="Mon, 13 Dec 2025 2:30:00 +0100">
+
+    <meta property="og:url" content="https://leonard.swiss/">
+    <meta property="og:title" content="Day 12 of Advent of Code 2025 in Charly">
+    <meta property="og:description" content="Day 12 of Advent of Code
+2025 in Charly">
+    <meta property="og:site_name" content="Leonard Schütz">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@leni4838">
+    <meta name="twitter:title" content="Day 12 of Advent of Code 2025 in Charly">
+    <meta name="twitter:description" content="Day 12 of Advent of Code
+2025 in Charly">
+
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'/>
+    <link rel="stylesheet" type="text/css" href="/resources/css/style.css"/>
+    <link rel="alternate" type="application/rss+xml" title="Blog" href="/feed.xml" />
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+
+          <style type="text/css">
+        code {
+          white-space: pre;
+        }
+      </style>
+      <style type="text/css">
+        html { -webkit-text-size-adjust: 100%; }
+        pre > code.sourceCode { white-space: pre; position: relative; }
+        pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+        pre > code.sourceCode > span:empty { height: 1.2em; }
+        .sourceCode { overflow: visible; }
+        code.sourceCode > span { color: inherit; text-decoration: inherit; }
+        div.sourceCode { margin: 1em 0; }
+        pre.sourceCode { margin: 0; }
+        @media screen {
+        div.sourceCode { overflow: auto; }
+        }
+        @media print {
+        pre > code.sourceCode { white-space: pre-wrap; }
+        pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+        }
+        pre.numberSource code
+          { counter-reset: source-line 0; }
+        pre.numberSource code > span
+          { position: relative; left: -4em; counter-increment: source-line; }
+        pre.numberSource code > span > a:first-child::before
+          { content: counter(source-line);
+            position: relative; left: -1em; text-align: right; vertical-align: baseline;
+            border: none; display: inline-block;
+            -webkit-touch-callout: none; -webkit-user-select: none;
+            -khtml-user-select: none; -moz-user-select: none;
+            -ms-user-select: none; user-select: none;
+            padding: 0 4px; width: 4em;
+            color: #aaaaaa;
+          }
+        pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+        div.sourceCode
+          {  background-color: #f8f8f8; }
+        @media screen {
+        pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+        }
+        code span.al { color: #ef2929; } /* Alert */
+        code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+        code span.at { color: #204a87; } /* Attribute */
+        code span.bn { color: #0000cf; } /* BaseN */
+        code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+        code span.ch { color: #4e9a06; } /* Char */
+        code span.cn { color: #8f5902; } /* Constant */
+        code span.co { color: #8f5902; font-style: italic; } /* Comment */
+        code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+        code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+        code span.dt { color: #204a87; } /* DataType */
+        code span.dv { color: #0000cf; } /* DecVal */
+        code span.er { color: #a40000; font-weight: bold; } /* Error */
+        code span.ex { } /* Extension */
+        code span.fl { color: #0000cf; } /* Float */
+        code span.fu { color: #204a87; font-weight: bold; } /* Function */
+        code span.im { } /* Import */
+        code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+        code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+        code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+        code span.ot { color: #8f5902; } /* Other */
+        code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+        code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+        code span.ss { color: #4e9a06; } /* SpecialString */
+        code span.st { color: #4e9a06; } /* String */
+        code span.va { color: #000000; } /* Variable */
+        code span.vs { color: #4e9a06; } /* VerbatimString */
+        code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+      </style>
+            </head>
+  <body>
+    <div id="content">
+      <header>
+        <div id="name-container">
+          <a href="/">leonard schütz</a>
+        </div>
+        <nav>
+          <a href="/about">about</a>
+          <a href="/blog/">blog</a>
+        </nav>
+      </header>
+      <main class="blog-article">
+<h1 id="advent-of-code-2025-in-charly">Advent of Code 2025 in
+Charly</h1>
+<h2 id="day-12">Day 12</h2>
+<ul class="incremental">
+<li><a href="../">Back to the main article</a></li>
+<li><a href="../day11">Previous day</a></li>
+</ul>
+<blockquote>
+<p>This article is part of my series on implementing each Advent of Code
+2025 challenge in my own programming language Charly.</p>
+</blockquote>
+<h2 id="task">Task</h2>
+<p>Today’s puzzle dropped us into a large cavern full of Christmas trees
+and a bunch of differently shaped presents. The elves hand me a
+description of how each present is shaped, how much space is available
+below each christmas tree and how many of each type of present must be
+placed below that tree.</p>
+<p>For example:</p>
+<pre><code>0:
+###
+##.
+##.
+
+1:
+###
+##.
+.##
+
+2:
+.##
+###
+##.
+
+3:
+##.
+###
+##.
+
+4:
+###
+#..
+###
+
+5:
+###
+.#.
+###
+
+4x4: 0 0 0 0 2 0
+12x5: 1 0 1 0 2 2
+12x5: 1 0 1 0 3 2</code></pre>
+<p>The input starts with a list of standard present shapes. Each shape
+is given an index and shown as a small 2D grid of <code>#</code> and
+<code>.</code> characters. A <code>#</code> marks a unit cell that the
+present occupies, while <code>.</code> marks empty space inside the
+shape’s bounding box.</p>
+<p>After the shape list comes a list of rectangular regions under the
+christmas trees. Each region is described by its width and height (for
+example <code>12x5</code>), followed by a list of counts that specifies
+how many presents of each shape index must be placed into that
+region.</p>
+<p>Presents must be placed on the region’s unit grid and cannot be
+stacked. Shapes may be rotated and flipped. Occupied cells
+(<code>#</code>) from different presents may not overlap, but empty
+cells (<code>.</code>) do not block anything and can be shared with
+other shapes.</p>
+<p>The task is to check each region and determine whether all required
+presents can fit. The final answer is how many of the listed regions are
+solvable.</p>
+<h2 id="implementation">Implementation</h2>
+<p>I began my attempt by determinig the minimum total amount of cells
+that each region must contain to be able to accomodate all blocked
+(<code>#</code>) cells from all required presents. If the region doesn’t
+have enough space in it to accomodate the blocked cells, then that means
+that there is no way we could possibly arrange all the presents to make
+them fit.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> input_path <span class="op">=</span> ARGV[<span class="dv">1</span>]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> lines <span class="op">=</span> <span class="fu">readfile</span>(input_path)<span class="op">.</span><span class="fu">lines</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> (presents<span class="op">,</span> regions) <span class="op">=</span> <span class="fu">parse_input</span>(lines)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> valid_regions <span class="op">=</span> regions<span class="op">.</span><span class="fu">filter</span>(<span class="op">-&gt;</span>(region<span class="op">,</span> region_id) {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (size<span class="op">,</span> present_ids) <span class="op">=</span> region</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> (x<span class="op">,</span> y) <span class="op">=</span> size</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> gridArea <span class="op">=</span> x <span class="op">*</span> y</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> minimumRequiredArea <span class="op">=</span> present_ids<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(count<span class="op">,</span> i) {</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        count <span class="op">*</span> presents[i]<span class="op">.</span><span class="fu">map</span>(<span class="op">-&gt;</span>(r) [<span class="op">...</span>r]<span class="op">.</span><span class="fu">sum</span>())<span class="op">.</span><span class="fu">sum</span>()</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    })<span class="op">.</span><span class="fu">sum</span>()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    gridArea <span class="op">&gt;=</span> minimumRequiredArea</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;there are {valid_regions.length} regions that might fit the presents&quot;</span>)</span></code></pre></div>
+<p>The next step would have been to attempt to place each present, in
+any possible orientation, flipped horizontally and vertically, in any
+possible position on the grid. You then would have to iterate over all
+possible combinations of those factors to figure out if the region is
+solvable or not. This apprach could’ve been implemented as a DFS search
+over all possible present placements.</p>
+<p>The validation input had regions with areas up to <code>50x50</code>
+with hundreds of presents that had to be placed. I did some
+napkin-calculations and figured out that this would take an astronomical
+amount of time.</p>
+<p>At this point it dawned on me that I must be missing some key part of
+how to solve this problem. There had to be an easier way of solving this
+than to just search the entire space of possible present placements.</p>
+<p>I figured it couldn’t hurt to check if all the regions that
+<em>might</em> be solvable are indeed solvable. I copied the count of
+regions that <em>might</em> be solvable, pasted it into the solution
+submission field and clicked <code>Submit</code>.</p>
+<p>My guess turned out to be correct, the site accepted my answer and I
+got the star <code>:P</code>. I do realize that I’ve kind of cheesed
+todays’ puzzle, but I’m satisfied with it.</p>
+<p>There was no second part of the puzzle, only a short message
+congratulating you on your success.</p>
+<h2 id="changes-to-the-stdlib-vm">Changes to the stdlib / VM</h2>
+<p>Modifications:</p>
+<ul class="incremental">
+<li><code>hashmap</code> Now allows integer values to be used as
+keys</li>
+</ul>
+<p>Methods added to the standard library:</p>
+<ul class="incremental">
+<li><code>List::to_tuple</code> Convenience method for
+<code>(...list)</code></li>
+<li><code>List::distinct</code> Returns a list with no duplicate
+elements</li>
+</ul>
+<p>You can find the individual commits below:</p>
+<ul class="incremental">
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/878c98677b8544fc46990dcc91502696718ec160"><code>878c986</code></a>
+<code>Add List::to_tuple</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/b12e8f8f7f8c3cf5017dbf61ef0f13b23dd3a49f"><code>b12e8f8</code></a>
+<code>Allow integer keys in HashMap</code></li>
+<li><a
+href="https://github.com/KCreate/charly-vm/commit/92af76858cfff729a67d9e30ee4bd2aa98f48eaa"><code>92af768</code></a>
+<code>Add List::distinct</code></li>
+</ul>
+<h2 id="links">Links</h2>
+<ul class="incremental">
+<li><a href="https://adventofcode.com/">Advent of Code</a></li>
+<li><a href="https://github.com/KCreate/charly-vm">Charly Programming
+Language</a></li>
+<li><a
+href="https://github.com/KCreate/advent-of-code-2025-charly/blob/main/days/day12">Source
+code for today’s challenge</a></li>
+</ul>
+      </main>
+      <hr/>
+      <footer>
+        <div id="social-links">
+          <a href="https://github.com/KCreate" target="_blank">
+            <img height="20" width="20" src="/resources/github.svg" alt="GitHub Link"/>
+          </a>
+          <a href="https://linkedin.com/in/leonardschuetz" target="_blank">
+            <img height="20" width="20" src="/resources/linkedin.svg" alt="LinkedIn Link"/>
+          </a>
+          <a href="mailto:hello@leonard.swiss?subject=Hello%20Leonard!">
+            <img height="20" width="20" src="/resources/mail.svg" alt="Email Link"/>
+          </a>
+          <a href="/rss.xml" target="_blank">
+            <img height="20" width="20" src="/resources/rss.svg" alt="RSS Link"/>
+          </a>
+        </div>
+        <div id="open-source-notice">
+          <span>this blog is <a href="https://github.com/KCreate/leonardschuetz.ch" target="_blank">open-source</a></span>
+        </div>
+      </footer>
+      <span id="copyright">Copyright © 2024 - 2025 Leonard Schütz | <a href="/attributions">Attributions</a></span>
+      <span id="copyright">This post was written by a human and reviewed and proof-read by LLMs</span>
+    </div>
+  </body>
+  <script src="/script.js" async></script>
+</html>

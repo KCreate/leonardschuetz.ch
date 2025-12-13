@@ -7,6 +7,13 @@
     <atom:link href="https://leonard.swiss/rss.xml" rel="self" type="application/rss+xml"/>
 
     <item>
+      <title>Day 12 of Advent of Code 2025 in Charly</title>
+      <link>https://leonard.swiss/blog/aoc-2025/day12</link>
+      <description>Day 12 of Advent of Code 2025 in Charly</description>
+      <pubDate>Mon, 13 Dec 2025 02:30:00 +0100</pubDate>
+    </item>
+
+    <item>
       <title>Day 11 of Advent of Code 2025 in Charly</title>
       <link>https://leonard.swiss/blog/aoc-2025/day11</link>
       <description>Day 11 of Advent of Code 2025 in Charly</description>

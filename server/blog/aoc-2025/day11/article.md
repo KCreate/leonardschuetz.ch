@@ -9,7 +9,7 @@ description: Day 11 of Advent of Code 2025 in Charly
 ## Day 11
 
 - [Back to the main article](../)
-- [Previous day](../day10)
+- [Previous day](../day10) - [Next day](../day12)
 
 > This article is part of my series on implementing each Advent of Code 2025 challenge in my own
 > programming language Charly.
